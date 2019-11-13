@@ -6,10 +6,11 @@ import {
 } from 'react-router-dom';
 
 import LoginPage from './views/loginPage';
-import ClinicList from './views/admin/clinicListPage';
-import ClinicPage from './views/admin/clinicPage';
+import ClinicList from './views/admin/clinicList';
+import Clinic from './views/admin/clinic';
 import HomePage from './views/homePage';
-
+import ClinicAdmin from './views/admin/clinicAdmin';
+import ClinicAdminList from './views/admin/clinicAdminList';
 
 class Routes extends Component {
 
@@ -49,7 +50,22 @@ class Routes extends Component {
                             path="/admin/clinic/:id"
                             exact
                             render={(...renderProps) => (
-                                <ClinicPage {...renderProps} {...this.props} />
+                                <Clinic {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/admin/clinic/:cid/admins"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicAdminList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        <Route
+                            path="/admin/clinic/:cid/admins/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicAdmin {...renderProps} {...this.props} />
                             )}
                         />
 

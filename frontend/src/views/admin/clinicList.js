@@ -5,6 +5,7 @@ import Page from '../../containers/admin/page';
 
 import editIcon from '../../assets/svg/edit.svg';
 import deleteIcon from '../../assets/svg/delete.svg';
+import adminIcon from '../../assets/svg/admin.svg';
 
 
 import {
@@ -100,6 +101,8 @@ class ClinicList extends Component {
                                     </Col>
                                     <Col lg="3" className="actions">
                                         <Link to={`/admin/clinic/${item._id}`}><Isvg src={editIcon} /></Link>
+                                        <Link to={`/admin/clinic/${item._id}/admins`}><Isvg src={adminIcon} /></Link>
+
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
                                     </Col>
                                 </Row>

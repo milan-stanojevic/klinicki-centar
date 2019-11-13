@@ -17,6 +17,10 @@ const server = http.createServer(app);
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 
+/*
+    ADMIN API ROUTES
+*/
+
 app.post('/admin/upload', isAdminAuthenticated, function (req, res) {
     res.send(adminModule.upload(req.body.file));
 });
@@ -46,4 +50,23 @@ app.post('/admin/clinic/:id', isAdminAuthenticated, async (req, res) => {
 
 app.delete('/admin/clinic/:id', isAdminAuthenticated, async (req, res) => {
     res.send(await adminModule.clinicDelete(req.params.id));
+});
+
+
+
+app.get('/admin/clinic/:cid/admins', isAdminAuthenticated, async (req, res) => {
+    console.log('fetch')
+    res.send(await adminModule.clinicAdminList(req.params.cid));
+});
+
+app.get('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.clinicAdmin(req.params.cid, req.params.id));
+});
+
+app.post('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.clinicAdminUpdate(req.params.cid, req.params.id, req.body));
+});
+
+app.delete('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.clinicAdminDelete(req.params.cid, req.params.id));
 });

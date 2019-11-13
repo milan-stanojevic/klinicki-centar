@@ -125,6 +125,78 @@ class Admin {
         await db.collection('clinics').deleteOne({_id: ObjectID(id)});
     }
 
+
+
+
+
+    async clinicAdminList(cid){
+        let res = await db.collection('clinicAdmins').find({clinic: cid}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+    async clinicAdmin(cid, id){
+        let res = await db.collection('clinicAdmins').find({_id: ObjectID(id), clinic: cid }).toArray();
+        if (res.length){
+            return res[0];
+        }else{
+            return null;
+        }
+    }
+
+    async clinicAdminUpdate(cid, id, obj) {
+        let _id;
+
+
+        if (id == 'new') {
+            let check = await db.collection('clinicAdmins').find({username: obj.username}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
+            }
+            
+            _id = ObjectID();
+            obj._id = _id;
+            obj.clinic = cid;
+
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(obj.password, salt);
+            delete obj.password;
+            obj.pk = hash;
+
+            await db.collection('clinicAdmins').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+            obj.clinic = cid;
+            let check = await db.collection('clinicAdmins').find({username: obj.name, _id: {$ne: ObjectID(id) }}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
+            }
+
+            if (obj.password){
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync(obj.password, salt);
+                delete obj.password;
+                obj.pk = hash;
+            }
+
+            await db.collection('clinicAdmins').updateOne({ _id: ObjectID(id), clinic: cid }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
+
+    async clinicAdminDelete(cid, id){
+        await db.collection('clinicAdmins').deleteOne({_id: ObjectID(id), clinic: cid});
+    }
+
 }
 
 module.exports = Admin;
