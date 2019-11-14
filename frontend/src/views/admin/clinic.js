@@ -4,6 +4,9 @@ import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
 import ClinicForm from '../../components/forms/clinicForm';
+import EditClinicForm from '../../components/forms/editClinicForm';
+
+
 
 import {
     Container,
@@ -80,7 +83,7 @@ class Clinic extends Component {
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <ClinicForm initialValues={this.state.initialValues} onSubmit={this.add} />
+                        <ClinicForm initialValues={this.state.initialValues} onSubmit={this.add} /> //ClinicForm
                         :
                         <ClinicForm onSubmit={this.add} />
                     }

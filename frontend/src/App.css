@@ -799,3 +799,6 @@ button {
         margin-top: 10px; }
   .file-drop .gallery-grid .image-wrap {
     height: 300px; }
+
+.select-field .selected {
+  background-color: #ccf2ff; }

@@ -44,12 +44,6 @@ const renderImageField = ({
         />
     )
 
-
-
-
-
-
-
 class form extends React.Component {
     constructor(props) {
         super(props);
@@ -59,8 +53,6 @@ class form extends React.Component {
     }
 
     componentDidMount() {
-
-     
 
     }
 
