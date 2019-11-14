@@ -134,7 +134,6 @@ class form extends React.Component {
                                         component={renderTextArea}
                                         label={"Opis klinike"}
                                         placeholder="Unesite opis klinike"
-                                        validate={[required]}
                                     ></Field>
                                 </Col>
                             </Row>
@@ -145,7 +144,6 @@ class form extends React.Component {
                                         component={renderMultiSelect}
                                         label={"Spisak lekara"}
                                         placeholder="Izaberite lekare"
-                                        validate={[required]}
                                     ></Field>
                                 </Col>
                             </Row>
@@ -156,7 +154,6 @@ class form extends React.Component {
                                         component={renderMultiSelect}
                                         label={"Spisak sala"}
                                         placeholder="Izaberite sale"
-                                        validate={[required]}
                                     ></Field>
                                 </Col>
                             </Row>
@@ -165,7 +162,6 @@ class form extends React.Component {
                                     <label>Slobodni termini pregleda</label>
                                     <Calendar
                                         name="appointment"
-                                        validate={[required]}
                                     />
 
                                 </Col>
@@ -177,7 +173,6 @@ class form extends React.Component {
                                         component={renderTextArea}
                                         label={"Cenovnik"}
                                         placeholder="Unesite cenovnik"
-                                        validate={[required]}
                                     ></Field>
                                 </Col>
                             </Row>

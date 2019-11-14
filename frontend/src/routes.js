@@ -17,6 +17,9 @@ import Patients from './views/admin/patients';
 import PatientLoginPage from './views/patient/login';
 import PatientRegisterPage from './views/patient/register';
 
+import ClinicAdminLogin from './views/clinic/login';
+import ClinicEdit from './views/clinic/editClinic';
+
 
 class Routes extends Component {
 
@@ -101,6 +104,23 @@ class Routes extends Component {
                                 <PatientLoginPage {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/clinic/admin/login"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicAdminLogin {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                                                <Route
+                            path="/clinic/admin/edit"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicEdit {...renderProps} {...this.props} />
+                            )}
+                        />
+
 
                     </Switch>
                 </div>

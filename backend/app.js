@@ -11,6 +11,9 @@ const isAdminAuthenticated = require('./admin/auth');
 const patientModule = new (require('./patient/patient'))();
 const isPatientAuthenticated = require('./patient/auth');
 
+const clinicModule = new (require('./clinic/clinic'))();
+const isClinicAdminAuthenticated = require('./clinic/auth');
+
 
 const app = express();
 app.use(cors());
@@ -110,3 +113,26 @@ app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
 });
 
 
+
+
+/*
+    CLINICS API
+*/
+
+app.post('/clinic/admin/login', async (req, res) => {
+    console.log(req.body);
+    let result = await clinicModule.login(req.body.username, req.body.password);
+    res.send(result.response).status(result.status); 
+});
+
+
+app.get('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicData(uid));
+});
+
+
+app.post('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicUpdate(uid, req.body));
+});
