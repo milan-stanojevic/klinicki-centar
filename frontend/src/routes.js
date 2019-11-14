@@ -5,12 +5,16 @@ import {
     Switch
 } from 'react-router-dom';
 
-import LoginPage from './views/loginPage';
+import AdminLoginPage from './views/admin/login';
 import ClinicList from './views/admin/clinicList';
 import Clinic from './views/admin/clinic';
 import HomePage from './views/homePage';
 import ClinicAdmin from './views/admin/clinicAdmin';
 import ClinicAdminList from './views/admin/clinicAdminList';
+
+import PatientLoginPage from './views/patient/login';
+import PatientRegisterPage from './views/patient/register';
+
 
 class Routes extends Component {
 
@@ -32,10 +36,10 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/login"
+                            path="/admin/login"
                             exact
                             render={(...renderProps) => (
-                                <LoginPage {...renderProps} {...this.props} />
+                                <AdminLoginPage {...renderProps} {...this.props} />
                             )}
                         />
 
@@ -70,6 +74,22 @@ class Routes extends Component {
                         />
 
 
+                        <Route
+                            path="/patient/register"
+                            exact
+                            render={(...renderProps) => (
+                                <PatientRegisterPage {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        
+                        <Route
+                            path="/patient/login"
+                            exact
+                            render={(...renderProps) => (
+                                <PatientLoginPage {...renderProps} {...this.props} />
+                            )}
+                        />
 
                     </Switch>
                 </div>
