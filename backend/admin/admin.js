@@ -8,11 +8,10 @@ let db;
 const dbConnect = require('../db');
 dbConnect()
 .then((conn) => {
-    // your connection object
     db = conn;
 })
 .catch((e) => {
-    // handle err
+    console.log('DB error')
 })
 
 class Admin {
