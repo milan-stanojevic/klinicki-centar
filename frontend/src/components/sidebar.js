@@ -52,6 +52,22 @@ class Sidebar extends Component {
 
                     </ul>
 
+                <h6>PACIJENTI</h6>
+                    <ul>
+
+                        <li>
+                            <Link to='/admin/patients' className={this.props[0].location.pathname == '/admin/patients' ? 'active' : null}>
+                                <Isvg src={list} />
+                                Zahtjevi za registraciju
+                            </Link>
+                        </li>
+
+                       
+
+
+                    </ul>
+
+
                     <ul className="logout">
                         <li onClick={() => localStorage.removeItem('token')}>
                             <Link to='/login' >

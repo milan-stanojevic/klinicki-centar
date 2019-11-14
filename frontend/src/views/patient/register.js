@@ -35,10 +35,7 @@ class Register extends Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                username: data.username,
-                password: data.password
-            })
+            body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
             if (!result.error) {
                 this.props[0].history.push('/patient/login');

@@ -197,6 +197,30 @@ class Admin {
         await db.collection('clinicAdmins').deleteOne({_id: ObjectID(id), clinic: cid});
     }
 
+
+    async allowPatient(id){
+        await db.collection('patients').updateOne({_id: ObjectID(id)}, {$set: {
+            actionCreated: true,
+            verified: true
+        }} );
+    }
+
+    async disallowPatient(id){
+        await db.collection('patients').updateOne({_id: ObjectID(id)}, {$set: {
+            actionCreated: true,
+            verified: false
+        }} );
+    }
+
+    async patients(){
+        let res = await db.collection('patients').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+
+    
+
+
 }
 
 module.exports = Admin;

@@ -11,6 +11,8 @@ import Clinic from './views/admin/clinic';
 import HomePage from './views/homePage';
 import ClinicAdmin from './views/admin/clinicAdmin';
 import ClinicAdminList from './views/admin/clinicAdminList';
+import Patients from './views/admin/patients';
+
 
 import PatientLoginPage from './views/patient/login';
 import PatientRegisterPage from './views/patient/register';
@@ -42,6 +44,15 @@ class Routes extends Component {
                                 <AdminLoginPage {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/admin/patients"
+                            exact
+                            render={(...renderProps) => (
+                                <Patients {...renderProps} {...this.props} />
+                            )}
+                        />
+
 
                         <Route
                             path="/admin/clinic"
@@ -82,7 +93,7 @@ class Routes extends Component {
                             )}
                         />
 
-                        
+
                         <Route
                             path="/patient/login"
                             exact
