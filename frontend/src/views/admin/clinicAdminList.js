@@ -71,7 +71,7 @@ class ClinicAdminList extends Component {
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.token ? <Redirect to='/login' /> : null
+                    !localStorage.token ? <Redirect to='/admin/login' /> : null
                 }
 
                 <Container fluid className="table">

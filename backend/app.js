@@ -8,6 +8,10 @@ const bodyParser = require("body-parser");
 const adminModule = new (require('./admin/admin'))();
 const isAdminAuthenticated = require('./admin/auth');
 
+const patientModule = new (require('./patient/patient'))();
+const isPatientAuthenticated = require('./patient/auth');
+
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json({ limit: '20mb' }));
@@ -70,3 +74,28 @@ app.post('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, res)
 app.delete('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, res) => {
     res.send(await adminModule.clinicAdminDelete(req.params.cid, req.params.id));
 });
+
+
+
+
+/*
+    PATIENT API
+*/
+
+app.post('/patient/login', async (req, res) => {
+    console.log(req.body);
+    let result = await patientModule.login(req.body.username, req.body.password);
+    res.send(result.response).status(result.status); 
+});
+
+app.post('/patient/register', async (req, res) => {
+    console.log(req.body);
+    let result = await patientModule.register(req.body);
+    res.send(result.response).status(result.status); 
+});
+
+app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
+    res.send({ valid: true }).status(200);
+});
+
+

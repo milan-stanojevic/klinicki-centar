@@ -3,9 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 
 
-import logo from '../assets/images/logo.png';
-import bg from '../assets/images/login-bg.png';
-import LoginForm from '../components/forms/loginForm';
+import logo from '../../assets/images/logo.png';
+import bg from '../../assets/images/login-bg.png';
+import LoginForm from '../../components/forms/loginForm';
 
 
 import {
@@ -30,7 +30,7 @@ class LoginPage extends Component {
 
     login(data) {
 
-        fetch('http://127.0.0.1:4000/admin/login', {
+        fetch('http://127.0.0.1:4000/patient/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ class LoginPage extends Component {
             })
         }).then((res) => res.json()).then((result) => {
             if (!result.error) {
-                localStorage.setItem('token', result.token);
+                localStorage.setItem('patientToken', result.token);
                 this.props[0].history.push('/');
             } else {
                 this.setState({
@@ -59,7 +59,7 @@ class LoginPage extends Component {
         return (
             <div className="login-page">
                 {
-                    localStorage.token ? <Redirect to='/' /> : null
+                    localStorage.patientToken ? <Redirect to='/' /> : null
                 }
 
                 <Container className="block-wrap">
@@ -80,7 +80,7 @@ class LoginPage extends Component {
                                         <Container>
                                             <Row>
                                                 <Col lg="12">
-                                                    <h3>Login</h3>
+                                                    <h3>Prijava pacijenta</h3>
                                                     <h6>Hello there! Sign in and start managing your website</h6>
                                                 </Col>
                                             </Row>
