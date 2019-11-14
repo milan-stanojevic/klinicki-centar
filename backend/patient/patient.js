@@ -95,6 +95,7 @@ class Patient {
         delete obj.password;
         obj.pk = hash;
         obj.verified = false;
+        obj.registerTimestamp = Math.floor(new Date().getTime() / 1000);
 
         await db.collection('patients').insertOne(obj);
 

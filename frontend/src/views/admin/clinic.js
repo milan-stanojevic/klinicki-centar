@@ -73,6 +73,7 @@ class Clinic extends Component {
             <div className="page-wrap">
                 {
                     !localStorage.token ? <Redirect to='/admin/login' /> : null
+                
                 }
 
                 <Container fluid>

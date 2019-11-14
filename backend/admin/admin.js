@@ -8,11 +8,10 @@ let db;
 const dbConnect = require('../db');
 dbConnect()
 .then((conn) => {
-    // your connection object
     db = conn;
 })
 .catch((e) => {
-    // handle err
+    console.log('DB error')
 })
 
 class Admin {
@@ -196,6 +195,30 @@ class Admin {
     async clinicAdminDelete(cid, id){
         await db.collection('clinicAdmins').deleteOne({_id: ObjectID(id), clinic: cid});
     }
+
+
+    async allowPatient(id){
+        await db.collection('patients').updateOne({_id: ObjectID(id)}, {$set: {
+            actionCreated: true,
+            verified: true
+        }} );
+    }
+
+    async disallowPatient(id){
+        await db.collection('patients').updateOne({_id: ObjectID(id)}, {$set: {
+            actionCreated: true,
+            verified: false
+        }} );
+    }
+
+    async patients(){
+        let res = await db.collection('patients').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+
+    
+
 
 }
 

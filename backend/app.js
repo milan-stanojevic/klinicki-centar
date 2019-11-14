@@ -75,6 +75,17 @@ app.delete('/admin/clinic/:cid/admins/:id', isAdminAuthenticated, async (req, re
     res.send(await adminModule.clinicAdminDelete(req.params.cid, req.params.id));
 });
 
+app.get('/admin/patients/allow/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.allowPatient(req.params.id));
+});
+app.get('/admin/patients/disallow/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.disallowPatient(req.params.id));
+});
+
+app.get('/admin/patients', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.patients());
+});
+
 
 
 

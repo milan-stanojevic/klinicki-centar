@@ -28,7 +28,7 @@ class HomePage extends Component {
         return (
             <div className="page-wrap">
                             {
-                    !localStorage.token ? <Redirect to='/login' /> : <Redirect to='/admin/clinic' />
+                    !localStorage.patientToken ? <Redirect to='/patient/register' /> : null
                 }
 
             </div>
