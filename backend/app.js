@@ -11,6 +11,9 @@ const isAdminAuthenticated = require('./admin/auth');
 const patientModule = new (require('./patient/patient'))();
 const isPatientAuthenticated = require('./patient/auth');
 
+// const doctorModule = new (require('./doctor/doctor'))();
+// const isDoctorAuthenticated = require('./doctor/auth');
+
 const clinicModule = new (require('./clinic/clinic'))();
 const isClinicAdminAuthenticated = require('./clinic/auth');
 
@@ -90,8 +93,6 @@ app.get('/admin/patients', isAdminAuthenticated, async (req, res) => {
 });
 
 
-
-
 /*
     PATIENT API
 */
@@ -112,7 +113,21 @@ app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
     res.send({ valid: true }).status(200);
 });
 
+/*
+    DOCTOR API
+*/
 
+// app.post('/doctor/login', async (req, res) => {
+//     console.log(req.body);
+//     let result = await doctorModule.login(req.body.username, req.body.password);
+//     res.send(result.response).status(result.status); 
+// });
+
+// app.post('/doctor/register', async (req, res) => {
+//     console.log(req.body);
+//     let result = await doctorModule.register(req.body);
+//     res.send(result.response).status(result.status); 
+// });
 
 
 /*
@@ -136,3 +151,4 @@ app.post('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicUpdate(uid, req.body));
 });
+

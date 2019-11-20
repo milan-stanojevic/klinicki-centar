@@ -802,3 +802,17 @@ button {
 
 .select-field .selected {
   background-color: #ccf2ff; }
+
+.table-box {
+  border: 1px solid #555555;
+  color: #555555;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+  height: 150px;
+  margin-top: 24px;
+  padding: 40px; }
+
+.table-box a:hover, a:visited, a:link, a:active {
+  text-decoration: none; }

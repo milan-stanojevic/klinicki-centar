@@ -4,7 +4,10 @@ import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
 import ClinicForm from '../../components/forms/clinicForm';
-import EditClinicForm from '../../components/forms/editClinicForm';
+// import DoctorHomePage from '../../views/doctor/docHomePage';
+// import PatientHomePage from '../../views/patient/patientHomePage';
+// import MedicalStaff from '../../components/forms/medicalStaff';
+
 
 
 
