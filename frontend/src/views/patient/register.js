@@ -38,7 +38,7 @@ class Register extends Component {
             body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
             if (!result.error) {
-                this.props[0].history.push('/patient/login');
+                this.props[0].history.push('/login');
             } else {
                 this.setState({
                     error: result.error
