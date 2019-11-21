@@ -50,7 +50,7 @@ class Test extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-4"><Link to="/doctor/patientsList">
+                        <div class="col-6 col-lg-4"><Link to="/doctor/patients">
                             <div class="table-box">
                                 <p>Lista pacijenata</p>
                             </div>
