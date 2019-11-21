@@ -20,6 +20,7 @@ import PatientRegisterPage from './views/patient/register';
 import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
 import DocHomePage from './views/doctor/docHomePage'
+import PatientsList from './views/doctor/patientsList'
 import EditProfile from './views/doctor/editProfile'
 import PatientHomePage from './views/patient/patientHomePage'
 
@@ -163,6 +164,7 @@ class Routes extends Component {
                             )}
                         />
 
+                        
 
                     </Switch>
                 </div>
