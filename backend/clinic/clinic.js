@@ -244,6 +244,34 @@ class Clinic {
         return await db.collection('clinicUsers').find({ clinic: admin[0].clinic }).toArray();
     }
 
+    async clinicUpdate(uid, obj) {
+        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(uid) }).toArray();
+
+        if (!admin.length){
+            return null;
+        }
+
+
+
+        let _id;
+        _id = ObjectID(admin[0].clinic);
+        delete obj._id;
+        let check = await db.collection('clinics').find({ name: obj.name, _id: { $ne: ObjectID(admin[0].clinic) } }).count();
+        if (check) {
+            return {
+                error: `Clinic with name "${obj.name}" already exists`
+            }
+        }
+
+        await db.collection('clinics').updateOne({ _id: ObjectID(admin[0].clinic) }, {
+            $set: obj
+        })
+
+
+        return {
+            id: _id
+        };
+    }
 
 
 
