@@ -23,6 +23,8 @@ import DocHomePage from './views/doctor/docHomePage'
 import EditProfile from './views/doctor/editProfile'
 import PatientHomePage from './views/patient/patientHomePage'
 
+import ClinicUser from './views/clinic/user'
+import ClinicUsers from './views/clinic/users'
 
 class Routes extends Component {
 
@@ -144,6 +146,20 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <PatientHomePage {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/users/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicUser {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/users"
+                            exact
+                            render={(...renderProps) => (
+                                <ClinicUsers {...renderProps} {...this.props} />
                             )}
                         />
 
