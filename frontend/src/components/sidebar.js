@@ -70,8 +70,31 @@ class Sidebar extends Component {
 
                     }
 
+                    {
+                        localStorage.clinicAdminToken ?
+                            <>
+                                <h6>OSOBLJE</h6>
+                                <ul>
+
+                                    <li>
+                                        <Link to='/clinic/users' className={this.props[0].location.pathname == '/clinic/users' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Lista osoblja
+                        </Link>
+                                    </li>
+
+
+
+
+                                </ul>
+                            </>
+                            :
+                            null
+
+                    }
+
                     <ul className="logout">
-                        <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken');  }   }>
+                        <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken'); }}>
                             <Link to='/login' >
                                 <Isvg src={exit} />
                                 Odjavi se
