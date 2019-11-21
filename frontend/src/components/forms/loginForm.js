@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Text from './fields/text';
 import Check from './fields/check';
+import Select from './fields/select';
 
 import {
     Container,
@@ -47,6 +48,24 @@ const renderCheckField = ({
         />
     )
 
+const renderSelectField = ({
+    input,
+    placeholder,
+    label,
+    meta: { touched, error },
+    children
+}) => (
+
+        <Select
+            placeholder={placeholder}
+            label={label}
+            errorText={touched && error}
+            error={touched && error}
+            {...input}
+        >
+            {children}
+        </Select>
+    )
 
 
 const form = (props) => {
@@ -57,6 +76,23 @@ const form = (props) => {
 
         <form onSubmit={handleSubmit}>
             <Row>
+                <Col lg="12" className="input-wrap">
+                    <Field
+                        name="type"
+                        component={renderSelectField}
+                        label={"Tip korisnika"}
+                        placeholder="Izaberite tip"
+                        validate={[required]}
+                    >
+                        <option value="admin">Admin klinickog centra</option>
+                        <option value="clinicAdmin">Admin klinike</option>
+                        <option value="clinicUser">Medecinsko osoblje</option>
+                        <option value="patient">Pacijent</option>
+
+                    </Field>
+
+                </Col>
+
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="username"

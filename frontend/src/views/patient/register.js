@@ -55,7 +55,7 @@ class Register extends Component {
         return (
             <div className="login-page">
                 {
-                    localStorage.patientToken ? <Redirect to='/' /> : null
+                    localStorage.patientToken ? <Redirect to='/patient' /> : null
                 }
 
                 <Container className="block-wrap">

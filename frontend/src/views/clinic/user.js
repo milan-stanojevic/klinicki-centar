@@ -69,7 +69,7 @@ class ClinicUser extends Component {
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.clinicAdminToken ? <Redirect to='/clinic/admin/login' /> : null
+                    !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
                 }
 
                 <Container fluid>

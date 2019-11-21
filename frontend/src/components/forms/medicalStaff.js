@@ -41,23 +41,23 @@ const renderTextField = ({
         />
     )
 
-    const renderDateField = ({
-        input,
-        placeholder,
-        label,
-        type,
-        meta: { touched, error },
-    }) => (
-            <Date
-                placeholder={placeholder}
-                label={label}
-                errorText={touched && error}
-                type={type}
-                error={touched && error}
-                {...input}
-            />
-        )
-    
+const renderDateField = ({
+    input,
+    placeholder,
+    label,
+    type,
+    meta: { touched, error },
+}) => (
+        <Date
+            placeholder={placeholder}
+            label={label}
+            errorText={touched && error}
+            type={type}
+            error={touched && error}
+            {...input}
+        />
+    )
+
 
 const renderTextArea = ({
     input,
@@ -89,7 +89,7 @@ const renderSelectField = ({
             error={touched && error}
             {...input}
         >
-        {children}
+            {children}
         </Select>
     )
 
@@ -157,22 +157,11 @@ class form extends React.Component {
                                     ></Field>
                                 </Col>
                             </Row>
+
                             <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
-                                        name="old-password"
-                                        component={renderTextField}
-                                        label={"Trenutna lozinka"}
-                                        placeholder="Unesite trenutnu lozinku"
-                                        // validate={[required]}
-                                        type="password"
-                                    ></Field>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col lg="6" className="input-wrap">
-                                    <Field
-                                        name="new-password"
+                                        name="password"
                                         component={renderTextField}
                                         label={"Nova lozinka"}
                                         placeholder="Unesite novu lozinku"
@@ -185,7 +174,7 @@ class form extends React.Component {
                             <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
-                                        name="name"
+                                        name="firstName"
                                         component={renderTextField}
                                         label={"Ime"}
                                         placeholder="Unesite ime"
@@ -196,7 +185,7 @@ class form extends React.Component {
                             <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
-                                        name="lastname"
+                                        name="lastName"
                                         component={renderTextField}
                                         label={"Prezime"}
                                         placeholder="Unesite prezime"
@@ -232,8 +221,8 @@ class form extends React.Component {
                                         label={"Pol"}
                                         placeholder="Izaberite pol"
                                     >
-                                                <option value="1">Muski</option>
-            <option value="2">Zenski</option>
+                                        <option value="1">Muski</option>
+                                        <option value="2">Zenski</option>
 
                                     </Field>
                                 </Col>

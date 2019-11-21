@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
+import Page from '../../containers/admin/page'
 
 import {
     Container,
@@ -13,10 +14,47 @@ import {
 
 
 class patientsList extends Component {
+    constructor(props) {
+        super(props);
+        this.get = this.get.bind(this);
+
+        this.state = {
+            items: []
+        };
+    }
+
+    componentDidMount() {
+        this.get();
+    }
+
+    get() {
+        if (!localStorage.clientUserToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/patients', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+
+    }
+
 
     render() {
         return (
             <div className="page-wrap">
+                {
+                    !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
+
+                }
+
                 <Container fluid className="table">
 
                     <Row className="page-title">
@@ -39,29 +77,30 @@ class patientsList extends Component {
                         </Col>
 
                     </Row>
-                    {/* {
+                    {
                         this.state.items.map((item, idx) => {
                             return (
                                 <Row className="table-row" key={idx}>
                                     <Col lg="3">
-                                        <span className="value">{item.name}</span>
+                                        <span className="value">{item.firstName}</span>
                                     </Col>
                                     <Col lg="3">
-                                        <span className="value">{item.lastname}</span>
+                                        <span className="value">{item.lastName}</span>
                                     </Col>
                                     <Col lg="3">
-                                        <span className="value">{item.date}</span>
+                                        {/*<span className="value">{item.date}</span>*/}
                                     </Col>
                                     <Col lg="3" className="actions">
-                                        <Link to={`/admin/clinic/${item._id}`}><Isvg src={editIcon} /></Link>
+                                        {/*<Link to={`/admin/clinic/${item._id}`}><Isvg src={editIcon} /></Link>
                                         <Link to={`/admin/clinic/${item._id}/admins`}><Isvg src={adminIcon} /></Link>
 
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                            */}
                                     </Col>
                                 </Row>
                             )
                         })
-                    }  */}
+                    }
 
                 </Container>
             </div>
@@ -69,4 +108,4 @@ class patientsList extends Component {
     }
 }
 
-export default patientsList
+export default Page(patientsList)

@@ -19,14 +19,14 @@ import PatientRegisterPage from './views/patient/register';
 
 import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
-import DocHomePage from './views/doctor/docHomePage'
+import DocHomePage from './views/doctor/home'
 import PatientsList from './views/doctor/patientsList'
 import EditProfile from './views/doctor/editProfile'
 import PatientHomePage from './views/patient/patientHomePage'
 
 import ClinicUser from './views/clinic/user'
 import ClinicUsers from './views/clinic/users'
-
+import ClinicUserLogin from './views/patient/login'
 class Routes extends Component {
 
     componentDidMount() {
@@ -47,7 +47,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/admin/login"
+                            path="/login"
                             exact
                             render={(...renderProps) => (
                                 <AdminLoginPage {...renderProps} {...this.props} />
@@ -103,22 +103,6 @@ class Routes extends Component {
                         />
 
 
-                        <Route
-                            path="/patient/login"
-                            exact
-                            render={(...renderProps) => (
-                                <PatientLoginPage {...renderProps} {...this.props} />
-                            )}
-                        />
-
-                        <Route
-                            path="/clinic/admin/login"
-                            exact
-                            render={(...renderProps) => (
-                                <ClinicAdminLogin {...renderProps} {...this.props} />
-                            )}
-                        />
-
                                                 <Route
                             path="/clinic/admin/edit"
                             exact
@@ -164,7 +148,15 @@ class Routes extends Component {
                             )}
                         />
 
-                        
+                        <Route
+                            path="/doctor/patients"
+                            exact
+                            render={(...renderProps) => (
+                                <PatientsList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
 
                     </Switch>
                 </div>

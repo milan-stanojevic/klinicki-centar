@@ -30,25 +30,91 @@ class LoginPage extends Component {
 
     login(data) {
 
-        fetch('http://127.0.0.1:4000/admin/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: data.username,
-                password: data.password
-            })
-        }).then((res) => res.json()).then((result) => {
-            if (!result.error) {
-                localStorage.setItem('token', result.token);
-                this.props[0].history.push('/admin/clinic');
-            } else {
-                this.setState({
-                    error: result.error
+
+        if (data.type == 'admin') {
+            fetch('http://127.0.0.1:4000/admin/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password
                 })
-            }
-        })
+            }).then((res) => res.json()).then((result) => {
+                if (!result.error) {
+                    localStorage.setItem('token', result.token);
+                    this.props[0].history.push('/admin/clinic');
+                } else {
+                    this.setState({
+                        error: result.error
+                    })
+                }
+            })
+        }else if (data.type == 'clinicAdmin'){
+            fetch('http://127.0.0.1:4000/clinic/admin/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password
+                })
+            }).then((res) => res.json()).then((result) => {
+                if (!result.error) {
+                    localStorage.setItem('clinicAdminToken', result.token);
+                    this.props[0].history.push('/clinic/admin/edit');
+                } else {
+                    this.setState({
+                        error: result.error
+                    })
+                }
+            })
+    
+        }else if (data.type == 'clinicUser'){
+            fetch('http://127.0.0.1:4000/clinic/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password
+                })
+            }).then((res) => res.json()).then((result) => {
+                if (!result.error) {
+                    localStorage.setItem('clinicUserToken', result.token);
+                    this.props[0].history.push('/doctor');
+                } else {
+                    this.setState({
+                        error: result.error
+                    })
+                }
+            })
+    
+        }else if (data.type == 'patient'){
+            fetch('http://127.0.0.1:4000/patient/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password
+                })
+            }).then((res) => res.json()).then((result) => {
+                if (!result.error) {
+                    localStorage.setItem('patientToken', result.token);
+                    this.props[0].history.push('/patient');
+                } else {
+                    this.setState({
+                        error: result.error
+                    })
+                }
+            })
+    
+        }
 
     }
 
@@ -59,7 +125,16 @@ class LoginPage extends Component {
         return (
             <div className="login-page">
                 {
-                    localStorage.token ? <Redirect to='/admin/clinic' /> : null
+                    (localStorage.token) ? <Redirect to='/admin/clinic' /> : null
+                }
+                {
+                    (localStorage.clinicAdminToken) ? <Redirect to='/clinic/admin/edit' /> : null
+                }
+                {
+                    (localStorage.clinicUserToken) ? <Redirect to='/doctor' /> : null
+                }
+                {
+                    (localStorage.patientToken) ? <Redirect to='/patient' /> : null
                 }
 
                 <Container className="block-wrap">
@@ -91,6 +166,8 @@ class LoginPage extends Component {
                                                     :
                                                     null
                                             }
+
+                                            <Link to='/patient/register'>Registruj se kao pacijent</Link>
 
                                         </Container>
 

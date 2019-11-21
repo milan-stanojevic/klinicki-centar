@@ -30,11 +30,11 @@ class EditProfile extends Component {
     add(data) {
         console.log(data);
 
-        fetch('http://127.0.0.1:4000/admin/clinic/' + this.props[0].match.params.id, {
+        fetch('http://127.0.0.1:4000/clinic/user/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
             body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
@@ -44,27 +44,25 @@ class EditProfile extends Component {
                 })
                 return;
             }
-            this.props[0].history.push('/admin/clinic')
+            this.props[0].history.push('/doctor')
         })
     }
 
     componentDidMount() {
-        if (this.props[0].match.params.id != 'new') {
-            fetch('http://127.0.0.1:4000/admin/clinic/' + this.props[0].match.params.id, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+        fetch('http://127.0.0.1:4000/clinic/user', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
 
-                }
-            }).then((res) => res.json()).then((result) => {
-                this.setState({
-                    initialValues: result
-                })
-                console.log(result);
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                initialValues: result
             })
+            console.log(result);
+        })
 
-        }
     }
 
 
@@ -72,7 +70,7 @@ class EditProfile extends Component {
         return (
             <div className="page-wrap">
                 {
-                   // !localStorage.token ? <Redirect to='/admin/login' /> : null
+                    !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
                 
                 }
 

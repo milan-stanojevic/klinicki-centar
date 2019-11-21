@@ -9,7 +9,6 @@ import rocket from '../assets/svg/rocket.svg';
 import mail from '../assets/svg/mail.svg';
 import settings from '../assets/svg/settings.svg';
 import exit from '../assets/svg/exit.svg';
-import docHomePage from '../views/doctor/docHomePage';
 
 
 class Sidebar extends Component {
@@ -30,51 +29,59 @@ class Sidebar extends Component {
         return (
 
             <div className={this.state._show ? `sidebar` : 'sidebar sidebar-hidden'}>
-
                 <div className="items">
-                    <h6>KLINIKE</h6>
-                    <ul>
+                    {localStorage.token ?
 
-                        <li>
-                            <Link to='/admin/clinic' className={this.props[0].location.pathname == '/admin/clinic' ? 'active' : null}>
-                                <Isvg src={list} />
-                                Sve klinike
+                        <>
+                            <h6>KLINIKE</h6>
+                            <ul>
+
+                                <li>
+                                    <Link to='/admin/clinic' className={this.props[0].location.pathname == '/admin/clinic' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Sve klinike
                             </Link>
-                        </li>
+                                </li>
 
-                        <li>
-                            <Link to='/admin/clinic/new' className={this.props[0].location.pathname == '/admin/clinic/new' ? 'active' : null}>
-                                <Isvg src={list} />
-                                Dodaj kliniku
+                                <li>
+                                    <Link to='/admin/clinic/new' className={this.props[0].location.pathname == '/admin/clinic/new' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Dodaj kliniku
                             </Link>
-                        </li>
-                    </ul>
-                    <h6>PACIJENTI</h6>
-                    <ul>
+                                </li>
+                            </ul>
+                            <h6>PACIJENTI</h6>
+                            <ul>
 
-                        <li>
-                            <Link to='/admin/patients' className={this.props[0].location.pathname == '/admin/patients' ? 'active' : null}>
-                                <Isvg src={list} />
-                                Zahtjevi za registraciju
+                                <li>
+                                    <Link to='/admin/patients' className={this.props[0].location.pathname == '/admin/patients' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Zahtjevi za registraciju
                             </Link>
-                        </li>
+                                </li>
 
 
 
 
-                    </ul>
+                            </ul>
+                        </>
+                        :
+                        null
 
+                    }
 
                     <ul className="logout">
-                        <li onClick={() => localStorage.removeItem('token')}>
-                            <Link to='/admin/login' >
+                        <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken');  }   }>
+                            <Link to='/login' >
                                 <Isvg src={exit} />
                                 Odjavi se
                             </Link>
                         </li>
                     </ul>
 
+
                 </div>
+
 
                 <div className="menu" onClick={() => this.setState({ _show: !this.state._show })}>
                     <Isvg src={menu} />

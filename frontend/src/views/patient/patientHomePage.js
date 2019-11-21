@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Link, Redirect } from 'react-router-dom';
+import Page from '../../containers/admin/page';
 
 import {
     Container,
@@ -22,9 +24,9 @@ class patientHomePage extends Component {
     render() {
         return (
             <div className="page-wrap">
-                {/* {
-                    !localStorage.token ? <Redirect to='/admin/login' /> : null
-                } */}
+                {
+                    !localStorage.patientToken ? <Redirect to='/login' /> : null
+                }
 
                 <Container fluid className="table">
 
@@ -66,4 +68,4 @@ class patientHomePage extends Component {
     }
 }
 
-export default patientHomePage
+export default Page(patientHomePage)

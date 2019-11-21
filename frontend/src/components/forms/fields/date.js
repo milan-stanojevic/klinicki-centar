@@ -27,7 +27,6 @@ class Date extends Component {
                 {this.props.label ? <label>{this.props.label}</label> : null}
                 <br/>
                 <DatePicker
-                    selected={this.props.value}
                     onChange={this.props.onChange}
                 />
 

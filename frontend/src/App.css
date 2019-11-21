@@ -465,6 +465,40 @@
       border-radius: 6px;
       outline: none;
       border: 0; }
+  .login-page .select-field {
+    border: 1px solid #AAAAAA;
+    border-radius: 6px;
+    min-width: 100%;
+    padding: 0;
+    height: 46px;
+    font-size: 16px; }
+    .login-page .select-field button {
+      all: unset;
+      width: 100%;
+      padding: 5px 10px; }
+    .login-page .select-field a {
+      color: #555555; }
+    .login-page .select-field .dropdown-menu {
+      min-width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      overflow-x: hidden; }
+    .login-page .select-field .dropdown-toggle {
+      height: 46px;
+      float: left;
+      width: 100%; }
+      .login-page .select-field .dropdown-toggle::after {
+        display: none; }
+      .login-page .select-field .dropdown-toggle::before {
+        content: " ";
+        display: block;
+        border-top: 2px solid #555555;
+        border-right: 2px solid #555555;
+        width: 10px;
+        height: 10px;
+        transform: rotate(135deg);
+        float: right;
+        margin-top: 4px; }
 
 html, body {
   min-height: 100%;
