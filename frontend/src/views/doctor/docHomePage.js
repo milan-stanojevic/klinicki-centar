@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
+
 import {
     Container,
     Row,
@@ -36,11 +37,11 @@ class docHomePage extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-4"><a href="">
+                        <div class="col-6 col-lg-4"><Link to="/doctor/patientsList">
                             <div class="table-box">
                                 <p>Lista pacijenata</p>
                             </div>
-                        </a></div>
+                        </Link></div>
 
                         <div class="col-6 col-lg-4"><a href="">
                             <div class="table-box">
@@ -71,6 +72,13 @@ class docHomePage extends Component {
                                 <p>Zakazivanje pregleda/operacija</p>
                             </div>
                         </a></div>
+
+                        <div class="col-6 col-lg-4"><a href="">
+                            <div class="table-box">
+                                <p>Overa recepata</p>
+                            </div>
+                        </a></div>
+
 
 
                     </Row>
