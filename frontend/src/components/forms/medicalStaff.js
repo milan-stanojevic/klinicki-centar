@@ -9,6 +9,7 @@ import TextArea from './fields/textarea';
 import Select from './fields/select';
 import MultiSelect from './fields/multiSelect';
 
+import Date from './fields/date';
 
 import {
     Container,
@@ -40,6 +41,24 @@ const renderTextField = ({
         />
     )
 
+    const renderDateField = ({
+        input,
+        placeholder,
+        label,
+        type,
+        meta: { touched, error },
+    }) => (
+            <Date
+                placeholder={placeholder}
+                label={label}
+                errorText={touched && error}
+                type={type}
+                error={touched && error}
+                {...input}
+            />
+        )
+    
+
 const renderTextArea = ({
     input,
     placeholder,
@@ -60,6 +79,7 @@ const renderSelectField = ({
     placeholder,
     label,
     meta: { touched, error },
+    children
 }) => (
 
         <Select
@@ -69,8 +89,7 @@ const renderSelectField = ({
             error={touched && error}
             {...input}
         >
-            <option value="1">Muski</option>
-            <option value="2">Zenski</option>
+        {children}
         </Select>
     )
 
@@ -196,12 +215,13 @@ class form extends React.Component {
                             </Row>
                             <Row>
                                 <Col lg="6" className="input-wrap">
-                                    <label>Datum rodjenja</label>
-                                    <br></br>
-                                    <DatePicker
-                                        selected={this.state.startDate}
-                                        onChange={this.handleChange}
-                                    />
+                                    <Field
+                                        name="datum"
+                                        component={renderDateField}
+                                        label={"Datum rodjenja"}
+                                        placeholder="Izaberite datum"
+                                    >
+                                    </Field>
                                 </Col>
                             </Row>
                             <Row>
@@ -212,6 +232,9 @@ class form extends React.Component {
                                         label={"Pol"}
                                         placeholder="Izaberite pol"
                                     >
+                                                <option value="1">Muski</option>
+            <option value="2">Zenski</option>
+
                                     </Field>
                                 </Col>
                             </Row>

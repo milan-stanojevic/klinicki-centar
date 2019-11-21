@@ -19,6 +19,9 @@ import PatientRegisterPage from './views/patient/register';
 
 import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
+import DocHomePage from './views/doctor/docHomePage'
+import EditProfile from './views/doctor/editProfile'
+import PatientHomePage from './views/patient/patientHomePage'
 
 
 class Routes extends Component {
@@ -118,6 +121,29 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <ClinicEdit {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        
+                        <Route
+                            path="/doctor"
+                            exact
+                            render={(...renderProps) => (
+                                <DocHomePage {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/doctor/edit"
+                            exact
+                            render={(...renderProps) => (
+                                <EditProfile {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/patient"
+                            exact
+                            render={(...renderProps) => (
+                                <PatientHomePage {...renderProps} {...this.props} />
                             )}
                         />
 

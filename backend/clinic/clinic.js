@@ -86,34 +86,62 @@ class Clinic {
         }
     }
 
-    async clinicUpdate(uid, obj) {
-        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(uid) }).toArray();
-
-        if (!admin.length){
-            return null;
-        }
-
-
-
+    async clinicAdminUpdate(cid, id, obj) {
         let _id;
-        _id = ObjectID(admin[0].clinic);
-        delete obj._id;
-        let check = await db.collection('clinics').find({ name: obj.name, _id: { $ne: ObjectID(admin[0].clinic) } }).count();
-        if (check) {
-            return {
-                error: `Clinic with name "${obj.name}" already exists`
+
+
+        if (id == 'new') {
+            let check = await db.collection('clinicAdmins').find({username: obj.username}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
             }
+            
+            _id = ObjectID();
+            obj._id = _id;
+            obj.clinic = cid;
+
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(obj.password, salt);
+            delete obj.password;
+            obj.pk = hash;
+
+            await db.collection('clinicAdmins').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+            obj.clinic = cid;
+            let check = await db.collection('clinicAdmins').find({username: obj.name, _id: {$ne: ObjectID(id) }}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
+            }
+
+            if (obj.password){
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync(obj.password, salt);
+                delete obj.password;
+                obj.pk = hash;
+            }
+
+            await db.collection('clinicAdmins').updateOne({ _id: ObjectID(id), clinic: cid }, {
+                $set: obj
+            })
         }
-
-        await db.collection('clinics').updateOne({ _id: ObjectID(admin[0].clinic) }, {
-            $set: obj
-        })
-
 
         return {
             id: _id
         };
     }
+
+    async clinicAdminDelete(cid, id){
+        await db.collection('clinicAdmins').deleteOne({_id: ObjectID(id), clinic: cid});
+    }
+
+
+
 
 }
 

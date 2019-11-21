@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import {Link} from 'react-router-dom'
 import {
     Container,
     Row,
@@ -60,11 +60,11 @@ class docHomePage extends Component {
                             </div>
                         </a></div>
 
-                        <div class="col-6 col-lg-4"><a href="">
+                        <div class="col-6 col-lg-4"><Link to="/doctor/edit">
                             <div class="table-box">
                                 <p>Moj profil</p>
                             </div>
-                        </a></div>
+                        </Link></div>
 
                         <div class="col-6 col-lg-4"><a href="">
                             <div class="table-box">
