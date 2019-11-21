@@ -28,7 +28,7 @@ class patientsList extends Component {
     }
 
     get() {
-        if (!localStorage.clientUserToken) {
+        if (!localStorage.clinicUserToken) {
             return;
         }
 
