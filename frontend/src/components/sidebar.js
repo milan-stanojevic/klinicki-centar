@@ -70,7 +70,7 @@ class Sidebar extends Component {
 
                     <ul className="logout">
                         <li onClick={() => localStorage.removeItem('token')}>
-                            <Link to='/login' >
+                            <Link to='/admin/login' >
                                 <Isvg src={exit} />
                                 Odjavi se
                             </Link>

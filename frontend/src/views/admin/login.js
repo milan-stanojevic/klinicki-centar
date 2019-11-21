@@ -42,7 +42,7 @@ class LoginPage extends Component {
         }).then((res) => res.json()).then((result) => {
             if (!result.error) {
                 localStorage.setItem('token', result.token);
-                this.props[0].history.push('/');
+                this.props[0].history.push('/admin/clinic');
             } else {
                 this.setState({
                     error: result.error
