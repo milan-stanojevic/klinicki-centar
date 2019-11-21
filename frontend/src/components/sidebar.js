@@ -9,6 +9,7 @@ import rocket from '../assets/svg/rocket.svg';
 import mail from '../assets/svg/mail.svg';
 import settings from '../assets/svg/settings.svg';
 import exit from '../assets/svg/exit.svg';
+import docHomePage from '../views/doctor/docHomePage';
 
 
 class Sidebar extends Component {
@@ -47,12 +48,8 @@ class Sidebar extends Component {
                                 Dodaj kliniku
                             </Link>
                         </li>
-
-
-
                     </ul>
-
-                <h6>PACIJENTI</h6>
+                    <h6>PACIJENTI</h6>
                     <ul>
 
                         <li>
@@ -62,7 +59,7 @@ class Sidebar extends Component {
                             </Link>
                         </li>
 
-                       
+
 
 
                     </ul>
