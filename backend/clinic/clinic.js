@@ -107,8 +107,12 @@ class Clinic {
     }
 
 
-    async patients() {
-        return await db.collection('patients').find({}).toArray();
+    async patients(sort) {
+
+        if (sort == 0)
+            return await db.collection('patients').find({}).sort({ username: 1 }).toArray();
+        else if (sort == 1)
+            return await db.collection('patients').find({}).sort({ _id: 1 }).toArray();
 
 
     }
@@ -245,9 +249,9 @@ class Clinic {
     }
 
     async clinicUpdate(uid, obj) {
-        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(uid) }).toArray();
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
 
-        if (!admin.length){
+        if (!admin.length) {
             return null;
         }
 
