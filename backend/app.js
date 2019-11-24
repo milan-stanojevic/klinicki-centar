@@ -196,3 +196,13 @@ app.post('/clinic/user/update', isClinicAdminAuthenticated, async (req, res) => 
     res.send(await clinicModule.updateUserProfile(uid, req.body));
 });
 
+app.post('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await clinicModule.updateClinicAdmin(uid, req.body));
+});
+app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicAdmin(uid));
+});
+

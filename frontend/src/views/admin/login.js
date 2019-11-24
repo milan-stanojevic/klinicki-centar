@@ -64,7 +64,7 @@ class LoginPage extends Component {
             }).then((res) => res.json()).then((result) => {
                 if (!result.error) {
                     localStorage.setItem('clinicAdminToken', result.token);
-                    this.props[0].history.push('/clinic/admin/edit');
+                    this.props[0].history.push('/clinic/users');
                 } else {
                     this.setState({
                         error: result.error
@@ -128,7 +128,7 @@ class LoginPage extends Component {
                     (localStorage.token) ? <Redirect to='/admin/clinic' /> : null
                 }
                 {
-                    (localStorage.clinicAdminToken) ? <Redirect to='/clinic/admin/edit' /> : null
+                    (localStorage.clinicAdminToken) ? <Redirect to='/clinic/users' /> : null
                 }
                 {
                     (localStorage.clinicUserToken) ? <Redirect to='/doctor' /> : null

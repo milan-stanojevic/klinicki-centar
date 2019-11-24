@@ -26,7 +26,11 @@ import PatientHomePage from './views/patient/patientHomePage'
 
 import ClinicUser from './views/clinic/user'
 import ClinicUsers from './views/clinic/users'
+import Ordinations from './views/clinic/ordinations'
+import Ordination from './views/clinic/ordination'
+import EditProfileCA from './views/admin/editProfileCA'
 import ClinicUserLogin from './views/patient/login'
+import editProfileCA from './views/admin/editProfileCA';
 class Routes extends Component {
 
     componentDidMount() {
@@ -147,12 +151,33 @@ class Routes extends Component {
                                 <ClinicUsers {...renderProps} {...this.props} />
                             )}
                         />
+                        <Route
+                            path="/clinic/ordinations"
+                            exact
+                            render={(...renderProps) => (
+                                <Ordinations {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/ordination/new"
+                            exact
+                            render={(...renderProps) => (
+                                <Ordination {...renderProps} {...this.props} />
+                            )}
+                        />
 
                         <Route
                             path="/doctor/patients"
                             exact
                             render={(...renderProps) => (
                                 <PatientsList {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/admin/update"
+                            exact
+                            render={(...renderProps) => (
+                                <EditProfileCA {...renderProps} {...this.props} />
                             )}
                         />
 

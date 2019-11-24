@@ -197,6 +197,43 @@ class Clinic {
             id: _id
         };
     }
+    async updateClinicAdmin(uid, obj) {
+        let _id;
+
+
+        let check = await db.collection('clinicAdmins').find({ username: obj.name, _id: { $ne: ObjectID(uid) } }).count();
+        if (check) {
+            return {
+                error: `User with username "${obj.username}" already exists`
+            }
+        }
+
+        if (obj.password) {
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(obj.password, salt);
+            delete obj.password;
+            obj.pk = hash;
+        }
+        delete obj._id;
+        await db.collection('clinicAdmins').updateOne({ _id: ObjectID(uid) }, {
+            $set: obj
+        })
+
+
+        return {
+            id: uid
+        };
+    }
+    async clinicAdmin(uid, obj) {
+        let _id;
+
+        
+        let res = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+    
+
+
+        return res[0];
+    }
 
     async updateUserProfile(id, obj) {
         let _id;
@@ -245,9 +282,9 @@ class Clinic {
     }
 
     async clinicUpdate(uid, obj) {
-        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(uid) }).toArray();
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
 
-        if (!admin.length){
+        if (!admin.length) {
             return null;
         }
 

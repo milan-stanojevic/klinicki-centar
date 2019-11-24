@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
-import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
-import ClinicForm from '../../components/forms/editClinicForm';
-
+import ClinicAdminProfile from '../../components/forms/clinicAdminProfile';
 
 import {
     Container,
@@ -16,7 +14,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class Clinic extends Component {
+class EditProfileCA extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
@@ -28,7 +26,7 @@ class Clinic extends Component {
     add(data) {
         console.log(data);
 
-        fetch('http://127.0.0.1:4000/clinic/data', {
+        fetch('http://127.0.0.1:4000/clinic/admin/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,28 +40,26 @@ class Clinic extends Component {
                 })
                 return;
             }
-            //this.props[0].history.push('/admin/clinic')
+            // this.props[0].history.push('/clinic/users')
         })
     }
 
     componentDidMount() {
-            fetch('http://127.0.0.1:4000/clinic/data', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+        fetch('http://127.0.0.1:4000/clinic/admin/update', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
-                }
-            }).then((res) => res.json()).then((result) => {
-                this.setState({
-                    initialValues: result
-                })
-                console.log(result);
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                initialValues: result
             })
+            console.log(result);
+        })
 
-        
     }
-
 
     render() {
         return (
@@ -72,18 +68,16 @@ class Clinic extends Component {
                     !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
                 
                 }
-
                 <Container fluid>
-
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Izmjeni klinku</h3>
+                            <h3>Moj profil</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <ClinicForm initialValues={this.state.initialValues} onSubmit={this.add} />
+                        <ClinicAdminProfile initialValues={this.state.initialValues} onSubmit={this.add} /> 
                         :
-                        <ClinicForm onSubmit={this.add} />
+                        <ClinicAdminProfile onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -92,6 +86,8 @@ class Clinic extends Component {
                             :
                             null
                     }
+                    {/* <ClinicAdminProfile></ClinicAdminProfile> */}
+
                 </Container>
 
 
@@ -100,4 +96,4 @@ class Clinic extends Component {
     }
 }
 
-export default Page(Clinic);
+export default Page(EditProfileCA);
