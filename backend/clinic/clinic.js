@@ -226,12 +226,7 @@ class Clinic {
     }
     async clinicAdmin(uid, obj) {
         let _id;
-
-        
         let res = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
-    
-
-
         return res[0];
     }
 

@@ -112,22 +112,14 @@ app.post('/patient/register', async (req, res) => {
 app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
     res.send({ valid: true }).status(200);
 });
-
-/*
-    DOCTOR API
-*/
-
-// app.post('/doctor/login', async (req, res) => {
-//     console.log(req.body);
-//     let result = await doctorModule.login(req.body.username, req.body.password);
-//     res.send(result.response).status(result.status); 
-// });
-
-// app.post('/doctor/register', async (req, res) => {
-//     console.log(req.body);
-//     let result = await doctorModule.register(req.body);
-//     res.send(result.response).status(result.status); 
-// });
+app.get('/patient/update', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.patient(uid));
+});
+app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.updatePatient(uid, req.body));
+});
 
 
 /*
@@ -205,6 +197,7 @@ app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => 
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicAdmin(uid));
 });
+
 
 
 

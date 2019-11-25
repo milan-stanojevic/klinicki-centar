@@ -107,6 +107,41 @@ class Patient {
         }
 
     }
+    async patient(uid, obj) {
+        let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
+        console.log(res[0]);
+        return res[0];
+    }
+    
+    async updatePatient(uid, obj) {
+        let _id;
+
+
+        let check = await db.collection('patients').find({ username: obj.name, _id: { $ne: ObjectID(uid) } }).count();
+        if (check) {
+            return {
+                error: `User with username "${obj.username}" already exists`
+            }
+        }
+
+        if (obj.password) {
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(obj.password, salt);
+            delete obj.password;
+            obj.pk = hash;
+        }
+        delete obj._id;
+        await db.collection('patients').updateOne({ _id: ObjectID(uid) }, {
+            $set: obj
+        })
+
+
+        return {
+            id: uid
+        };
+    }
+    
+    
 
     async clinicList(){
         let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();

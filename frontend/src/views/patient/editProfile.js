@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
+import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
+import PatientProfile from '../../components/forms/patientProfileForm';
 
-import ClinicAdminProfile from '../../components/forms/clinicAdminProfile';
 
 import {
     Container,
@@ -14,7 +15,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class EditProfileCA extends Component {
+class EditProfile extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
@@ -26,11 +27,11 @@ class EditProfileCA extends Component {
     add(data) {
         console.log(data);
 
-        fetch('http://127.0.0.1:4000/clinic/admin/update', {
+        fetch('http://127.0.0.1:4000/patient/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
             },
             body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
@@ -40,16 +41,16 @@ class EditProfileCA extends Component {
                 })
                 return;
             }
-            // this.props[0].history.push('/clinic/users')
+            this.props[0].history.push('/patient')
         })
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/admin/update', {
+        fetch('http://127.0.0.1:4000/patient/update', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
 
             }
         }).then((res) => res.json()).then((result) => {
@@ -65,19 +66,21 @@ class EditProfileCA extends Component {
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
+                    !localStorage.patientToken ? <Redirect to='/login' /> : null
                 
                 }
+
                 <Container fluid>
+
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Moj profil</h3>
+                             <h3>Moj profil</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <ClinicAdminProfile initialValues={this.state.initialValues} onSubmit={this.add} /> 
+                        <PatientProfile initialValues={this.state.initialValues} onSubmit={this.add} /> 
                         :
-                        <ClinicAdminProfile onSubmit={this.add} />
+                        <PatientProfile onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -94,4 +97,4 @@ class EditProfileCA extends Component {
     }
 }
 
-export default Page(EditProfileCA);
+export default Page(EditProfile)
