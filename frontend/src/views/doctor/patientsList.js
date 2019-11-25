@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import Page from '../../containers/admin/page'
-
+import Select from '../../components/forms/fields/select'
 import {
     Container,
     Row,
@@ -19,7 +19,8 @@ class patientsList extends Component {
         this.get = this.get.bind(this);
 
         this.state = {
-            items: []
+            items: [],
+            sort: 0
         };
     }
 
@@ -32,7 +33,7 @@ class patientsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/patients', {
+        fetch('http://127.0.0.1:4000/clinic/patients/'+this.state.sort, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,11 +56,18 @@ class patientsList extends Component {
 
                 }
 
+
                 <Container fluid className="table">
 
                     <Row className="page-title">
-                        <Col lg="12">
+                        <Col lg="8">
                             <h3>Lista pacijenata</h3>
+                        </Col>
+                        <Col lg="4">
+                        <Select placeholder="Sortiraj po" onChange={(val) => this.setState({sort: val}, this.get)} value={this.state.sort}>
+                            <option value={0}>Po imenu</option>
+                            <option value={1}>Po jedinstvenom broju</option>
+                            </Select>
                         </Col>
                     </Row>
                     <Row className="table-head">

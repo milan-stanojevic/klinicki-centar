@@ -173,8 +173,8 @@ app.delete('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) =>
     res.send(await clinicModule.clinicUserDelete(uid, req.params.uid));
 });
 
-app.get('/clinic/patients', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.patients());
+app.get('/clinic/patients/:sort', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.patients(req.params.sort));
 });
 
 app.get('/clinic/user', isClinicAdminAuthenticated, async (req, res) => {
