@@ -27,6 +27,9 @@ import PatientHomePage from './views/patient/patientHomePage'
 import ClinicUser from './views/clinic/user'
 import ClinicUsers from './views/clinic/users'
 import Ordinations from './views/clinic/ordinations'
+import Types from './views/clinic/types'
+import Type from './views/clinic/type'
+
 import Ordination from './views/clinic/ordination'
 import EditProfileCA from './views/admin/editProfileCA'
 import ClinicUserLogin from './views/patient/login'
@@ -163,6 +166,20 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Ordination {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/types"
+                            exact
+                            render={(...renderProps) => (
+                                <Types {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/types/new"
+                            exact
+                            render={(...renderProps) => (
+                                <Type {...renderProps} {...this.props} />
                             )}
                         />
 

@@ -5,6 +5,7 @@ import Page from '../../containers/admin/page';
 
 import editIcon from '../../assets/svg/edit.svg';
 import deleteIcon from '../../assets/svg/delete.svg';
+import SearchForm from '../../components/forms/searchForm';
 
 
 
@@ -19,6 +20,53 @@ import {
 } from 'reactstrap';
 
 class Ordinations extends Component {
+    constructor(props) {
+        super(props);
+        this.get = this.get.bind(this);
+        this.delete = this.delete.bind(this);
+
+        this.state = {
+            items: []
+        };
+    }
+
+    componentDidMount() {
+        this.get();
+    }
+
+    get() {
+        if (!localStorage.clinicAdminToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/ordinations', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+
+    }
+
+    delete(id) {
+        if (!localStorage.clinicAdminToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/ordinations/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+
+            },
+        }).then((res) => this.get())
+    }
     render() {
         return (
             <div className="page-wrap">
@@ -33,11 +81,16 @@ class Ordinations extends Component {
                             <h3>Lista sala</h3>
                         </Col>
                     </Row>
+                    <Row>
+                        <Col lg="12">
+                            <SearchForm />
+                        </Col>
+                    </Row>
                     <Row className="table-head">
                         <Col lg="9">
                             <span className="name">Oznaka</span>
                         </Col>
-                        
+
 
                         <Col lg="3" className="actions">
 

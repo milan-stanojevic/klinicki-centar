@@ -18,7 +18,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class Users extends Component {
+class Types extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
@@ -38,7 +38,7 @@ class Users extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/users', {
+        fetch('http://127.0.0.1:4000/clinic/types', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ class Users extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/users/' + id, {
+        fetch('http://127.0.0.1:4000/clinic/types/' + id, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,31 +79,25 @@ class Users extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista korisnika klinike</h3>
+                            <h3>Lista tipova pregleda</h3>
                         </Col>
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm/>
+                            <SearchForm />
                         </Col>
                     </Row>
                     <Row className="table-head">
-                        <Col lg="3">
-                            <span className="name">KORISNICKO IME</span>
+                        <Col lg="4">
+                            <span className="name">Oznaka</span>
                         </Col>
-                        <Col lg="3">
-                            <span className="name">TIP</span>
-                        </Col>
-                        <Col lg="2">
-                            <span className="name">IME</span>
-                        </Col>
-                        <Col lg="2">
-                            <span className="name">PREZIME</span>
+                        <Col lg="4">
+                            <span className="name">Naziv</span>
                         </Col>
 
-                        <Col lg="2" className="actions">
+                        <Col lg="4" className="actions">
 
-                            <span className="name">OBRISI</span>
+                            <span className="name">OPCIJE</span>
                         </Col>
 
                     </Row>
@@ -111,20 +105,15 @@ class Users extends Component {
                         this.state.items.map((item, idx) => {
                             return (
                                 <Row className="table-row" key={idx}>
-                                    <Col lg="3">
-                                        <span className="value">{item.username}</span>
+                                    <Col lg="4">
+                                        <span className="value">{item.tag}</span>
                                     </Col>
-                                    <Col lg="3">
-                                        <span className="value">{item.type}</span>
-                                    </Col>
-                                    <Col lg="2">
-                                        <span className="value">{item.firstName}</span>
-                                    </Col>
-                                    <Col lg="2">
-                                        <span className="value">{item.lastName}</span>
+                                    <Col lg="4">
+                                        <span className="value">{item.name}</span>
                                     </Col>
 
-                                    <Col lg="2" className="actions">
+                                    <Col lg="4" className="actions">
+                                        <Link to={`/clinic/users/${item._id}`}><Isvg src={editIcon} /></Link>
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
                                     </Col>
                                 </Row>
@@ -137,8 +126,8 @@ class Users extends Component {
                 <Container fluid className="bottom-wrap">
                     <Row>
                         <Col lg="12">
-                            <Link to={`/clinic/users/new`}>
-                                <button>Novi korisnik</button>
+                            <Link to={`/clinic/types/new`}>
+                                <button>Novi tip pregleda</button>
                             </Link>
                         </Col>
                     </Row>
@@ -146,8 +135,8 @@ class Users extends Component {
                 </Container>
 
             </div>
-        );
+        )
     }
 }
 
-export default Page(Users);
+export default Page(Types);

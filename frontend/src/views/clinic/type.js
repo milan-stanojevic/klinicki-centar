@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
-import OrdinationForm from '../../components/forms/ordinationForm';
+import TypeForm from '../../components/forms/typeForm';
 
 import {
     Container,
@@ -15,7 +15,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class Ordination extends Component {
+class Type extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
@@ -26,7 +26,7 @@ class Ordination extends Component {
     add(data) {
         console.log(data);
 
-        fetch('http://127.0.0.1:4000/clinic/ordination/' + this.props[0].match.params.id, {
+        fetch('http://127.0.0.1:4000/clinic/types/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,13 +40,13 @@ class Ordination extends Component {
                 })
                 return;
             }
-            this.props[0].history.push('/clinic/ordinations')
+            this.props[0].history.push('/clinic/types')
         })
     }
 
     componentDidMount() {
         if (this.props[0].match.params.id != 'new') {
-            fetch('http://127.0.0.1:4000/clinic/ordinations/' + this.props[0].match.params.id, {
+            fetch('http://127.0.0.1:4000/clinic/types/' + this.props[0].match.params.id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,13 +74,13 @@ class Ordination extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni salu</h3> : <h3>Dodaj salu</h3>}
+                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni tip</h3> : <h3>Dodaj tip</h3>}
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <OrdinationForm initialValues={this.state.initialValues} onSubmit={this.add} />
+                        <TypeForm initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
-                        <OrdinationForm onSubmit={this.add} />
+                        <TypeForm onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -99,4 +99,4 @@ class Ordination extends Component {
     }
 }
 
-export default Page(Ordination)
+export default Page(Type)

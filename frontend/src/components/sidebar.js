@@ -89,6 +89,13 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                     <li>
+                                        <Link to='/clinic/types' className={this.props[0].location.pathname == '/clinic/types' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Lista tipova pregleda
+                                        </Link>
+                                    </li>
+                                    
+                                    <li>
                                         <Link to='/clinic/admin/edit' className={this.props[0].location.pathname == '/clinic/admin/edit' ? 'active' : null}>
                                             <Isvg src={list} />
                                             Uredjivanje profila klinike

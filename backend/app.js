@@ -206,3 +206,5 @@ app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => 
     res.send(await clinicModule.clinicAdmin(uid));
 });
 
+
+
