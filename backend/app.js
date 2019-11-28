@@ -96,6 +96,24 @@ app.post('/admin/patients/notify/:id', isAdminAuthenticated, async (req, res) =>
     res.send(await adminModule.notifyUser(req.params.id, req.body));
 });
 
+app.post('/admin/admins/update/:id', isAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await adminModule.adminUpdate(req.params.id, req.body));
+});
+app.post('/admin/changePassword', isAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await adminModule.adminChangePassword(uid, req.body));
+});
+
+app.get('/admin/checkPasswordChange', isAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await adminModule.checkPasswordChange(uid));
+});
+
+
 /*
     PATIENT API
 */

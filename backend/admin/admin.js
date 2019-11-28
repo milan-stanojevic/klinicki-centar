@@ -79,6 +79,81 @@ class Admin {
         }
     }
 
+
+    async checkPasswordChange(id){
+        let admin = await db.collection('admins').find({_id: ObjectID(id)}).toArray();
+        if (admin[0].changePasswordRequired){
+            return {
+                required: true
+            }
+        }else{
+            return {
+                required: false
+            }
+        }
+    }
+
+    async adminChangePassword(id, obj){
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(obj.password, salt);
+
+        await db.collection('admins').updateOne({_id: ObjectID(id)}, {$set: {
+            pk: hash,
+            changePasswordRequired: false
+        }})
+    }
+
+    async adminUpdate(id, obj) {
+        let _id;
+
+
+        if (id == 'new') {
+            let check = await db.collection('admins').find({username: obj.username}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
+            }
+            
+            _id = ObjectID();
+            obj._id = _id;
+
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(obj.password, salt);
+            delete obj.password;
+            obj.pk = hash;
+            obj.changePasswordRequired = true;
+
+            await db.collection('admins').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+
+            let check = await db.collection('admins').find({username: obj.name, _id: {$ne: ObjectID(id) }}).count();
+            if (check){
+                return {
+                    error: `Administrator with username "${obj.username}" already exists`
+                }
+            }
+            obj.changePasswordRequired = true;
+
+            if (obj.password){
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync(obj.password, salt);
+                delete obj.password;
+                obj.pk = hash;
+            }
+
+            await db.collection('admins').updateOne({ _id: ObjectID(id) }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
+
     async clinicList(){
         let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
         return res;

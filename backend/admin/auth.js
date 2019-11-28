@@ -7,6 +7,8 @@ module.exports = function(req, res, next) {
 
         jwt.verify(token, constants.jwtSecretKey, { algorithm: "HS256" }, (err, user) => {
             console.log(user);
+            res.locals.uid = user.id;  
+
             if (err) {
                 res.status(500).json({ error: "Not Authorized" });
                 throw new Error("Not Authorized");
