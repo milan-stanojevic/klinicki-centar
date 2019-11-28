@@ -89,7 +89,6 @@ class Type extends Component {
                             :
                             null
                     }
-                    {/* <OrdinationForm></OrdinationForm> */}
                 </Container>
                 
 

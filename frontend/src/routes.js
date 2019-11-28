@@ -208,7 +208,7 @@ class Routes extends Component {
                             )}
                         />
                         <Route
-                            path="/clinic/ordination/new"
+                            path="/clinic/ordination/:id"
                             exact
                             render={(...renderProps) => (
                                 <Ordination {...renderProps} {...this.props} />
@@ -222,7 +222,7 @@ class Routes extends Component {
                             )}
                         />
                         <Route
-                            path="/clinic/types/new"
+                            path="/clinic/types/:id"
                             exact
                             render={(...renderProps) => (
                                 <Type {...renderProps} {...this.props} />

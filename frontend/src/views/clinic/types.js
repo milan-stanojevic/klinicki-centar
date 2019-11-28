@@ -113,7 +113,7 @@ class Types extends Component {
                                     </Col>
 
                                     <Col lg="4" className="actions">
-                                        <Link to={`/clinic/users/${item._id}`}><Isvg src={editIcon} /></Link>
+                                        <Link to={`/clinic/types/${item._id}`}><Isvg src={editIcon} /></Link>
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
                                     </Col>
                                 </Row>

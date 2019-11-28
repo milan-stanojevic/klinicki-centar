@@ -201,6 +201,73 @@ class Clinic {
             id: _id
         };
     }
+    
+    async updateClinicOrdinations(id, obj) {
+        let _id;
+        console.log(id);
+
+        console.log(obj);
+
+
+        if (id == 'new') {
+            let check = await db.collection('ordinations').find({ tag: obj.tag }).count();
+            if (check) {
+                return {
+                    error: `User with username "${obj.tag}" already exists`
+                }
+            }
+
+            _id = ObjectID();
+            obj._id = _id;
+
+            await db.collection('ordinations').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+            
+           
+            await db.collection('ordinations').updateOne({ _id: ObjectID(id) }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
+    async updateClinicTypes(id, obj) {
+        let _id;
+        console.log(id);
+
+        console.log(obj);
+
+
+        if (id == 'new') {
+            let check = await db.collection('types').find({ tag: obj.tag }).count();
+            if (check) {
+                return {
+                    error: `User with username "${obj.tag}" already exists`
+                }
+            }
+
+            _id = ObjectID();
+            obj._id = _id;
+
+            await db.collection('types').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+            
+           
+            await db.collection('types').updateOne({ _id: ObjectID(id) }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
     async updateClinicAdmin(uid, obj) {
         let _id;
 
@@ -260,6 +327,27 @@ class Clinic {
         return {
             id: _id
         };
+    }
+    
+    async clinicTypes(cid) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+
+        return await db.collection('types').find({ clinic: admin[0].type }).toArray();
+    }
+    async clinicTypeDelete(cid, id) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+
+        await db.collection('types').deleteOne({ _id: ObjectID(id), clinic: admin[0].type });
+    }
+    async clinicOrdinations(cid) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+
+        return await db.collection('ordinations').find({ clinic: admin[0].ordination }).toArray();
+    }
+    async clinicOrdinationDelete(cid, id) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+
+        await db.collection('ordinations').deleteOne({ _id: ObjectID(id), clinic: admin[0].ordination });
     }
 
     async clinicUser(id) {

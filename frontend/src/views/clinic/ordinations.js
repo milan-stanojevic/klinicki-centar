@@ -98,25 +98,24 @@ class Ordinations extends Component {
                         </Col>
 
                     </Row>
-                    {/* {
+                    {
                         this.state.items.map((item, idx) => {
                             return (
-                                <Row className="table-row" key={idx}>
-                                    <Col lg="5">
-                                        <span className="value">{item.username}</span>
-                                    </Col>
-                                    <Col lg="4">
-                                        <span className="value">{item.type}</span>
-                                    </Col>
 
-                                    <Col lg="3" className="actions">
-                                        <Link to={`/clinic/users/${item._id}`}><Isvg src={editIcon} /></Link>
+                                <Row className="table-row" key={idx}>
+                                    <Col lg="8">
+                                        <span className="value">{item.tag}</span>
+                                    </Col>
+                                    
+
+                                    <Col lg="4" className="actions">
+                                        <Link to={`/clinic/ordination/${item._id}`}><Isvg src={editIcon} /></Link>
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
                                     </Col>
                                 </Row>
                             )
                         })
-                    } */}
+                    }
 
                 </Container>
 
