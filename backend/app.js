@@ -92,6 +92,9 @@ app.get('/admin/patients', isAdminAuthenticated, async (req, res) => {
     res.send(await adminModule.patients());
 });
 
+app.post('/admin/patients/notify/:id', isAdminAuthenticated, async (req, res) => {
+    res.send(await adminModule.notifyUser(req.params.id, req.body));
+});
 
 /*
     PATIENT API

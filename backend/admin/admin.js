@@ -4,6 +4,8 @@ const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
+var nodemailer = require('nodemailer');
+
 let db;
 const dbConnect = require('../db');
 dbConnect()
@@ -13,6 +15,13 @@ dbConnect()
 .catch((e) => {
     console.log('DB error')
 })
+
+
+const SMTPServer = 'mail.hugemedia.online';
+const SMTPPort = 465;
+const SMTPUsername = 'admin@hugemedia.online';
+const SMTPPassword = 'tSwFq%8e;LC%';
+
 
 class Admin {
     constructor(props) {
@@ -209,6 +218,50 @@ class Admin {
             actionCreated: true,
             verified: false
         }} );
+    }
+
+    async notifyUser(id, obj){
+        let user = await db.collection('patients').find({_id: ObjectID(id)}).toArray();
+        if (!user.length){
+            return;
+        }
+
+        this.sendMail(user[0].email, obj.subject, obj.message);
+        return;
+    }
+
+    sendMail(to, subject, message) {
+        var transporter = nodemailer.createTransport({
+            host: SMTPServer,
+            port: SMTPPort,
+            secure: true,
+            requireTLS: true,
+            auth: {
+                user: SMTPUsername,
+                pass: SMTPPassword
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+
+
+        var mailOptions = {
+            from: SMTPUsername,
+            to: to,
+            subject: subject,
+            text: message
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
     }
 
     async patients(){
