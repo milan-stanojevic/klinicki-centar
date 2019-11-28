@@ -101,6 +101,10 @@ class Admin {
             pk: hash,
             changePasswordRequired: false
         }})
+
+        return {
+            
+        }
     }
 
     async adminUpdate(id, obj) {
@@ -158,6 +162,13 @@ class Admin {
         let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
         return res;
     }
+
+    async admins(){
+        let res = await db.collection('admins').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+
 
     async clinic(id){
         let res = await db.collection('clinics').find({_id: ObjectID(id)}).toArray();

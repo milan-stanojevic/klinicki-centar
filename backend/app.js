@@ -113,6 +113,11 @@ app.get('/admin/checkPasswordChange', isAdminAuthenticated, async (req, res) => 
     res.send(await adminModule.checkPasswordChange(uid));
 });
 
+app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await adminModule.admins(uid));
+});
 
 /*
     PATIENT API

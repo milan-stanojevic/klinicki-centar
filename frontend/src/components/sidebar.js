@@ -50,6 +50,22 @@ class Sidebar extends Component {
                             </Link>
                                 </li>
                             </ul>
+                            <h6>ADMINISTRATORI</h6>
+                            <ul>
+
+                                <li>
+                                    <Link to='/admin/admins' className={this.props[0].location.pathname == '/admin/admins' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Lista
+                            </Link>
+                                </li>
+
+
+
+
+                            </ul>
+
+
                             <h6>PACIJENTI</h6>
                             <ul>
 

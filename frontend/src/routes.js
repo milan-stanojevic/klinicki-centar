@@ -36,6 +36,10 @@ import Ordination from './views/clinic/ordination'
 import EditProfileCA from './views/admin/editProfileCA'
 import ClinicUserLogin from './views/patient/login'
 import editProfileCA from './views/admin/editProfileCA';
+import Admin from './views/admin/admin';
+import Admins from './views/admin/admins';
+
+import ChangePassword from './views/admin/changePassword';
 class Routes extends Component {
 
     componentDidMount() {
@@ -68,6 +72,32 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Patients {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        <Route
+                            path="/admin/changePassword"
+                            exact
+                            render={(...renderProps) => (
+                                <ChangePassword {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
+                        <Route
+                            path="/admin/admins"
+                            exact
+                            render={(...renderProps) => (
+                                <Admins {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
+                        <Route
+                            path="/admin/admins/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Admin {...renderProps} {...this.props} />
                             )}
                         />
 
@@ -112,7 +142,7 @@ class Routes extends Component {
                         />
 
 
-                                                <Route
+                        <Route
                             path="/clinic/admin/edit"
                             exact
                             render={(...renderProps) => (
@@ -120,7 +150,7 @@ class Routes extends Component {
                             )}
                         />
 
-                        
+
                         <Route
                             path="/doctor"
                             exact
