@@ -36,11 +36,11 @@ class patientHomePage extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-6"><a href="">
+                        <div class="col-6 col-lg-6"><Link to='/patient/clinic'>
                             <div class="table-box">
                                 <p>Lista svih klinika</p>
                             </div>
-                        </a></div>
+                        </Link></div>
 
                         <div class="col-6 col-lg-6"><a href="">
                             <div class="table-box">

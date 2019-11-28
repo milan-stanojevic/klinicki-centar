@@ -157,6 +157,11 @@ class Patient {
         }
     }
 
+    async clinicList(){
+        let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
 
 }
 
