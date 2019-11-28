@@ -15,12 +15,15 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
+import PatientNotifyForm from '../../components/forms/patientNotifyForm';
+
 class Patients extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
         this.allow = this.allow.bind(this);
         this.disallow = this.disallow.bind(this);
+        this.notify = this.notify.bind(this);
 
         this.state = {
             items: []
@@ -55,6 +58,12 @@ class Patients extends Component {
             return;
         }
 
+        this.setState({
+            modal: id
+        })
+
+
+
         fetch('http://127.0.0.1:4000/admin/patients/allow/' + id, {
             method: 'GET',
             headers: {
@@ -65,11 +74,16 @@ class Patients extends Component {
         }).then((res) => this.get())
     }
 
-    
+
     disallow(id) {
         if (!localStorage.token) {
             return;
         }
+
+
+        this.setState({
+            modal: id
+        })
 
         fetch('http://127.0.0.1:4000/admin/patients/disallow/' + id, {
             method: 'GET',
@@ -79,6 +93,27 @@ class Patients extends Component {
 
             },
         }).then((res) => this.get())
+    }
+
+    notify(data) {
+        if (!localStorage.token) {
+            return;
+        }
+
+
+
+        fetch('http://127.0.0.1:4000/admin/patients/notify/' + this.state.modal, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+
+            },
+            body: JSON.stringify(data)
+        }).then((res) => {
+            this.setState({ modal: null })
+            this.get()
+        })
     }
 
 
@@ -185,6 +220,18 @@ class Patients extends Component {
 
 
                 </Container>
+                {this.state.modal ?
+                    <div className="modal-container">
+                        <h3>Razlog</h3>
+
+                        <PatientNotifyForm onSubmit={this.notify} />
+                    </div>
+
+                    :
+
+                    null
+
+                }
 
                 {/*<Container fluid className="bottom-wrap">
                     <Row>
