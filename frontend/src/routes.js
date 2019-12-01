@@ -45,6 +45,7 @@ import MedicationsList from './views/admin/medicationsList';
 import Medication from './views/admin/medication';
 import DiagnosesList from './views/admin/diagnosesList';
 import Diagnose from './views/admin/diagnose';
+import MedicalRecord from './views/patient/medicalRecord';
 
 class Routes extends Component {
 
@@ -295,6 +296,13 @@ class Routes extends Component {
                             )}
                         />
 
+                        <Route
+                            path="/patient/medicalRecord"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicalRecord {...renderProps} {...this.props} />
+                            )}
+                        />
 
 
                     </Switch>

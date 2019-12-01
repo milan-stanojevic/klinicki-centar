@@ -188,6 +188,12 @@ app.get('/patient/clinic', isPatientAuthenticated, async (req, res) => {
     console.log('fetch')
     res.send(await patientModule.clinicList());
 });
+app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.medicalRecord(uid));
+});
+
+
 
 
 /*

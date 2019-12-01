@@ -44,7 +44,7 @@ class Text extends Component {
                     }
                     this.forceUpdate();
 
-                }} value={this.props.multilang ? (this.props.value && this.props.value[this.props.lang]) ? this.props.value[this.props.lang] : '' : this.props.value} placeholder={this.props.placeholder} />
+                }} disabled={this.props.disabled} value={this.props.multilang ? (this.props.value && this.props.value[this.props.lang]) ? this.props.value[this.props.lang] : '' : this.props.value} placeholder={this.props.placeholder} />
 
             </>
 
