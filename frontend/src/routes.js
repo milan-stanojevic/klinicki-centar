@@ -41,6 +41,7 @@ import Admins from './views/admin/admins';
 
 import ChangePassword from './views/admin/changePassword';
 import Vacation from './views/doctor/vacation'
+import VacationRequest from './views/clinic/vacationRequest';
 
 class Routes extends Component {
 
@@ -74,6 +75,13 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Patients {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/vacationRequests"
+                            exact
+                            render={(...renderProps) => (
+                                <VacationRequest {...renderProps} {...this.props} />
                             )}
                         />
 

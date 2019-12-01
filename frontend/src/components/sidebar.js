@@ -111,44 +111,55 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                 </ul>
+                                <h6>Medicinsko osoblje</h6>
+                                <ul>
+                                    <li>
+                                        <Link to='/clinic/vacationRequests' className={this.props[0].location.pathname == '/clinic/vacationRequests' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Zahtjevi za godisnji odmor
+                                        </Link>
+                                    </li>
+                                    
+
+                                </ul>
                                 <h6>Uredjivanje profila</h6>
                                 <ul>
-                                <li>
-                                    <Link to='/clinic/admin/edit' className={this.props[0].location.pathname == '/clinic/admin/edit' ? 'active' : null}>
-                                        <Isvg src={list} />
-                                        Profil klinike
+                                    <li>
+                                        <Link to='/clinic/admin/edit' className={this.props[0].location.pathname == '/clinic/admin/edit' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Profil klinike
                                         </Link>
-                                </li>
-                                <li>
-                                    <Link to='/clinic/admin/update' className={this.props[0].location.pathname == '/clinic/admin/update' ? 'active' : null}>
-                                        <Isvg src={list} />
-                                        Moj profil
+                                    </li>
+                                    <li>
+                                        <Link to='/clinic/admin/update' className={this.props[0].location.pathname == '/clinic/admin/update' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Moj profil
                                         </Link>
-                                </li>
+                                    </li>
 
-                            </ul>
+                                </ul>
                             </>
-                :
-                null
+                            :
+                            null
 
-        }
+                    }
 
                     <ul className="logout">
-                    <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken'); }}>
-                        <Link to='/login' >
-                            <Isvg src={exit} />
-                            Odjavi se
+                        <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken'); }}>
+                            <Link to='/login' >
+                                <Isvg src={exit} />
+                                Odjavi se
                             </Link>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
 
 
-            </div>
+                </div>
 
 
-            <div className="menu" onClick={() => this.setState({ _show: !this.state._show })}>
-                <Isvg src={menu} />
-            </div>
+                <div className="menu" onClick={() => this.setState({ _show: !this.state._show })}>
+                    <Isvg src={menu} />
+                </div>
 
             </div >
         )

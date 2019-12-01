@@ -39,7 +39,7 @@ class Vacation extends Component {
             date: date,
             reason: data.reason
         }
-        fetch('http://127.0.0.1:4000/clinic/user/vacationRequest', {
+        fetch('http://127.0.0.1:4000/clinic/vacationRequest', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

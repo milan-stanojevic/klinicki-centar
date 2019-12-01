@@ -174,7 +174,19 @@ app.get('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicData(uid));
 });
-
+app.get('/clinic/vacationRequests', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.vacationRequests());
+});
+app.get('/clinic/vacationRequests/allow/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.allowReq(req.params.id));
+});
+app.get('/clinic/vacationRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.disallowReq(req.params.id));
+});
+app.post('/clinic/vacationRequests/notify/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.notifyUser(req.params.id, req.body));
+});
 
 app.post('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;

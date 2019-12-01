@@ -4,6 +4,7 @@ const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
+var nodemailer = require('nodemailer');
 let db;
 const dbConnect = require('../db');
 dbConnect()
@@ -13,6 +14,10 @@ dbConnect()
     .catch((e) => {
         console.log('DB error')
     })
+const SMTPServer = 'mail.hugemedia.online';
+const SMTPPort = 465;
+const SMTPUsername = 'admin@hugemedia.online';
+const SMTPPassword = 'tSwFq%8e;LC%'
 
 class Clinic {
     constructor(props) {
@@ -118,20 +123,20 @@ class Clinic {
     }
     async patientsSearch(obj) {
         let query = {}
-        if(obj.search){
-            query = {$or:[]}
-            query['$or'].push({firstName : new RegExp(obj.search,'i')})
+        if (obj.search) {
+            query = { $or: [] }
+            query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
         }
-        if(obj.search){
-            query['$or'].push({lastName : new RegExp(obj.search,'i')})
+        if (obj.search) {
+            query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
         }
-        if(obj.pol){
+        if (obj.pol) {
             query.pol = obj.pol;
         }
-        if(obj.email){
+        if (obj.email) {
             query.email = obj.email;
         }
-       
+
         return await db.collection('patients').find(query).toArray();
     }
 
@@ -219,7 +224,76 @@ class Clinic {
             id: _id
         };
     }
+    async vacationRequests() {
+        let requests = await db.collection('vacationRequests').find().toArray();
 
+        for (let i = 0; i < requests.length; i++) {
+            let user = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].uid) }).toArray();
+            requests[i].user = user[0];
+        }
+        return requests;
+    }
+
+    async allowReq(id) {
+        await db.collection('vacationRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                actionCreated: true,
+                verified: true
+            }
+        });
+    }
+
+    async disallowReq(id) {
+        await db.collection('vacationRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                actionCreated: true,
+                verified: false
+            }
+        });
+    }
+    async notifyUser(id, obj) {
+        let user = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
+        if (!user.length) {
+            return;
+        }
+
+        this.sendMail(user[0].email, obj.subject, obj.message);
+        return;
+    }
+
+    sendMail(to, subject, message) {
+        var transporter = nodemailer.createTransport({
+            host: SMTPServer,
+            port: SMTPPort,
+            secure: true,
+            requireTLS: true,
+            auth: {
+                user: SMTPUsername,
+                pass: SMTPPassword
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+
+
+        var mailOptions = {
+            from: SMTPUsername,
+            to: to,
+            subject: subject,
+            text: message
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+    }
 
 
     async vacationRequest(uid, obj) {
@@ -364,12 +438,12 @@ class Clinic {
             id: _id
         };
     }
-    
+
     async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].type }
-        if(obj.search){
-            query.tag = new RegExp(obj.search,'i');
+        if (obj.search) {
+            query.tag = new RegExp(obj.search, 'i');
         }
         return await db.collection('types').find(query).toArray();
     }
@@ -381,16 +455,16 @@ class Clinic {
     async clinicOrdinations(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].ordination }
-        if(obj.search){
-            query.tag = new RegExp(obj.search,'i');
+        if (obj.search) {
+            query.tag = new RegExp(obj.search, 'i');
         }
         return await db.collection('ordinations').find(query).toArray();
     }
-    
-    
+
+
     async clinicOrdinationDelete(cid, id) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-        
+
         await db.collection('ordinations').deleteOne({ _id: ObjectID(id), clinic: admin[0].ordination });
     }
 
@@ -408,8 +482,8 @@ class Clinic {
     async clinicUsers(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
-        if(obj.search){
-            query.username = new RegExp(obj.search,'i');
+        if (obj.search) {
+            query.username = new RegExp(obj.search, 'i');
         }
 
         return await db.collection('clinicUsers').find(query).toArray();
