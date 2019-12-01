@@ -40,7 +40,7 @@ class form extends React.Component {
                             <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
-                                        name="query"
+                                        name="search"
                                         component={renderTextField}
                                         placeholder= 'Trazi . . . '
                                     ></Field>

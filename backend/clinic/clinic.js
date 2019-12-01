@@ -329,24 +329,30 @@ class Clinic {
         };
     }
     
-    async clinicTypes(cid) {
+    async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-
-        return await db.collection('types').find({ clinic: admin[0].type }).toArray();
+        let query = { clinic: admin[0].type }
+        if(obj.search){
+            query.tag = new RegExp(obj.search,'i');
+        }
+        return await db.collection('types').find(query).toArray();
     }
     async clinicTypeDelete(cid, id) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
 
         await db.collection('types').deleteOne({ _id: ObjectID(id), clinic: admin[0].type });
     }
-    async clinicOrdinations(cid) {
+    async clinicOrdinations(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-
-        return await db.collection('ordinations').find({ clinic: admin[0].ordination }).toArray();
+        let query = { clinic: admin[0].ordination }
+        if(obj.search){
+            query.tag = new RegExp(obj.search,'i');
+        }
+        return await db.collection('ordinations').find(query).toArray();
     }
     async clinicOrdinationDelete(cid, id) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-
+        
         await db.collection('ordinations').deleteOne({ _id: ObjectID(id), clinic: admin[0].ordination });
     }
 
@@ -361,11 +367,14 @@ class Clinic {
         await db.collection('clinicUsers').deleteOne({ _id: ObjectID(id), clinic: admin[0].clinic });
     }
 
-    async clinicUsers(cid) {
+    async clinicUsers(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+        let query = { clinic: admin[0].clinic }
+        if(obj.search){
+            query.username = new RegExp(obj.search,'i');
+        }
 
-
-        return await db.collection('clinicUsers').find({ clinic: admin[0].clinic }).toArray();
+        return await db.collection('clinicUsers').find(query).toArray();
     }
 
     async clinicUpdate(uid, obj) {

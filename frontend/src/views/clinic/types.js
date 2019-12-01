@@ -23,6 +23,7 @@ class Types extends Component {
         super(props);
         this.get = this.get.bind(this);
         this.delete = this.delete.bind(this);
+        this.search = this.search.bind(this);
 
         this.state = {
             items: []
@@ -39,11 +40,30 @@ class Types extends Component {
         }
 
         fetch('http://127.0.0.1:4000/clinic/types', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
             },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+
+    }
+    search(data) {
+        if (!localStorage.clinicAdminToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/types', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+            },
+            body: JSON.stringify(data),
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
@@ -84,7 +104,7 @@ class Types extends Component {
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm />
+                            <SearchForm onSubmit={this.search}/>
                         </Col>
                     </Row>
                     <Row className="table-head">
