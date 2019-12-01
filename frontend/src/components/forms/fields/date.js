@@ -28,7 +28,8 @@ class Date extends Component {
                 <br/>
                 <DatePicker
                     onChange={this.props.onChange}
-                />
+                    selected={this.props.value}
+                    />
 
             </>
 

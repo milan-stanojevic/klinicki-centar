@@ -40,6 +40,8 @@ import Admin from './views/admin/admin';
 import Admins from './views/admin/admins';
 
 import ChangePassword from './views/admin/changePassword';
+import Vacation from './views/doctor/vacation'
+
 class Routes extends Component {
 
     componentDidMount() {
@@ -158,6 +160,17 @@ class Routes extends Component {
                                 <DocHomePage {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/doctor/vacation"
+                            exact
+                            render={(...renderProps) => (
+                                <Vacation {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
+
                         <Route
                             path="/doctor/edit"
                             exact
