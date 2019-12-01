@@ -76,7 +76,7 @@ class vacationRequest extends Component {
 
 
     disallow(id,uid) {
-        if (!localStorage.token) {
+        if (!localStorage.clinicAdminToken) {
             return;
         }
 
