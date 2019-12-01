@@ -201,7 +201,25 @@ class Clinic {
             id: _id
         };
     }
-    
+
+
+
+    async vacationRequest(uid, obj) {
+        let _id;
+
+        _id = ObjectID();
+        obj._id = _id;
+        obj.uid = uid;
+
+        await db.collection('vacationRequests').insertOne(obj);
+
+        return {
+            id: _id
+        };
+    }
+
+
+
     async updateClinicOrdinations(id, obj) {
         let _id;
         console.log(id);
@@ -224,8 +242,8 @@ class Clinic {
         } else {
             _id = id;
             delete obj._id;
-            
-           
+
+
             await db.collection('ordinations').updateOne({ _id: ObjectID(id) }, {
                 $set: obj
             })
@@ -257,8 +275,8 @@ class Clinic {
         } else {
             _id = id;
             delete obj._id;
-            
-           
+
+
             await db.collection('types').updateOne({ _id: ObjectID(id) }, {
                 $set: obj
             })
@@ -328,7 +346,7 @@ class Clinic {
             id: _id
         };
     }
-    
+
     async clinicTypes(cid) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
 
