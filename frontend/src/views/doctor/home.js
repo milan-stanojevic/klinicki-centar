@@ -74,11 +74,11 @@ class Test extends Component {
                             </div>
                         </a></div>
 
-                        <div class="col-6 col-lg-4"><a href="">
+                        <div class="col-6 col-lg-4"><Link to="/doctor/vacation">
                             <div class="table-box">
                                 <p>Zahtevi za godisnji i odsustvo</p>
                             </div>
-                        </a></div>
+                        </Link></div>
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/edit">
                             <div class="table-box">
