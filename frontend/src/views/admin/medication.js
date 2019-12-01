@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
-import MedicalStaff from '../../components/forms/medicalStaff';
+import MedicationForm from '../../components/forms/medicationForm';
 
 
 
@@ -17,10 +17,8 @@ import {
     DropdownMenu,
     DropdownToggle
 } from 'reactstrap';
-import VacationForm from '../../components/forms/vacationForm';
-import moment from 'moment'
 
-class Vacation extends Component {
+class Medication extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
@@ -31,21 +29,14 @@ class Vacation extends Component {
 
     add(data) {
         console.log(data);
-        let ts = Math.floor(data.date.getTime() / 1000)
-        console.log(ts);
-        let date = moment.unix(ts).format('DD.MM.YYYY')
-        let obj = {
-            duration: data.duration,
-            date: date,
-            reason: data.reason
-        }
-        fetch('http://127.0.0.1:4000/clinic/vacationRequest', {
+
+        fetch('http://127.0.0.1:4000/admin/medications/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
             if (result.error) {
                 this.setState({
@@ -53,12 +44,27 @@ class Vacation extends Component {
                 })
                 return;
             }
-            this.props[0].history.push('/doctor')
+            this.props[0].history.push('/admin/medications')
         })
     }
 
     componentDidMount() {
+        if (this.props[0].match.params.id != 'new') {
+            fetch('http://127.0.0.1:4000/admin/medications/' + this.props[0].match.params.id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
 
+                }
+            }).then((res) => res.json()).then((result) => {
+                this.setState({
+                    initialValues: result
+                })
+                console.log(result);
+            })
+
+        }
     }
 
 
@@ -66,7 +72,7 @@ class Vacation extends Component {
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
+                    !localStorage.token ? <Redirect to='/admin/login' /> : null
                 
                 }
 
@@ -74,13 +80,13 @@ class Vacation extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                             <h3>Moj profil</h3>
+                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni lek</h3> : <h3>Dodaj lek</h3>}
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <VacationForm initialValues={this.state.initialValues} onSubmit={this.add} /> //ClinicForm
+                        <MedicationForm initialValues={this.state.initialValues} onSubmit={this.add} /> //ClinicForm
                         :
-                        <VacationForm onSubmit={this.add} />
+                        <MedicationForm onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -97,4 +103,4 @@ class Vacation extends Component {
     }
 }
 
-export default Page(Vacation);
+export default Page(Medication);

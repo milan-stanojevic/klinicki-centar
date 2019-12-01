@@ -80,6 +80,52 @@ class Sidebar extends Component {
 
 
                             </ul>
+
+
+
+                            <h6>LEKOVI</h6>
+                            <ul>
+
+                                <li>
+                                    <Link to='/admin/medications' className={this.props[0].location.pathname == '/admin/medications' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Lista lekova
+                            </Link>
+                                </li>
+                                <li>
+                                    <Link to='/admin/medications/new' className={this.props[0].location.pathname == '/admin/medications/new' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Dodaj lek
+                            </Link>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <h6>DIJAGNOZE</h6>
+                            <ul>
+
+                                <li>
+                                    <Link to='/admin/diagnoses' className={this.props[0].location.pathname == '/admin/diagnoses' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Lista dijagnoza
+                            </Link>
+                                </li>
+                                <li>
+                                    <Link to='/admin/diagnoses/new' className={this.props[0].location.pathname == '/admin/diagnoses/new' ? 'active' : null}>
+                                        <Isvg src={list} />
+                                        Dodaj dijagnozu
+                            </Link>
+                                </li>
+
+
+
+
+                            </ul>
+
                         </>
                         :
                         null
@@ -110,7 +156,7 @@ class Sidebar extends Component {
                                             Lista tipova pregleda
                                         </Link>
                                     </li>
-                                    
+
                                     <li>
                                         <Link to='/clinic/admin/edit' className={this.props[0].location.pathname == '/clinic/admin/edit' ? 'active' : null}>
                                             <Isvg src={list} />

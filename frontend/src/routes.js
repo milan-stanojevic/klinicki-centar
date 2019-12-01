@@ -41,6 +41,10 @@ import Admins from './views/admin/admins';
 
 import ChangePassword from './views/admin/changePassword';
 import Vacation from './views/doctor/vacation'
+import MedicationsList from './views/admin/medicationsList';
+import Medication from './views/admin/medication';
+import DiagnosesList from './views/admin/diagnosesList';
+import Diagnose from './views/admin/diagnose';
 
 class Routes extends Component {
 
@@ -91,6 +95,40 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Admins {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
+                            <Route
+                            path="/admin/medications"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicationsList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/medications/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Medication {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        
+                        <Route
+                            path="/admin/diagnoses"
+                            exact
+                            render={(...renderProps) => (
+                                <DiagnosesList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/diagnoses/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Diagnose {...renderProps} {...this.props} />
                             )}
                         />
 
