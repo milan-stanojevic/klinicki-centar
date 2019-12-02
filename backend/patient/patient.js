@@ -168,10 +168,27 @@ class Patient {
     
     
 
-    async clinicList(){
-        let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
-        return res;
+    async clinicList(cid, obj){
+        let admin = await db.collection('patients').find({ _id: ObjectID(cid) }).toArray();
+        console.log(admin);
+        let query = { clinic: admin[0].name }
+        console.log("--------" + query);
+        if(obj.search){
+            query.name = new RegExp(obj.search, 'i');
+        }
+        return await db.collection('clinics').find(query).toArray();
+        //let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
+        //return res;
     }
+
+    // async clinicTypes(cid, obj) {
+    //     let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+    //     let query = { clinic: admin[0].type }
+    //     if (obj.search) {
+    //         query.tag = new RegExp(obj.search, 'i');
+    //     }
+    //     return await db.collection('types').find(query).toArray();
+    // }
 
     async clinic(id){
         let res = await db.collection('clinics').find({_id: ObjectID(id)}).toArray();

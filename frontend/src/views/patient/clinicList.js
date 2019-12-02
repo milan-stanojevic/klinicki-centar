@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
+import PatientSearchClinicForm from '../../components/forms/patientSearchClinicForm';
 
 //import editIcon from '../../assets/svg/edit.svg';
 //import deleteIcon from '../../assets/svg/delete.svg';
@@ -23,6 +24,7 @@ class ClinicList extends Component {
         super(props);
         this.get = this.get.bind(this);
         //this.delete = this.delete.bind(this);
+        this.search = this.search.bind(this);
 
         this.state = {
             items: []
@@ -39,11 +41,30 @@ class ClinicList extends Component {
         }
 
         fetch('http://127.0.0.1:4000/patient/clinic', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
             },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+
+    }
+    search(data) {
+        if (!localStorage.patientToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/patient/clinic', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+            },
+            body: JSON.stringify(data),
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
@@ -63,12 +84,13 @@ class ClinicList extends Component {
                 }
 
                 <Container fluid className="table">
-
+                    
                     <Row className="page-title">
                         <Col lg="12">
                             <h3>Lista klinika</h3>
                         </Col>
                     </Row>
+                    <PatientSearchClinicForm onSubmit={this.search}/>
                     <Row className="table-head">
                         <Col lg="4">
                             <span className="name">IME</span>

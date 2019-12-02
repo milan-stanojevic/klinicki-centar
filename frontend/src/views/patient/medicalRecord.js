@@ -45,7 +45,7 @@ class MedicalRecord extends Component {
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.patientToken ? <Redirect to='/login' /> : null
+                    !localStorage.patientToken & !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
                 
                 }
 

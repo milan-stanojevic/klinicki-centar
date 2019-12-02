@@ -442,6 +442,7 @@ class Clinic {
     async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].type }
+        console.log("--------" + admin);
         if (obj.search) {
             query.tag = new RegExp(obj.search, 'i');
         }

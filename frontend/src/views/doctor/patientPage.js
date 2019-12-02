@@ -10,6 +10,10 @@ import {
 
 
 class PatientPage extends Component {
+    
+
+   
+
     render() {
         return (
             <div className="page-wrap">
@@ -25,7 +29,7 @@ class PatientPage extends Component {
                     </Row>
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
-                            <Link to="/doctor/patients">
+                            <Link to="/patient/medicalRecord">
                                 <div class="table-box">
                                     <p>Zdravstveni karton</p>
                                 </div>
