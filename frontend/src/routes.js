@@ -105,6 +105,40 @@ class Routes extends Component {
                         />
 
 
+                            <Route
+                            path="/admin/medications"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicationsList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/medications/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Medication {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        
+                        <Route
+                            path="/admin/diagnoses"
+                            exact
+                            render={(...renderProps) => (
+                                <DiagnosesList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/diagnoses/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Diagnose {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
                         <Route
                             path="/admin/admins/:id"
                             exact
@@ -275,6 +309,13 @@ class Routes extends Component {
                             )}
                         />
 
+                        <Route
+                            path="/patient/medicalRecord"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicalRecord {...renderProps} {...this.props} />
+                            )}
+                        />
 
 
                     </Switch>

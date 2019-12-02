@@ -48,11 +48,11 @@ class patientHomePage extends Component {
                             </div>
                         </a></div>
 
-                        <div class="col-6 col-lg-6"><a href="">
+                        <div class="col-6 col-lg-6"><Link to='/patient/medicalRecord'>
                             <div class="table-box">
                                 <p>Zdravstveni karton</p>
                             </div>
-                        </a></div>
+                            </Link></div>
 
                         <div class="col-6 col-lg-6"><Link to="/patient/update">
                             <div class="table-box">

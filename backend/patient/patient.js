@@ -107,6 +107,31 @@ class Patient {
         }
 
     }
+
+
+    async medicalRecord(uid) {
+        let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
+        res[0].illnessHistory = [
+            {
+                date: '05.04.2019',
+                illnessName: 'dijareja',
+                medications: [ {
+                    name: 'Brufen'
+                },{name: 'Probiotik'} ]
+            },
+            {
+                date: '10.04.2019',
+                illnessName: 'temperatura',
+                medications: [ {
+                    name: 'Brufen'
+                } ]
+            }
+        ]
+
+        return res[0]
+    }
+
+
     async patient(uid, obj) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
         console.log(res[0]);
