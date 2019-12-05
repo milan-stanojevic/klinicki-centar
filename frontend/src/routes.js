@@ -18,13 +18,16 @@ import PatientLoginPage from './views/patient/login';
 import PatientRegisterPage from './views/patient/register';
 import PatientEdit from './views/patient/editProfile';
 import PatientClinicList from './views/patient/clinicList';
+import DoctorsList from './views/patient/doctorsList'
 
 import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
 import DocHomePage from './views/doctor/home'
 import PatientsList from './views/doctor/patientsList'
 import EditProfile from './views/doctor/editProfile'
+import PatientPage from './views/doctor/patientPage'
 import PatientHomePage from './views/patient/patientHomePage'
+
 
 import ClinicUser from './views/clinic/user'
 import ClinicUsers from './views/clinic/users'
@@ -41,6 +44,12 @@ import Admins from './views/admin/admins';
 
 import ChangePassword from './views/admin/changePassword';
 import Vacation from './views/doctor/vacation'
+import VacationRequest from './views/clinic/vacationRequest';
+import MedicationsList from './views/admin/medicationsList';
+import Medication from './views/admin/medication';
+import DiagnosesList from './views/admin/diagnosesList';
+import Diagnose from './views/admin/diagnose';
+import MedicalRecord from './views/patient/medicalRecord';
 
 class Routes extends Component {
 
@@ -76,6 +85,13 @@ class Routes extends Component {
                                 <Patients {...renderProps} {...this.props} />
                             )}
                         />
+                        <Route
+                            path="/clinic/vacationRequests"
+                            exact
+                            render={(...renderProps) => (
+                                <VacationRequest {...renderProps} {...this.props} />
+                            )}
+                        />
 
                         <Route
                             path="/admin/changePassword"
@@ -91,6 +107,40 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Admins {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
+                            <Route
+                            path="/admin/medications"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicationsList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/medications/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Medication {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                        
+                        <Route
+                            path="/admin/diagnoses"
+                            exact
+                            render={(...renderProps) => (
+                                <DiagnosesList {...renderProps} {...this.props} />
+                            )}
+                        />
+
+                            <Route
+                            path="/admin/diagnoses/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Diagnose {...renderProps} {...this.props} />
                             )}
                         />
 
@@ -160,6 +210,14 @@ class Routes extends Component {
                                 <DocHomePage {...renderProps} {...this.props} />
                             )}
                         />
+                        
+                        <Route
+                            path="/doctor/patient/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <PatientPage {...renderProps} {...this.props} />
+                            )}
+                        />
 
                         <Route
                             path="/doctor/vacation"
@@ -190,6 +248,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <PatientClinicList {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/patient/clinic/doctors"
+                            exact
+                            render={(...renderProps) => (
+                                <DoctorsList {...renderProps} {...this.props} />
                             )}
                         />
                         <Route
@@ -257,6 +323,13 @@ class Routes extends Component {
                             )}
                         />
 
+                        <Route
+                            path="/patient/medicalRecord"
+                            exact
+                            render={(...renderProps) => (
+                                <MedicalRecord {...renderProps} {...this.props} />
+                            )}
+                        />
 
 
                     </Switch>

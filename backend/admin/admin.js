@@ -179,6 +179,89 @@ class Admin {
         }
     }
 
+    async medication(id){
+        let res = await db.collection('medications').find({_id: ObjectID(id)}).toArray();
+        if (res.length){
+            return res[0];
+        }else{
+            return null;
+        }
+    }
+    async diagnose(id){
+        let res = await db.collection('diagnoses').find({_id: ObjectID(id)}).toArray();
+        if (res.length){
+            return res[0];
+        }else{
+            return null;
+        }
+    }
+
+
+    async medications(){
+        let res = await db.collection('medications').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+    async diagnoses(){
+        let res = await db.collection('diagnoses').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+    async diagnoseDelete(id){
+        await db.collection('diagnoses').deleteOne({_id: ObjectID(id)});
+    }
+    async medicationDelete(id){
+        await db.collection('medications').deleteOne({_id: ObjectID(id)});
+    }
+
+
+    async medicationUpdate(id, obj) {
+        let _id;
+
+
+        if (id == 'new') {            
+            _id = ObjectID();
+            obj._id = _id;
+
+            await db.collection('medications').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+           
+            await db.collection('medications').updateOne({ _id: ObjectID(id) }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
+
+    async diagnoseUpdate(id, obj) {
+        let _id;
+
+
+        if (id == 'new') {            
+            _id = ObjectID();
+            obj._id = _id;
+
+            await db.collection('diagnoses').insertOne(obj);
+        } else {
+            _id = id;
+            delete obj._id;
+           
+            await db.collection('diagnoses').updateOne({ _id: ObjectID(id) }, {
+                $set: obj
+            })
+        }
+
+        return {
+            id: _id
+        };
+    }
+
+
+
     async clinicUpdate(id, obj) {
         let _id;
 

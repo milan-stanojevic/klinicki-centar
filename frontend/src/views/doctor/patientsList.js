@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 
 
-class patientsList extends Component {
+class PatientsList extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
@@ -34,7 +34,7 @@ class patientsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/patients/'+this.state.sort, {
+        fetch('http://127.0.0.1:4000/clinic/patients/' + this.state.sort, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,15 +84,15 @@ class patientsList extends Component {
                             <h3>Lista pacijenata</h3>
                         </Col>
                         <Col lg="4">
-                        <Select placeholder="Sortiraj po" onChange={(val) => this.setState({sort: val}, this.get)} value={this.state.sort}>
-                            <option value={0}>Po imenu</option>
-                            <option value={1}>Po jedinstvenom broju</option>
+                            <Select placeholder="Sortiraj po" onChange={(val) => this.setState({ sort: val }, this.get)} value={this.state.sort}>
+                                <option value={0}>Po imenu</option>
+                                <option value={1}>Po jedinstvenom broju</option>
                             </Select>
                         </Col>
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm onSubmit={this.search}/>
+                            <SearchForm onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
@@ -113,24 +113,23 @@ class patientsList extends Component {
                     {
                         this.state.items.map((item, idx) => {
                             return (
-                                <Row className="table-row" key={idx}>
-                                    <Col lg="3">
-                                        <span className="value">{item.firstName}</span>
-                                    </Col>
-                                    <Col lg="3">
-                                        <span className="value">{item.lastName}</span>
-                                    </Col>
-                                    <Col lg="3">
-                                        {/*<span className="value">{item.date}</span>*/}
-                                    </Col>
-                                    <Col lg="3" className="actions">
-                                        {/*<Link to={`/admin/clinic/${item._id}`}><Isvg src={editIcon} /></Link>
-                                        <Link to={`/admin/clinic/${item._id}/admins`}><Isvg src={adminIcon} /></Link>
+                                <Link to={`/doctor/patient/${item._id}`}>
+                                    
+                                    <Row className="table-row" key={idx}>
+                                        <Col lg="3">
+                                            <span className="value">{item.firstName}</span>
+                                        </Col>
+                                        <Col lg="3">
+                                            <span className="value">{item.lastName}</span>
+                                        </Col>
+                                        <Col lg="3">
+                                            {/* <span className="value">{item.date}</span> */}
+                                        </Col>
+                                        <Col lg="3" className="actions">
 
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
-                            */}
-                                    </Col>
-                                </Row>
+                                        </Col>
+                                    </Row>
+                                </Link>
                             )
                         })
                     }
@@ -141,4 +140,4 @@ class patientsList extends Component {
     }
 }
 
-export default Page(patientsList)
+export default Page(PatientsList)
