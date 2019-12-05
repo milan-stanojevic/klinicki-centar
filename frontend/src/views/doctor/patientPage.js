@@ -10,9 +10,6 @@ import {
 
 
 class PatientPage extends Component {
-    
-
-   
 
     render() {
         return (
@@ -24,12 +21,13 @@ class PatientPage extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Pacijent </h3>
+                            <h3>Pacijent</h3>
                         </Col>
                     </Row>
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
                             <Link to="/patient/medicalRecord">
+                            
                                 <div class="table-box">
                                     <p>Zdravstveni karton</p>
                                 </div>
@@ -44,7 +42,7 @@ class PatientPage extends Component {
                         </div>
 
                     </Row>
-                    
+
 
 
                 </Container>

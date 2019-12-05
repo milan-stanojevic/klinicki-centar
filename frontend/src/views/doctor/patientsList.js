@@ -113,7 +113,8 @@ class PatientsList extends Component {
                     {
                         this.state.items.map((item, idx) => {
                             return (
-                                <Link to="/doctor/patient">
+                                <Link to={`/doctor/patient/${item._id}`}>
+                                    
                                     <Row className="table-row" key={idx}>
                                         <Col lg="3">
                                             <span className="value">{item.firstName}</span>

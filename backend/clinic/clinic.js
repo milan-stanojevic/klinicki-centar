@@ -110,6 +110,14 @@ class Clinic {
             }
         }
     }
+    async patient(id){
+        let res = await db.collection('patients').find({_id: ObjectID(id)}).toArray();
+        if (res.length){
+            return res[0];
+        }else{
+            return null;
+        }
+    }
 
 
     async patients(sort) {
