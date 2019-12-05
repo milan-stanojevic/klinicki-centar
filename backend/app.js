@@ -227,8 +227,17 @@ app.delete('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) =>
     res.send(await clinicModule.clinicUserDelete(uid, req.params.uid));
 });
 
+
+app.post('/clinic/vacationRequest', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.vacationRequest(uid, req.body));
+})
+
 app.get('/clinic/patients/:sort', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.patients(req.params.sort));
+});
+app.post('/clinic/patientsSearch', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.patientsSearch(req.body));
 });
 
 app.get('/clinic/user', isClinicAdminAuthenticated, async (req, res) => {

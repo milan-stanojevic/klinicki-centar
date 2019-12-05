@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import Page from '../../containers/admin/page'
 import Select from '../../components/forms/fields/select'
+import SearchForm from '../../components/forms/searchPatientsForm'
 import {
     Container,
     Row,
@@ -17,7 +18,7 @@ class patientsList extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
-
+        this.search = this.search.bind(this);
         this.state = {
             items: [],
             sort: 0
@@ -39,6 +40,25 @@ class patientsList extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+
+    }
+    search(data) {
+        if (!localStorage.clinicUserToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/patientsSearch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+            },
+            body: JSON.stringify(data),
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
@@ -68,6 +88,11 @@ class patientsList extends Component {
                             <option value={0}>Po imenu</option>
                             <option value={1}>Po jedinstvenom broju</option>
                             </Select>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg="12">
+                            <SearchForm onSubmit={this.search}/>
                         </Col>
                     </Row>
                     <Row className="table-head">
