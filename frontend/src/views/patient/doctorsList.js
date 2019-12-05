@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import Isvg from 'react-inlinesvg';
+import React, { Component } from 'react'
 import Page from '../../containers/admin/page';
-import PatientSearchClinicForm from '../../components/forms/patientSearchClinicForm';
-
-//import editIcon from '../../assets/svg/edit.svg';
-//import deleteIcon from '../../assets/svg/delete.svg';
-//import adminIcon from '../../assets/svg/admin.svg';
-
+import { Link, Redirect } from 'react-router-dom';
+import SearchForm from '../../components/forms/searchForm';
 
 import {
     Container,
@@ -19,7 +13,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class ClinicList extends Component {
+class DoctorsList extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
@@ -39,7 +33,7 @@ class ClinicList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +51,7 @@ class ClinicList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,11 +65,7 @@ class ClinicList extends Component {
         })
 
     }
-
-
-
     render() {
-
         return (
             <div className="page-wrap">
                 {
@@ -86,12 +76,12 @@ class ClinicList extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista klinika</h3>
+                            <h3>Lista doktora</h3>
                         </Col>
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <PatientSearchClinicForm onSubmit={this.search} />
+                            <SearchForm onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
@@ -99,10 +89,10 @@ class ClinicList extends Component {
                             <span className="name">IME</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">Adresa</span>
+                            <span className="name">Prezime</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">Opis</span>
+                            <span className="name">tip</span>
                         </Col>
 
 
@@ -110,19 +100,19 @@ class ClinicList extends Component {
                     {
                         this.state.items.map((item, idx) => {
                             return (
-                                <Link to='/patient/clinic/doctors'>
+                                // <Link to='/patient/clinic/doctors'>
                                     <Row className="table-row" key={idx}>
                                         <Col lg="4">
-                                            <span className="value">{item.name}</span>
+                                            <span className="value">{item.firstName}</span>
                                         </Col>
                                         <Col lg="4">
-                                            <span className="value">{item.adress}</span>
+                                            <span className="value">{item.lastName}</span>
                                         </Col>
                                         <Col lg="4">
-                                            <span className="value">{item.description}</span>
+                                            <span className="value">{item.type}</span>
                                         </Col>
                                     </Row>
-                                </Link>
+                                // </Link>
                             )
                         })
                     }
@@ -133,4 +123,4 @@ class ClinicList extends Component {
     }
 }
 
-export default Page(ClinicList);
+export default Page(DoctorsList)

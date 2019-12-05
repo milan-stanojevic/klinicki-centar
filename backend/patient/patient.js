@@ -7,13 +7,13 @@ const uuidv4 = require('uuid/v4');
 let db;
 const dbConnect = require('../db');
 dbConnect()
-.then((conn) => {
-    // your connection object
-    db = conn;
-})
-.catch((e) => {
-    // handle err
-})
+    .then((conn) => {
+        // your connection object
+        db = conn;
+    })
+    .catch((e) => {
+        // handle err
+    })
 
 class Patient {
     constructor(props) {
@@ -50,13 +50,13 @@ class Patient {
             };
 
         } else {
-            if (!admin[0].verified){
+            if (!admin[0].verified) {
                 return {
                     response: {
                         error: 'Patient registration not verified'
                     },
                     status: 500
-                };    
+                };
             }
 
             if (bcrypt.compareSync(password, admin[0].pk)) {
@@ -80,16 +80,16 @@ class Patient {
         }
     }
 
-    async register(obj){
-        let check = await db.collection('patients').find({username: obj.username}).count();
-        if (check){
+    async register(obj) {
+        let check = await db.collection('patients').find({ username: obj.username }).count();
+        if (check) {
             return {
-                response: {error: `Patient with username "${obj.username}" already exists`},
+                response: { error: `Patient with username "${obj.username}" already exists` },
                 status: 500
             }
         }
-        
-        
+
+
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
         delete obj.password;
@@ -115,16 +115,16 @@ class Patient {
             {
                 date: '05.04.2019',
                 illnessName: 'dijareja',
-                medications: [ {
+                medications: [{
                     name: 'Brufen'
-                },{name: 'Probiotik'} ]
+                }, { name: 'Probiotik' }]
             },
             {
                 date: '10.04.2019',
                 illnessName: 'temperatura',
-                medications: [ {
+                medications: [{
                     name: 'Brufen'
-                } ]
+                }]
             }
         ]
 
@@ -137,7 +137,7 @@ class Patient {
         console.log(res[0]);
         return res[0];
     }
-    
+
     async updatePatient(uid, obj) {
         let _id;
 
@@ -165,44 +165,58 @@ class Patient {
             id: uid
         };
     }
-    
-    
 
-    async clinicList(cid, obj){
-        let admin = await db.collection('patients').find({ _id: ObjectID(cid) }).toArray();
-        console.log(admin);
-        let query = { clinic: admin[0].name }
-        console.log("--------" + query);
-        if(obj.search){
-            query.name = new RegExp(obj.search, 'i');
+
+    async doctorsList(obj) {
+
+        let query = {}
+        console.log(query);
+        
+        if (obj.search) {
+            // if (query.type == 'doctor') {
+                
+                query = { $or: [] }
+                
+                query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
+            // }
         }
-        return await db.collection('clinics').find(query).toArray();
-        //let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
-        //return res;
+        if (obj.search) {
+            // if (query.type == 'doctor') {
+                query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
+            // }
+        }
+
+        let res = await db.collection('clinicUsers').find(query).toArray();
+
+        return res;
     }
 
-    // async clinicTypes(cid, obj) {
-    //     let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-    //     let query = { clinic: admin[0].type }
-    //     if (obj.search) {
-    //         query.tag = new RegExp(obj.search, 'i');
-    //     }
-    //     return await db.collection('types').find(query).toArray();
-    // }
+    async clinicList(obj) {
+        let query = {}
+        if (obj.search) {
+            query.name = new RegExp(obj.search, 'i');
+        }
+        if (obj.adress) {
+            query.adress = obj.adress;
+        }
 
-    async clinic(id){
-        let res = await db.collection('clinics').find({_id: ObjectID(id)}).toArray();
-        if (res.length){
+        let res = await db.collection('clinics').find(query).toArray();
+
+        return res;
+    }
+
+
+
+    async clinic(id) {
+        let res = await db.collection('clinics').find({ _id: ObjectID(id) }).toArray();
+        if (res.length) {
             return res[0];
-        }else{
+        } else {
             return null;
         }
     }
 
-    async clinicList(){
-        let res = await db.collection('clinics').find({}).sort({_id: -1}).toArray();
-        return res;
-    }
+
 
 
 }

@@ -185,15 +185,15 @@ app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.updatePatient(uid, req.body));
 });
 app.post('/patient/clinic', isPatientAuthenticated, async (req, res) => {
-    let uid = res.locals.uid;
-    res.send(await patientModule.clinicList(uid, req.body));
+    res.send(await patientModule.clinicList(req.body));
+});
+app.post('/patient/clinic/doctors', isPatientAuthenticated, async (req, res) => {
+    res.send(await patientModule.doctorsList(req.body));
 });
 
 
-// app.post('/clinic/types', isClinicAdminAuthenticated, async (req, res) => {
-//     let uid = res.locals.uid;
-//     res.send(await clinicModule.clinicTypes(uid,req.body));
-// });
+
+
 
 app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;

@@ -45,6 +45,13 @@ class form extends React.Component {
                                         placeholder= 'Unesite naziv klinike'
                                     ></Field>
                                 </Col>
+                                <Col lg="6" className="input-wrap">
+                                    <Field
+                                        name="adress"
+                                        component={renderTextField}
+                                        placeholder= 'Unesite adresu klinike'
+                                    ></Field>
+                                </Col>
                                 <Col lg="6">
                                     <button className="button">Trazi</button>
                                 </Col>

@@ -25,6 +25,7 @@ import PatientLoginPage from './views/patient/login';
 import PatientRegisterPage from './views/patient/register';
 import PatientEdit from './views/patient/editProfile';
 import PatientClinicList from './views/patient/clinicList';
+import DoctorsList from './views/patient/doctorsList'
 
 import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
@@ -249,6 +250,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <PatientClinicList {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/patient/clinic/doctors"
+                            exact
+                            render={(...renderProps) => (
+                                <DoctorsList {...renderProps} {...this.props} />
                             )}
                         />
                         <Route
