@@ -122,10 +122,10 @@ class PatientsList extends Component {
                                             <span className="value">{item.lastName}</span>
                                         </Col>
                                         <Col lg="3">
-                                            {/*<span className="value">{item.date}</span>*/}
+                                            {/* <span className="value">{item.date}</span> */}
                                         </Col>
                                         <Col lg="3" className="actions">
-                                  
+
                                         </Col>
                                     </Row>
                                 </Link>

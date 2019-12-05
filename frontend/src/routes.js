@@ -13,13 +13,6 @@ import ClinicAdmin from './views/admin/clinicAdmin';
 import ClinicAdminList from './views/admin/clinicAdminList';
 import Patients from './views/admin/patients';
 
-import MedicationsList from './views/admin/medicationsList'
-import Medication from './views/admin/medication'
-import DiagnosesList from './views/admin/diagnosesList'
-import Diagnose from './views/admin/diagnose'
-import MedicalRecord from './views/patient/medicalRecord';
-
-
 
 import PatientLoginPage from './views/patient/login';
 import PatientRegisterPage from './views/patient/register';

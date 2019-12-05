@@ -24,7 +24,7 @@ class PatientPage extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Pacijent: </h3>
+                            <h3>Pacijent </h3>
                         </Col>
                     </Row>
                     <Row className="table-row">
@@ -43,37 +43,8 @@ class PatientPage extends Component {
                             </Link>
                         </div>
 
-
-
-
-
-
-                        {/* {this.state.type != 'nurse' ?
-
-                            <div class="col-6 col-lg-4"><a href="">
-                                <div class="table-box">
-                                    <p>Zakazivanje pregleda/operacija</p>
-                                </div>
-                            </a></div>
-                            :
-                            null
-                        }
-
-                        {this.state.type == 'nurse' ?
-                            <div class="col-6 col-lg-4"><a href="">
-                                <div class="table-box">
-                                    <p>Overa recepata</p>
-                                </div>
-                            </a></div>
-
-                            :
-
-                            null
-                        } */}
-
-
-
                     </Row>
+                    
 
 
                 </Container>
