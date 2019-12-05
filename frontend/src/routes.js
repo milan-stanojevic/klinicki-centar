@@ -44,6 +44,11 @@ import Admins from './views/admin/admins';
 import ChangePassword from './views/admin/changePassword';
 import Vacation from './views/doctor/vacation'
 import VacationRequest from './views/clinic/vacationRequest';
+import MedicationsList from './views/admin/medicationsList';
+import Medication from './views/admin/medication';
+import DiagnosesList from './views/admin/diagnosesList';
+import Diagnose from './views/admin/diagnose';
+import MedicalRecord from './views/patient/medicalRecord';
 
 class Routes extends Component {
 

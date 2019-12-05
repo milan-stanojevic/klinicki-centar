@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 
 
-class patientsList extends Component {
+class PatientsList extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
@@ -125,11 +125,7 @@ class patientsList extends Component {
                                             {/*<span className="value">{item.date}</span>*/}
                                         </Col>
                                         <Col lg="3" className="actions">
-                                            {/*<Link to={`/admin/clinic/${item._id}`}><Isvg src={editIcon} /></Link>
-                                            <Link to={`/admin/clinic/${item._id}/admins`}><Isvg src={adminIcon} /></Link>
-
-                                            <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
-                                */}
+                                  
                                         </Col>
                                     </Row>
                                 </Link>
@@ -143,4 +139,4 @@ class patientsList extends Component {
     }
 }
 
-export default Page(patientsList)
+export default Page(PatientsList)
