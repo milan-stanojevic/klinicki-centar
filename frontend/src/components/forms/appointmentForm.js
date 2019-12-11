@@ -5,7 +5,7 @@ import Isvg from 'react-inlinesvg';
 import Text from './fields/text';
 import Image from './fields/image';
 import Select from './fields/select';
-import Date from './fields/date';
+import Date from './fields/date_time';
 
 import {
     Container,

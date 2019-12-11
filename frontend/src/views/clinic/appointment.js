@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
+import moment from 'moment';
 
 import AppointmentForm from '../../components/forms/appointmentForm';
 
@@ -25,6 +26,16 @@ class Appointment extends Component {
     }
     add(data) {
         console.log(data);
+        let ts = Math.floor(data.date.getTime() / 1000)
+        let date = moment.unix(ts).format('DD.MM.YYYY, HH:mm')
+        let obj = {
+            duration: data.duration,
+            date: date,
+            type: data.type,
+            ordination: data.ordination,
+            doctor: data.doctor,
+            price: data.price
+        }
 
         fetch('http://127.0.0.1:4000/clinic/appointments/' + this.props[0].match.params.id, {
             method: 'POST',
@@ -32,7 +43,7 @@ class Appointment extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(obj)
         }).then((res) => res.json()).then((result) => {
             if (result.error) {
                 this.setState({

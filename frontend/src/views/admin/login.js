@@ -163,7 +163,7 @@ class LoginPage extends Component {
                         <Col lg="12">
                             <div className="logo">
                                 <img src={logo} />
-                                <h2>React<span>Admin</span></h2>
+                                {/* <h2>React<span>Admin</span></h2> */}
                             </div>
                         </Col>
                         <Col lg="12">

@@ -6,6 +6,7 @@ import Page from '../../containers/admin/page';
 import editIcon from '../../assets/svg/edit.svg';
 import deleteIcon from '../../assets/svg/delete.svg';
 import SearchForm from '../../components/forms/searchForm';
+import moment from 'moment';
 
 
 import {
