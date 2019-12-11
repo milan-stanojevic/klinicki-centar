@@ -329,3 +329,8 @@ app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
 
 
 
+
+
+app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.events());
+});

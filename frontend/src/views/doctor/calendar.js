@@ -23,11 +23,27 @@ class CalendarPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            events: []
         };
     }
 
     componentDidMount() {
+        fetch('http://127.0.0.1:4000/clinic/events', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            for(let i=0;i<result.length;i++){
+                result[i].start =  new Date(result[i].start * 1000);
+                result[i].end =  new Date(result[i].end * 1000);
+
+            }
+            this.setState({events: result})
+            console.log(result);
+        })
 
     }
 
@@ -71,26 +87,7 @@ class CalendarPage extends Component {
                                     event: this.renderEvent,
 
                                 }}
-                                events={[
-                                    {
-                                        id: 0,
-                                        patientName: 'Pero Peric',
-                                        medicalStaff: 'Dr. Jankovic, Sestra Jelena',
-                                        start: new Date(2019, 11, 11, 3, 0, 0),
-                                        end: new Date(2019, 11, 11, 4, 30, 0),
-                                        type: 0,
-                                    },
-                                    {
-                                        id: 1,
-                                        patientName: 'Pero Peric',
-                                        medicalStaff: 'Dr. Jankovic, Sestra Jelena',
-                                        start: new Date(2019, 11, 11, 5, 20, 0),
-                                        end: new Date(2019, 11, 11, 10, 30, 0),
-                                        type: 1
-                                    },
-
-
-                                ]}
+                                events={this.state.events}
                                 startAccessor="start"
                                 endAccessor="end"
                                 style={{ height: 870 }}
