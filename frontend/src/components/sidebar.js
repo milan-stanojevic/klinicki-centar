@@ -168,6 +168,17 @@ class Sidebar extends Component {
                                     
 
                                 </ul>
+                                <h6>Termini</h6>
+                                <ul>
+                                    <li>
+                                        <Link to='/clinic/appointments' className={this.props[0].location.pathname == '/clinic/appointments' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Slobodni termini
+                                        </Link>
+                                    </li>
+                                    
+
+                                </ul>
                                 <h6>Uredjivanje profila</h6>
                                 <ul>
                                     <li>

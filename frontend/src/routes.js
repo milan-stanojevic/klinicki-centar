@@ -34,6 +34,11 @@ import ClinicUsers from './views/clinic/users'
 import Ordinations from './views/clinic/ordinations'
 import Types from './views/clinic/types'
 import Type from './views/clinic/type'
+import Appointments from './views/clinic/appointments'
+import Appointment from './views/clinic/appointment'
+
+
+
 
 import Ordination from './views/clinic/ordination'
 import EditProfileCA from './views/admin/editProfileCA'
@@ -298,6 +303,20 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Types {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/appointments"
+                            exact
+                            render={(...renderProps) => (
+                                <Appointments {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/appointments/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Appointment {...renderProps} {...this.props} />
                             )}
                         />
                         <Route
