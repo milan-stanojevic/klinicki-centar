@@ -249,6 +249,14 @@ app.post('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.updateClinicUser(uid, req.params.uid, req.body));
 });
+app.post('/clinic/appointments/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.updateClinicAppointments(req.params.id, req.body));
+});
+app.get('/clinic/appointments', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicAppointments(uid));
+});
+
 
 app.post('/clinic/types/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.updateClinicTypes(req.params.id, req.body));

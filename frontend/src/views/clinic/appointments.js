@@ -39,8 +39,8 @@ class Appointments extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/types', {
-            method: 'POST',
+        fetch('http://127.0.0.1:4000/clinic/appointments', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
@@ -108,42 +108,54 @@ class Appointments extends Component {
                         </Col>
                     </Row> */}
                     <Row className="table-head">
-                        <Col lg="3">
-                            <span className="name">Datum pregleda</span>
+                        <Col lg="2">
+                            <span className="name">Datum</span>
                         </Col>
                         <Col lg="2">
-                            <span className="name">Trajanje pregleda</span>
+                            <span className="name">Trajanje</span>
                         </Col>
-                        <Col lg="2" className="actions">
-                            <span className="name">Tip pregleda</span>
+                        <Col lg="2">
+                            <span className="name">Tip</span>
                         </Col>
-                        <Col lg="2" className="actions">
+                        <Col lg="2">
                             <span className="name">Sala</span>
                         </Col>
-                        <Col lg="3" className="actions">
+                        <Col lg="2">
                             <span className="name">Doktor</span>
+                        </Col>
+                        <Col lg="2">
+                            <span className="name">Cijena</span>
                         </Col>
 
                     </Row>
-                    {/* {
+                    {
                         this.state.items.map((item, idx) => {
                             return (
                                 <Row className="table-row" key={idx}>
-                                    <Col lg="4">
-                                        <span className="value">{item.tag}</span>
+                                    <Col lg="2">
+                                        <span className="value">{item.date}</span>
                                     </Col>
-                                    <Col lg="4">
-                                        <span className="value">{item.name}</span>
+                                    <Col lg="2">
+                                        <span className="value">{item.duration}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.type}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.ordination}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.doctor}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.price}</span>
                                     </Col>
 
-                                    <Col lg="4" className="actions">
-                                        <Link to={`/clinic/types/${item._id}`}><Isvg src={editIcon} /></Link>
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
-                                    </Col>
+                                   
                                 </Row>
                             )
                         })
-                    } */}
+                    }
 
                 </Container>
 

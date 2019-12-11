@@ -114,7 +114,7 @@ class form extends React.Component {
 
                                 <Col lg="7" className="input-wrap">
                                     <Field
-                                        name="datum"
+                                        name="date"
                                         component={renderDateField}
                                         label={"Datum i vrijeme pregleda"}
                                         placeholder="Izaberite datum"
@@ -137,9 +137,10 @@ class form extends React.Component {
                                         component={renderSelectField}
                                         label={"Tip pregleda"}
                                         placeholder="Izaberite tip pregleda"
+                                        
                                     >
-                                        {/* <option value="1">Muski</option>
-                                        <option value="2">Zenski</option> */}
+                                        <option value="tip1">tip1</option>
+                                        <option value="tip2">tip2</option>
 
                                     </Field>
                                 </Col>
@@ -151,8 +152,8 @@ class form extends React.Component {
                                         label={"Sala"}
                                         placeholder="Izaberite salu za pregled"
                                     >
-                                        {/* <option value="1">Muski</option>
-                                        <option value="2">Zenski</option> */}
+                                        <option value="a1">a1</option>
+                                        <option value="a2">a2</option>
 
                                     </Field>
                                 </Col>
@@ -163,8 +164,8 @@ class form extends React.Component {
                                         label={"Doktor"}
                                         placeholder="Izaberite doktora"
                                     >
-                                        {/* <option value="1">Muski</option>
-                                        <option value="2">Zenski</option> */}
+                                        <option value="Petar Petrovic">Petar Petrovic</option>
+                                        <option value="Ivan Ivanic">Ivan Ivanic</option>
 
                                     </Field>
                                 </Col>

@@ -110,11 +110,11 @@ class Clinic {
             }
         }
     }
-    async patient(id){
-        let res = await db.collection('patients').find({_id: ObjectID(id)}).toArray();
-        if (res.length){
+    async patient(id) {
+        let res = await db.collection('patients').find({ _id: ObjectID(id) }).toArray();
+        if (res.length) {
             return res[0];
-        }else{
+        } else {
             return null;
         }
     }
@@ -386,6 +386,45 @@ class Clinic {
             id: _id
         };
     }
+
+    async updateClinicAppointments(id, obj) {
+        let _id;
+        console.log(id);
+
+        console.log(obj);
+
+
+        // if (id == 'new') {
+        //     let check = await db.collection('appointments').find({ tag: obj.tag }).count();
+        //     if (check) {
+        //         return {
+        //             error: `User with username "${obj.tag}" already exists`
+        //         }
+        //     }
+
+        //     _id = ObjectID();
+        //     obj._id = _id;
+
+        //     await db.collection('appointments').insertOne(obj);
+        // } else {
+        //     _id = id;
+        //     delete obj._id;
+
+
+        //     await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
+        //         $set: obj
+        //     })
+        // }
+        _id = ObjectID();
+        obj._id = _id;
+        await db.collection('appointments').insertOne(obj);
+
+        return {
+            id: _id
+        };
+    }
+
+
     async updateClinicAdmin(uid, obj) {
         let _id;
 
@@ -446,10 +485,20 @@ class Clinic {
             id: _id
         };
     }
+    
+    async clinicAppointments(cid) {
+        let admin = await db.collection('appointments').find({ _id: ObjectID(cid) }).toArray();
+        let query = { }
+        // if (obj.search) {
+        //     query.tag = new RegExp(obj.search, 'i');
+        // }
+         return await db.collection('appointments').find(query).toArray();
+    }
 
     async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].type }
+        
         if (obj.search) {
             query.tag = new RegExp(obj.search, 'i');
         }
