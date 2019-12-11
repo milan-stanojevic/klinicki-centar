@@ -190,6 +190,15 @@ class Patient {
 
         return res;
     }
+    async appointementsList(obj) {
+
+        let query = {}
+    
+        let res = await db.collection('appointments').find(query).toArray();
+
+        return res;
+    }
+    
 
     async clinicList(obj) {
         let query = {}

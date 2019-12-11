@@ -190,6 +190,10 @@ app.post('/patient/clinic', isPatientAuthenticated, async (req, res) => {
 app.post('/patient/clinic/doctors', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.doctorsList(req.body));
 });
+app.post('/patient/clinic/appointements', isPatientAuthenticated, async (req, res) => {
+    res.send(await patientModule.appointementsList());
+});
+
 
 
 
