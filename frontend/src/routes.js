@@ -50,6 +50,7 @@ import Medication from './views/admin/medication';
 import DiagnosesList from './views/admin/diagnosesList';
 import Diagnose from './views/admin/diagnose';
 import MedicalRecord from './views/patient/medicalRecord';
+import Calendar from './views/doctor/calendar';
 
 class Routes extends Component {
 
@@ -111,7 +112,7 @@ class Routes extends Component {
                         />
 
 
-                            <Route
+                        <Route
                             path="/admin/medications"
                             exact
                             render={(...renderProps) => (
@@ -119,7 +120,7 @@ class Routes extends Component {
                             )}
                         />
 
-                            <Route
+                        <Route
                             path="/admin/medications/:id"
                             exact
                             render={(...renderProps) => (
@@ -127,7 +128,7 @@ class Routes extends Component {
                             )}
                         />
 
-                        
+
                         <Route
                             path="/admin/diagnoses"
                             exact
@@ -136,7 +137,7 @@ class Routes extends Component {
                             )}
                         />
 
-                            <Route
+                        <Route
                             path="/admin/diagnoses/:id"
                             exact
                             render={(...renderProps) => (
@@ -210,7 +211,7 @@ class Routes extends Component {
                                 <DocHomePage {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/doctor/patient/:id"
                             exact
@@ -250,7 +251,7 @@ class Routes extends Component {
                                 <PatientClinicList {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/patient/clinic/doctors"
                             exact
@@ -330,6 +331,15 @@ class Routes extends Component {
                                 <MedicalRecord {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/doctor/calendar"
+                            exact
+                            render={(...renderProps) => (
+                                <Calendar {...renderProps} {...this.props} />
+                            )}
+                        />
+
 
 
                     </Switch>

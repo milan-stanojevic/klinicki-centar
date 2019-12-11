@@ -68,11 +68,11 @@ class Test extends Component {
                             null
                         }
 
-                        <div class="col-6 col-lg-4"><a href="">
+                        <div class="col-6 col-lg-4"><Link to="/doctor/calendar">
                             <div class="table-box">
                                 <p>Radni kalendar</p>
                             </div>
-                        </a></div>
+                        </Link></div>
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/vacation">
                             <div class="table-box">
