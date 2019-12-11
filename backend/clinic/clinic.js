@@ -178,7 +178,17 @@ class Clinic {
             return null;
         }
     }
-
+    async clinicDoctors() {
+        return await db.collection('clinicUsers').find({type : "doctor"}).toArray();
+    }
+    
+    async clinicType() {
+        return await db.collection('types').find({}).toArray();
+    }
+    
+    async clinicOrdination() {
+        return await db.collection('ordinations').find({}).toArray();
+    }
 
     async updateClinicUser(uid, id, obj) {
         let _id;

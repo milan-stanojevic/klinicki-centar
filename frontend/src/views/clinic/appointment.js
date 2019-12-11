@@ -20,10 +20,29 @@ class Appointment extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
+        // this.getDocs = this.getDocs.bind(this);
         this.state = {
 
         };
     }
+    // getDocs() {
+    //     if (!localStorage.clinicAdminToken) {
+    //         return;
+    //     }
+
+    //     fetch('http://127.0.0.1:4000/clinic/doctors', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+    //         },
+    //     }).then((res) => res.json()).then((result) => {
+    //         this.setState({
+    //             items: result
+    //         })
+    //     })
+
+    // }
     add(data) {
         console.log(data);
         let ts = Math.floor(data.date.getTime() / 1000)
@@ -56,24 +75,48 @@ class Appointment extends Component {
     }
 
     componentDidMount() {
-        if (this.props[0].match.params.id != 'new') {
-            fetch('http://127.0.0.1:4000/clinic/appointments/' + this.props[0].match.params.id, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+        fetch('http://127.0.0.1:4000/clinic/doctors', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
-                }
-            }).then((res) => res.json()).then((result) => {
-                this.setState({
-                    initialValues: result
-                })
-                console.log(result);
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                doctors: result
             })
+            console.log(result);
+        })
+        fetch('http://127.0.0.1:4000/clinic/type', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
-        }
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                types: result
+            })
+            console.log(result);
+        })
+        fetch('http://127.0.0.1:4000/clinic/ordination', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                ordinations: result
+            })
+            console.log(result);
+        })
+        
     }
-    
+
     render() {
         return (
             <div className="page-wrap">
@@ -89,9 +132,9 @@ class Appointment extends Component {
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <AppointmentForm initialValues={this.state.initialValues} onSubmit={this.add} />
+                        <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
-                        <AppointmentForm onSubmit={this.add} />
+                        <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -101,7 +144,7 @@ class Appointment extends Component {
                             null
                     }
                 </Container>
-                
+
 
 
             </div>

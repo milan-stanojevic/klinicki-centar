@@ -296,6 +296,15 @@ app.post('/clinic/users', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicUsers(uid,req.body));
 });
+app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.clinicDoctors());
+});
+app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.clinicType());
+});
+app.get('/clinic/ordination', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.clinicOrdination());
+});
 
 app.delete('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;

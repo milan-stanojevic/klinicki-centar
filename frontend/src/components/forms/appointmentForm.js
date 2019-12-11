@@ -118,6 +118,7 @@ class form extends React.Component {
                                         component={renderDateField}
                                         label={"Datum i vrijeme pregleda"}
                                         placeholder="Izaberite datum"
+                                        validate={[required]}
                                     >
                                     </Field>
                                 </Col>
@@ -137,10 +138,16 @@ class form extends React.Component {
                                         component={renderSelectField}
                                         label={"Tip pregleda"}
                                         placeholder="Izaberite tip pregleda"
-                                        
+                                        validate={[required]}
+
                                     >
-                                        <option value="tip1">tip1</option>
-                                        <option value="tip2">tip2</option>
+                                        {/* <option value="tip1">tip1</option>
+                                        <option value="tip2">tip2</option> */}
+                                        {this.props.types && this.props.types.map((item, idx) => {
+                                            return (
+                                                <option value={item.tag}>{item.tag}</option>
+                                            )
+                                        })}
 
                                     </Field>
                                 </Col>
@@ -151,9 +158,13 @@ class form extends React.Component {
                                         component={renderSelectField}
                                         label={"Sala"}
                                         placeholder="Izaberite salu za pregled"
+                                        validate={[required]}
                                     >
-                                        <option value="a1">a1</option>
-                                        <option value="a2">a2</option>
+                                        {this.props.ordinations && this.props.ordinations.map((item, idx) => {
+                                            return (
+                                                <option value={item.tag}>{item.tag}</option>
+                                            )
+                                        })}
 
                                     </Field>
                                 </Col>
@@ -163,9 +174,15 @@ class form extends React.Component {
                                         component={renderSelectField}
                                         label={"Doktor"}
                                         placeholder="Izaberite doktora"
+                                        validate={[required]}
                                     >
-                                        <option value="Petar Petrovic">Petar Petrovic</option>
-                                        <option value="Ivan Ivanic">Ivan Ivanic</option>
+                                        {/* <option value="Petar Petrovic">Petar Petrovic</option> */}
+                                        {/* <option value="Ivan Ivanic">Ivan Ivanic</option> */}
+                                        {this.props.doctors && this.props.doctors.map((item, idx) => {
+                                            return (
+                                                <option value={item.firstName + " " + item.lastName}>{item.firstName} {item.lastName}</option>
+                                            )
+                                        })}
 
                                     </Field>
                                 </Col>
