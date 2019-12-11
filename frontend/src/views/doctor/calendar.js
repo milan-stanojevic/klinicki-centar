@@ -59,6 +59,9 @@ class CalendarPage extends Component {
                 <p>
                     Doktor: {event.medicalStaff}
                 </p>
+                <p>
+                    Sala: {event.ordination}
+                </p>
 
             </>
         )
