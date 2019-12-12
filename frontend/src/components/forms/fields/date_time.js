@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 
-class Date extends Component {
+class DateTime extends Component {
     constructor(props) {
         super(props);
 
@@ -30,6 +30,8 @@ class Date extends Component {
                 <DatePicker
                     onChange={this.props.onChange}
                     selected={this.props.value}
+                    showTimeSelect
+                    dateFormat= "Pp"
                 />
 
             </>
@@ -39,4 +41,4 @@ class Date extends Component {
     }
 }
 
-export default Date;
+export default DateTime;

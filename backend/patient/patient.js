@@ -4,6 +4,7 @@ const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
+var nodemailer = require('nodemailer');
 let db;
 const dbConnect = require('../db');
 dbConnect()
@@ -14,7 +15,13 @@ dbConnect()
     .catch((e) => {
         // handle err
     })
-
+    
+ 
+    const SMTPServer = 'mail.hugemedia.online';
+    const SMTPPort = 465;
+    const SMTPUsername = 'admin@hugemedia.online';
+    const SMTPPassword = 'tSwFq%8e;LC%'
+    
 class Patient {
     constructor(props) {
 
@@ -171,18 +178,18 @@ class Patient {
 
         let query = {}
         console.log(query);
-        
+
         if (obj.search) {
             // if (query.type == 'doctor') {
-                
-                query = { $or: [] }
-                
-                query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
+
+            query = { $or: [] }
+
+            query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
             // }
         }
         if (obj.search) {
             // if (query.type == 'doctor') {
-                query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
+            query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
             // }
         }
 
@@ -190,6 +197,15 @@ class Patient {
 
         return res;
     }
+    async appointementsList(obj) {
+
+        let query = {}
+
+        let res = await db.collection('appointments').find(query).toArray();
+
+        return res;
+    }
+
 
     async clinicList(obj) {
         let query = {}
@@ -215,7 +231,66 @@ class Patient {
             return null;
         }
     }
+    async sendRequest(id, uid, obj) {
+        let _id;
+        let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
+        let patient = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();        
+        let clinic = appointment[0].clinic;
+        let admin = await db.collection('clinicAdmins').find({ clinic: clinic }).toArray();
 
+
+        _id = ObjectID();
+        obj._id = _id;
+        obj.appointment = appointment[0]._id;
+        obj.patient = patient[0]._id;
+        // obj.actionCreated = true;
+        // obj.verified = false;
+        await db.collection('appointmentRequests').insertOne(obj);
+
+        await db.collection('appointments').updateOne({ _id: appointment[0]._id }, {
+            $set: {
+                actionCreated: true,
+              
+            }
+        });
+        
+        for(let i=0; i<admin.length; i++){
+            this.sendMail(admin[i].email, "Zakazivanje pregleda", "Pacijent zeli da zakaze pregled");
+        }
+    }
+    sendMail(to, subject, message) {
+        var transporter = nodemailer.createTransport({
+            host: SMTPServer,
+            port: SMTPPort,
+            secure: true,
+            requireTLS: true,
+            auth: {
+                user: SMTPUsername,
+                pass: SMTPPassword
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+
+
+        var mailOptions = {
+            from: SMTPUsername,
+            to: to,
+            subject: subject,
+            text: message
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+    }
 
 
 

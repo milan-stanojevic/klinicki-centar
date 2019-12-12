@@ -141,33 +141,45 @@ class Sidebar extends Component {
                                     <li>
                                         <Link to='/clinic/users' className={this.props[0].location.pathname == '/clinic/users' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Lista osoblja
+                                            Osoblje
                                         </Link>
                                     </li>
                                     <li>
                                         <Link to='/clinic/ordinations' className={this.props[0].location.pathname == '/clinic/ordination' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Lista sala
+                                            Sale
                                         </Link>
                                     </li>
                                     <li>
                                         <Link to='/clinic/types' className={this.props[0].location.pathname == '/clinic/types' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Lista tipova pregleda
+                                            Tipovi pregleda
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to='/clinic/appointments' className={this.props[0].location.pathname == '/clinic/appointments' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Slobodni termini
                                         </Link>
                                     </li>
                                 </ul>
-                                <h6>Medicinsko osoblje</h6>
+                                <h6>Zahtjevi</h6>
                                 <ul>
                                     <li>
                                         <Link to='/clinic/vacationRequests' className={this.props[0].location.pathname == '/clinic/vacationRequests' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Zahtjevi za godisnji odmor
+                                            Godisnji odmor
                                         </Link>
                                     </li>
-                                    
+                                    <li>
+                                        <Link to='/clinic/appointmentRequest' className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Termin za pregled
+                                        </Link>
+                                    </li>
 
                                 </ul>
+
                                 <h6>Uredjivanje profila</h6>
                                 <ul>
                                     <li>

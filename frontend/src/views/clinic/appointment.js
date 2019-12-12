@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
+import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 import moment from 'moment';
-import ClinicAdminProfile from '../../components/forms/clinicAdminProfile';
+
+import AppointmentForm from '../../components/forms/appointmentForm';
 
 import {
     Container,
@@ -14,7 +16,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class EditProfileCA extends Component {
+class Appointment extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
@@ -22,24 +24,21 @@ class EditProfileCA extends Component {
 
         };
     }
-
+    
     add(data) {
         console.log(data);
-        let ts = Math.floor(data.datum.getTime() / 1000)
-        let date = moment.unix(ts).format('DD.MM.YYYY')
+        let ts = Math.floor(data.date.getTime() / 1000)
+        let date = moment.unix(ts).format('DD.MM.YYYY, HH:mm')
         let obj = {
-            username: data.username,
+            duration: data.duration,
             date: date,
-            password: data.password,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            image: data.image,
-            pol: data.pol,
-            email: data.email,
-            adress: data.adress
+            type: data.type,
+            ordination: data.ordination,
+            doctor: data.doctor,
+            price: data.price
         }
 
-        fetch('http://127.0.0.1:4000/clinic/admin/update', {
+        fetch('http://127.0.0.1:4000/clinic/appointments/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,12 +52,12 @@ class EditProfileCA extends Component {
                 })
                 return;
             }
-            // this.props[0].history.push('/clinic/users')
+            this.props[0].history.push('/clinic/appointments')
         })
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/admin/update', {
+        fetch('http://127.0.0.1:4000/clinic/doctors', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,11 +66,37 @@ class EditProfileCA extends Component {
             }
         }).then((res) => res.json()).then((result) => {
             this.setState({
-                initialValues: result
+                doctors: result
             })
             console.log(result);
         })
+        fetch('http://127.0.0.1:4000/clinic/type', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                types: result
+            })
+            console.log(result);
+        })
+        fetch('http://127.0.0.1:4000/clinic/ordination', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                ordinations: result
+            })
+            console.log(result);
+        })
+        
     }
 
     render() {
@@ -79,18 +104,19 @@ class EditProfileCA extends Component {
             <div className="page-wrap">
                 {
                     !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
-                
                 }
+
                 <Container fluid>
+
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Moj profil</h3>
+                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni tip</h3> : <h3>Dodaj tip</h3>}
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <ClinicAdminProfile initialValues={this.state.initialValues} onSubmit={this.add} /> 
+                        <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
-                        <ClinicAdminProfile onSubmit={this.add} />
+                        <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -102,9 +128,10 @@ class EditProfileCA extends Component {
                 </Container>
 
 
+
             </div>
         );
     }
 }
 
-export default Page(EditProfileCA);
+export default Page(Appointment)

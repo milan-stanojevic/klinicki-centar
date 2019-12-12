@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom';
 import Page from '../../containers/admin/page';
+import { Link, Redirect } from 'react-router-dom';
 
 import {
     Container,
@@ -8,9 +8,8 @@ import {
     Col,
 } from 'reactstrap';
 
-const required = value => value ? undefined : "Required"
 
-class patientHomePage extends Component {
+class ClinicView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,33 +31,22 @@ class patientHomePage extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Pocetna stranica</h3>
+                            <h3>Klinika</h3>
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-6"><Link to='/patient/clinics'>
+                        <div class="col-6 col-lg-6"><Link to='/patient/clinic/doctors'>
                             <div class="table-box">
-                                <p>Lista svih klinika</p>
+                                <p>Lista svih doktora</p>
                             </div>
                         </Link></div>
 
-                        <div class="col-6 col-lg-6"><a href="">
+                        <div class="col-6 col-lg-6"><Link to='/patient/clinic/appointements'>
                             <div class="table-box">
-                                <p>Istorija pregled i operacija</p>
-                            </div>
-                        </a></div>
-
-                        <div class="col-6 col-lg-6"><Link to='/patient/medicalRecord'>
-                            <div class="table-box">
-                                <p>Zdravstveni karton</p>
-                            </div>
-                            </Link></div>
-
-                        <div class="col-6 col-lg-6"><Link to="/patient/update">
-                            <div class="table-box">
-                                <p>Moj profil</p>
+                                <p>Lista unaprijed kreiranih pregleda</p>
                             </div>
                         </Link></div>
+
                     </Row>
 
 
@@ -68,4 +56,4 @@ class patientHomePage extends Component {
     }
 }
 
-export default Page(patientHomePage)
+export default Page(ClinicView)

@@ -8,12 +8,11 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 
-class Date extends Component {
+class Date1 extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
         };
     }
 
@@ -26,11 +25,11 @@ class Date extends Component {
         return (
             <>
                 {this.props.label ? <label>{this.props.label}</label> : null}
-                <br />
+                <br/>
                 <DatePicker
                     onChange={this.props.onChange}
                     selected={this.props.value}
-                />
+                    />
 
             </>
 
@@ -39,4 +38,4 @@ class Date extends Component {
     }
 }
 
-export default Date;
+export default Date1;

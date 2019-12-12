@@ -9,7 +9,7 @@ import TextArea from './fields/textarea';
 import Select from './fields/select';
 import MultiSelect from './fields/multiSelect';
 
-import Date from './fields/date';
+import Date from './fields/date1';
 
 import {
     Container,
