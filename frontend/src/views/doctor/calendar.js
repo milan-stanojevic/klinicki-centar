@@ -37,8 +37,10 @@ class CalendarPage extends Component {
             }
         }).then((res) => res.json()).then((result) => {
             for(let i=0;i<result.length;i++){
-                result[i].start =  new Date(result[i].start * 1000);
-                result[i].end =  new Date(result[i].end * 1000);
+                //result[i].start =  new Date(result[i].start * 1000);
+                //result[i].end =  new Date(result[i].end * 1000);
+                result[i].start = moment(result[i].appointment.date, 'DD.MM.YYYY, HH:mm').toDate();
+                result[i].end = moment(result[i].appointment.date, 'DD.MM.YYYY, HH:mm').add(result[i].appointment.duration, 'minutes').toDate();
 
             }
             this.setState({events: result})
@@ -51,16 +53,16 @@ class CalendarPage extends Component {
         return (
             <>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
-                    <strong>{event.type == 0 ? 'Operacija' : 'Pregled'}</strong>
+                    <strong>{event.appointment.type}</strong>
                 </p>
                 <p>
-                    Pacijent: {event.patientName}
+                    Pacijent: {event.patient.firstName} {event.patient.lastName}
                 </p>
                 <p>
-                    Doktor: {event.medicalStaff}
+                    Doktor: {event.appointment.doctor}
                 </p>
                 <p>
-                    Sala: {event.ordination}
+                    Sala: {event.appointment.ordination}
                 </p>
 
             </>

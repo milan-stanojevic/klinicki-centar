@@ -652,7 +652,18 @@ class Clinic {
 
 
     async events(){
-        return [
+
+        let requests = await db.collection('appointmentRequests').find().toArray();
+
+        for (let i = 0; i < requests.length; i++) {
+            let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+            let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+            requests[i].patient = patient[0];
+            requests[i].appointment = appointment[0];
+        }
+        return requests;
+
+        /*return [
             {
                 id: 0,
                 patientName: 'Pero Peric',
@@ -672,7 +683,7 @@ class Clinic {
                 ordination: '204'
             },
 
-        ]
+        ]*/
     }
 
 
