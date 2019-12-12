@@ -20,29 +20,11 @@ class Appointment extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
-        // this.getDocs = this.getDocs.bind(this);
         this.state = {
 
         };
     }
-    // getDocs() {
-    //     if (!localStorage.clinicAdminToken) {
-    //         return;
-    //     }
-
-    //     fetch('http://127.0.0.1:4000/clinic/doctors', {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
-    //         },
-    //     }).then((res) => res.json()).then((result) => {
-    //         this.setState({
-    //             items: result
-    //         })
-    //     })
-
-    // }
+    
     add(data) {
         console.log(data);
         let ts = Math.floor(data.date.getTime() / 1000)

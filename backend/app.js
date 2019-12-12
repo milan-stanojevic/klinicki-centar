@@ -253,17 +253,18 @@ app.post('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.updateClinicUser(uid, req.params.uid, req.body));
 });
-app.post('/clinic/appointments/:id', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.updateClinicAppointments(req.params.id, req.body));
+app.post('/clinic/appointments/:uid', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.updateClinicAppointments(uid, req.params.uid, req.body));
 });
 app.get('/clinic/appointments', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicAppointments(uid));
+    res.send(await clinicModule.clinicAppointments(uid,req.body));
 });
 
-
-app.post('/clinic/types/:id', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.updateClinicTypes(req.params.id, req.body));
+app.post('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.updateClinicTypes(uid, req.params.uid, req.body));
 });
 app.post('/clinic/types', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -273,8 +274,9 @@ app.delete('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) =>
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicTypeDelete(uid, req.params.uid));
 });
-app.post('/clinic/ordination/:id', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.updateClinicOrdinations(req.params.id, req.body));
+app.post('/clinic/ordination/:uid', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.updateClinicOrdinations(uid, req.params.uid, req.body));
 });
 app.post('/clinic/ordinations', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;

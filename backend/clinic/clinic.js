@@ -179,13 +179,13 @@ class Clinic {
         }
     }
     async clinicDoctors() {
-        return await db.collection('clinicUsers').find({type : "doctor"}).toArray();
+        return await db.collection('clinicUsers').find({ type: "doctor" }).toArray();
     }
-    
+
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
-    
+
     async clinicOrdination() {
         return await db.collection('ordinations').find({}).toArray();
     }
@@ -330,31 +330,40 @@ class Clinic {
 
 
 
-    async updateClinicOrdinations(id, obj) {
+    async updateClinicOrdinations(uid, id, obj) {
         let _id;
         console.log(id);
 
         console.log(obj);
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        let cid = admin[0].clinic;
 
 
         if (id == 'new') {
             let check = await db.collection('ordinations').find({ tag: obj.tag }).count();
             if (check) {
                 return {
-                    error: `User with username "${obj.tag}" already exists`
+                    error: `Ordination with tag "${obj.tag}" already exists`
                 }
             }
 
             _id = ObjectID();
             obj._id = _id;
+            obj.clinic = cid;
 
             await db.collection('ordinations').insertOne(obj);
         } else {
             _id = id;
             delete obj._id;
+            
+            let check = await db.collection('ordinations').find({tag: obj.tag, _id: { $ne: ObjectID(id) }, clinic: cid }).count();
+            if (check) {
+                return {
+                    error: `Ordination with tag "${obj.tag}" already exists`
+                }
+            }
 
-
-            await db.collection('ordinations').updateOne({ _id: ObjectID(id) }, {
+            await db.collection('ordinations').updateOne({ _id: ObjectID(id), clinic: cid }, {
                 $set: obj
             })
         }
@@ -363,31 +372,35 @@ class Clinic {
             id: _id
         };
     }
-    async updateClinicTypes(id, obj) {
+    async updateClinicTypes(uid, id, obj) {
         let _id;
-        console.log(id);
-
-        console.log(obj);
-
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        let cid = admin[0].clinic;
 
         if (id == 'new') {
             let check = await db.collection('types').find({ tag: obj.tag }).count();
             if (check) {
                 return {
-                    error: `User with username "${obj.tag}" already exists`
+                    error: `Type with tag "${obj.tag}" already exists`
                 }
             }
 
             _id = ObjectID();
             obj._id = _id;
+            obj.clinic = cid;
 
             await db.collection('types').insertOne(obj);
         } else {
             _id = id;
             delete obj._id;
 
-
-            await db.collection('types').updateOne({ _id: ObjectID(id) }, {
+            let check = await db.collection('types').find({ tag: obj.tag, _id: { $ne: ObjectID(id) }, clinic: cid }).count();
+            if (check) {
+                return {
+                    error: `type with tag "${obj.tag}" already exists`
+                }
+            }
+            await db.collection('types').updateOne({ _id: ObjectID(id), clinic: cid }, {
                 $set: obj
             })
         }
@@ -397,38 +410,21 @@ class Clinic {
         };
     }
 
-    async updateClinicAppointments(id, obj) {
+
+    async updateClinicAppointments(uid, id, obj) {
         let _id;
-        console.log(id);
 
-        console.log(obj);
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
 
+        let cid = admin[0].clinic;
+        if (id == 'new') {
 
-        // if (id == 'new') {
-        //     let check = await db.collection('appointments').find({ tag: obj.tag }).count();
-        //     if (check) {
-        //         return {
-        //             error: `User with username "${obj.tag}" already exists`
-        //         }
-        //     }
+            _id = ObjectID();
+            obj._id = _id;
+            obj.clinic = cid;
 
-        //     _id = ObjectID();
-        //     obj._id = _id;
-
-        //     await db.collection('appointments').insertOne(obj);
-        // } else {
-        //     _id = id;
-        //     delete obj._id;
-
-
-        //     await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
-        //         $set: obj
-        //     })
-        // }
-        _id = ObjectID();
-        obj._id = _id;
-        await db.collection('appointments').insertOne(obj);
-
+            await db.collection('appointments').insertOne(obj);
+        }
         return {
             id: _id
         };
@@ -495,20 +491,26 @@ class Clinic {
             id: _id
         };
     }
-    
-    async clinicAppointments(cid) {
-        let admin = await db.collection('appointments').find({ _id: ObjectID(cid) }).toArray();
-        let query = { }
-        // if (obj.search) {
-        //     query.tag = new RegExp(obj.search, 'i');
-        // }
-         return await db.collection('appointments').find(query).toArray();
+
+    async clinicAppointments(cid,obj) {
+        // let admin = await db.collection('appointments').find({ _id: ObjectID(cid) }).toArray();
+        // let query = {}
+        // // if (obj.search) {
+        // //     query.tag = new RegExp(obj.search, 'i');
+        // // }
+        // return await db.collection('appointments').find(query).toArray();
+
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
+        let query = { clinic: admin[0].clinic }
+        return await db.collection('appointments').find(query).toArray();
     }
+  
+    
 
     async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-        let query = { clinic: admin[0].type }
-        
+        let query = { clinic: admin[0].clinic }
+
         if (obj.search) {
             query.tag = new RegExp(obj.search, 'i');
         }
@@ -517,11 +519,11 @@ class Clinic {
     async clinicTypeDelete(cid, id) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
 
-        await db.collection('types').deleteOne({ _id: ObjectID(id), clinic: admin[0].type });
+        await db.collection('types').deleteOne({ _id: ObjectID(id), clinic: admin[0].clinic });
     }
     async clinicOrdinations(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
-        let query = { clinic: admin[0].ordination }
+        let query = { clinic: admin[0].clinic }
         if (obj.search) {
             query.tag = new RegExp(obj.search, 'i');
         }
@@ -532,7 +534,7 @@ class Clinic {
     async clinicOrdinationDelete(cid, id) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
 
-        await db.collection('ordinations').deleteOne({ _id: ObjectID(id), clinic: admin[0].ordination });
+        await db.collection('ordinations').deleteOne({ _id: ObjectID(id), clinic: admin[0].clinic });
     }
 
     async clinicUser(id) {
