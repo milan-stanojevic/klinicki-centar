@@ -242,6 +242,59 @@ class Clinic {
             id: _id
         };
     }
+    
+    async appointmentRequests() {
+        let requests = await db.collection('appointmentRequests').find().toArray();
+
+        for (let i = 0; i < requests.length; i++) {
+            let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+            let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+            requests[i].patient = patient[0];
+            requests[i].appointment = appointment[0];
+            // console.log(requests[i]);
+            // requests[i].date = appointment[0].date;
+            // requests[i].doctor = appointment[0].doctor;
+            // requests[i].patientName = patient[0].firstName;
+            // requests[i].patientLastName = patient[0].lastName;
+            // console.log(requests[i].date + " " + requests[i].doctor  + " " + requests[i].patientName  + " " + requests[i].patientLastName );
+        }
+        return requests;
+    }
+    
+    async allowReqAppointment(id) {
+        let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
+        let appointment = request[0].appointment;
+
+
+        await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                verified: true
+            }
+        });
+        await db.collection('appointments').updateOne({ _id: appointment }, {
+            $set: {
+                verified: true,
+                actionCreated: false
+
+            }
+        });
+    }
+    
+    async disallowReqAppointment(id) {
+        let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
+        let appointment = request[0].appointment;
+        await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                verified: false
+            }
+        });
+        await db.collection('appointments').updateOne({ _id: appointment }, {
+            $set: {
+                verified: false,
+                actionCreated: false
+            }
+        });
+    }
     async vacationRequests() {
         let requests = await db.collection('vacationRequests').find().toArray();
 
@@ -269,6 +322,16 @@ class Clinic {
             }
         });
     }
+    async notifyPatient(id, obj) {
+        let user = await db.collection('patients').find({ _id: ObjectID(id) }).toArray();
+        if (!user.length) {
+            return;
+        }
+
+        this.sendMail(user[0].email, obj.subject, obj.message);
+        return;
+    }
+
     async notifyUser(id, obj) {
         let user = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
         if (!user.length) {

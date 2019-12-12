@@ -193,7 +193,10 @@ app.post('/patient/clinic/doctors', isPatientAuthenticated, async (req, res) => 
 app.post('/patient/clinic/appointements', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.appointementsList());
 });
-
+app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.sendRequest(req.params.id,uid,req.body));
+});
 
 
 
@@ -229,6 +232,20 @@ app.get('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicData(uid));
 });
+app.get('/clinic/appointmentRequests', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.appointmentRequests());
+});
+app.get('/clinic/appointmentRequests/allow/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.allowReqAppointment(req.params.id));
+});
+app.get('/clinic/appointmentRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.disallowReqAppointment(req.params.id));
+});
+app.post('/clinic/appointmentRequests/notify/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.notifyPatient(req.params.id, req.body));
+});
+
 app.get('/clinic/vacationRequests', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.vacationRequests());
@@ -247,6 +264,8 @@ app.post('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicUpdate(uid, req.body));
 });
+
+
 
 
 app.post('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {

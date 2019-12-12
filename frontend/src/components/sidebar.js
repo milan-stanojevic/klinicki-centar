@@ -163,15 +163,20 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                 </ul>
-                                <h6>Medicinsko osoblje</h6>
+                                <h6>Zahtjevi</h6>
                                 <ul>
                                     <li>
                                         <Link to='/clinic/vacationRequests' className={this.props[0].location.pathname == '/clinic/vacationRequests' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Zahtjevi za godisnji odmor
+                                            Godisnji odmor
                                         </Link>
                                     </li>
-
+                                    <li>
+                                        <Link to='/clinic/appointmentRequest' className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Termin za pregled
+                                        </Link>
+                                    </li>
 
                                 </ul>
 

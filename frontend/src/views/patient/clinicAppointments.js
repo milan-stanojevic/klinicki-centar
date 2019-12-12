@@ -15,11 +15,35 @@ class ClinicAppointments extends Component {
         this.get = this.get.bind(this);
         // this.delete = this.delete.bind(this);
         // this.search = this.search.bind(this);
+        this.reserve = this.reserve.bind(this);
+
 
         this.state = {
             items: []
         };
     }
+    reserve(id, uid) {
+        if (!localStorage.patientToken) {
+            return;
+        }
+
+        this.setState({
+            modal: uid
+        })
+        let obj = {}
+
+        fetch('http://127.0.0.1:4000/patient/appointmentRequests/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+
+            },
+            body: JSON.stringify(obj)
+        }).then((res) => this.get())
+    }
+
+
     componentDidMount() {
         this.get();
     }
@@ -87,7 +111,10 @@ class ClinicAppointments extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
+                            if(!item.verified)
                             return (
+                                
+                                
                                 <Row className="table-row" key={idx}>
                                     <Col lg="2">
                                         <span className="value">{item.date}</span>
@@ -108,9 +135,12 @@ class ClinicAppointments extends Component {
                                         <span className="value">{item.price}</span>
                                     </Col>
                                     <Col lg="2" className="actions">
-                                        <button className="button">Zakazi</button>
+                                        {item.actionCreated ?
+                                                <button className="button1">OBRADA</button>
+                                                :
+                                                <button className="button" onClick={() => { this.reserve(item._id, item.uid) }}>ZAKAZI</button>
+                                        }
                                     </Col>
-
                                 </Row>
                             )
                         })

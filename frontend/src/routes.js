@@ -53,6 +53,7 @@ import Admins from './views/admin/admins';
 import ChangePassword from './views/admin/changePassword';
 import Vacation from './views/doctor/vacation'
 import VacationRequest from './views/clinic/vacationRequest';
+import AppointmentRequest from './views/clinic/appointmentRequest';
 import MedicationsList from './views/admin/medicationsList';
 import Medication from './views/admin/medication';
 import DiagnosesList from './views/admin/diagnosesList';
@@ -99,6 +100,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <VacationRequest {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/clinic/appointmentRequest"
+                            exact
+                            render={(...renderProps) => (
+                                <AppointmentRequest {...renderProps} {...this.props} />
                             )}
                         />
 
