@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import Page from '../../containers/admin/page';
-
+import moment from 'moment';
 import ClinicAdminProfile from '../../components/forms/clinicAdminProfile';
 
 import {
@@ -25,6 +25,19 @@ class EditProfileCA extends Component {
 
     add(data) {
         console.log(data);
+        let ts = Math.floor(data.datum.getTime() / 1000)
+        let date = moment.unix(ts).format('DD.MM.YYYY')
+        let obj = {
+            username: data.username,
+            date: date,
+            password: data.password,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            image: data.image,
+            pol: data.pol,
+            email: data.email,
+            adress: data.adress
+        }
 
         fetch('http://127.0.0.1:4000/clinic/admin/update', {
             method: 'POST',
@@ -32,7 +45,7 @@ class EditProfileCA extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(obj)
         }).then((res) => res.json()).then((result) => {
             if (result.error) {
                 this.setState({

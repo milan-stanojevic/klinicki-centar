@@ -588,6 +588,28 @@ class Clinic {
     }
 
 
+    async events(){
+        return [
+            {
+                id: 0,
+                patientName: 'Pero Peric',
+                medicalStaff: 'Dr. Jankovic, Sestra Jelena',
+                start: new Date(2019, 11, 11, 3, 0, 0).getTime() / 1000,
+                end: new Date(2019, 11, 11, 4, 30, 0).getTime() / 1000,
+                type: 0,
+            },
+            {
+                id: 1,
+                patientName: 'Pero Peric',
+                medicalStaff: 'Dr. Jankovic, Sestra Jelena',
+                start: new Date(2019, 11, 11, 5, 20, 0).getTime() / 1000,
+                end: new Date(2019, 11, 11, 10, 30, 0).getTime() / 1000,
+                type: 1
+            },
+
+        ]
+    }
+
 
 
 }

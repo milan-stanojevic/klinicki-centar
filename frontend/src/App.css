@@ -395,6 +395,23 @@
   .modal-container textarea {
     min-height: 200px; }
 
+.operation-range {
+  color: #F1646C; }
+
+.examination-range {
+  color: greenyellow; }
+
+.rbc-timeslot-group {
+  min-height: 60px !important; }
+
+.rbc-month-view .rbc-event p {
+  margin-bottom: 0;
+  font-size: 10px; }
+
+.rbc-time-view .rbc-event p {
+  margin-bottom: 0;
+  font-size: 14px; }
+
 .login-page {
   min-height: 100vh;
   background-image: linear-gradient(to left, #0B9DEC, #3F51B5); }
