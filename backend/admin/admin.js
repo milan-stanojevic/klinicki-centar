@@ -46,7 +46,9 @@ class Admin {
 
     async login(username, password) {
         //console.log(db);   
-
+        if (!db){
+            db = await dbConnect();
+        }
         let admin = await db.collection('admins').find({ username: username }).toArray();
 
         if (!admin.length) {

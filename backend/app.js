@@ -38,7 +38,8 @@ app.post('/admin/upload', isAdminAuthenticated, function (req, res) {
 app.post('/admin/login', async (req, res) => {
     console.log(req.body);
     let result = await adminModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    console.log(result.status)
+    res.status(result.status).send(result.response);
 });
 
 app.post('/admin/verify', isAdminAuthenticated, (req, res) => {
@@ -376,3 +377,7 @@ app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.events());
 });
+
+
+
+export default app;

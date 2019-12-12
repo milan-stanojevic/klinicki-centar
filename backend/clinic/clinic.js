@@ -660,6 +660,7 @@ class Clinic {
                 start: new Date(2019, 11, 11, 3, 0, 0).getTime() / 1000,
                 end: new Date(2019, 11, 11, 4, 30, 0).getTime() / 1000,
                 type: 0,
+                ordination: '200'
             },
             {
                 id: 1,
@@ -667,7 +668,8 @@ class Clinic {
                 medicalStaff: 'Dr. Jankovic, Sestra Jelena',
                 start: new Date(2019, 11, 11, 5, 20, 0).getTime() / 1000,
                 end: new Date(2019, 11, 11, 10, 30, 0).getTime() / 1000,
-                type: 1
+                type: 1,
+                ordination: '204'
             },
 
         ]

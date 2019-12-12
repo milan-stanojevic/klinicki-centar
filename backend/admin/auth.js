@@ -11,12 +11,14 @@ module.exports = function(req, res, next) {
 
             if (err) {
                 res.status(500).json({ error: "Not Authorized" });
-                throw new Error("Not Authorized");
+                return;
+                //throw new Error("Not Authorized");
             }
             return next();
         });
     } else {
         res.status(500).json({ error: "Not Authorized" });
-        throw new Error("Not Authorized");
+        return;
+        //throw new Error("Not Authorized");
     }
 }
