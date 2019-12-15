@@ -390,7 +390,35 @@ class Clinic {
             id: _id
         };
     }
+    
+    async clinicOrd(uid, userId) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        
+        if (!admin.length) {
+            return null;
+        }
 
+        let res = await db.collection('ordinations').find({ clinic: admin[0].clinic, _id: ObjectID(userId) }).toArray();
+        if (res.length) {
+            return res[0];
+        } else {
+            return null;
+        }
+    }
+    async clinictype(uid, userId) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        
+        if (!admin.length) {
+            return null;
+        }
+
+        let res = await db.collection('types').find({ clinic: admin[0].clinic, _id: ObjectID(userId) }).toArray();
+        if (res.length) {
+            return res[0];
+        } else {
+            return null;
+        }
+    }
 
 
     async updateClinicOrdinations(uid, id, obj) {

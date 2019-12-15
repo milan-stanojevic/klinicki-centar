@@ -306,6 +306,15 @@ app.delete('/clinic/ordinations/:uid', isClinicAdminAuthenticated, async (req, r
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicOrdinationDelete(uid, req.params.uid));
 });
+app.get('/clinic/ordinations/:uid', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicOrd(uid, req.params.uid));
+});
+app.get('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinictype(uid, req.params.uid));
+});
+
 
 
 app.get('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
