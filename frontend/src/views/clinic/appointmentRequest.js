@@ -138,15 +138,15 @@ class AppointmentRequest extends Component {
                         <Col lg="2">
                             <span className="name">DATUM</span>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="2">
                             <span className="name">PACIJENT</span>
                         </Col>
 
 
-                        <Col lg="3">
+                        <Col lg="2">
                             <span className="name">DOKTOR</span>
                         </Col>
-                        <Col lg="1" className="actions">
+                        <Col lg="4" className="actions">
                             <span className="name">OPCIJE</span>
                         </Col>
 
@@ -157,23 +157,23 @@ class AppointmentRequest extends Component {
                                 <Row className="table-row" key={idx}>
 
                                     <Col lg="2" className="reservation-status">
-                                        <div className={item.verified ? 'valid-reservation' : item.appointment.actionCreated ? 'not-valid-reservation' : 'undefined-reservation'}></div>
-                                        <span className="value">{item.verified ? 'ODOBRENO' : item.appointment.actionCreated ? 'ODBIJENO' : ''}</span>
+                                        <div className={item.verified ? 'valid-reservation' : !item.appointment.actionCreated ? 'not-valid-reservation' : 'undefined-reservation'}></div>
+                                        <span className="value">{item.verified ? 'ODOBRENO' : !item.appointment.actionCreated ? 'ODBIJENO' : ''}</span>
                                     </Col>
 
                                     <Col lg="2">
                                         <span className="value">{item.appointment.date}</span>
                                     </Col>
-                                    <Col lg="3">
+                                    <Col lg="2">
                                         <span className="value">{item.patient.firstName + " " + item.patient.lastName}</span>
                                     </Col>
 
-                                    <Col lg="3">
+                                    <Col lg="2">
                                         <span className="value">{item.appointment.doctor}</span>
                                     </Col>
 
-                                    <Col lg="2" className="actions">
-                                        {item.appointment.actionCreated ?
+                                    <Col lg="4" className="actions">
+                                        {/* {item.appointment.actionCreated ?
                                             item.verified ?
                                                 <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>
                                                 :
@@ -181,7 +181,11 @@ class AppointmentRequest extends Component {
                                             :
                                             <button className="button" onClick={() => { this.allow(item._id, item.patient._id) }}>ODOBRI</button>
 
-                                        }
+                                        } */}
+                                        <Row>
+                                            <button className="button" onClick={() => { this.allow(item._id, item.patient._id) }}>ODOBRI</button>
+                                            <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>
+                                        </Row>
                                     </Col>
 
                                 </Row>

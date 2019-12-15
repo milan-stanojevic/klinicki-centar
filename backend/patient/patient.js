@@ -249,7 +249,7 @@ class Patient {
 
         await db.collection('appointments').updateOne({ _id: appointment[0]._id }, {
             $set: {
-                actionCreated: true,
+                actionCreated: true
               
             }
         });
