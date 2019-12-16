@@ -27,9 +27,11 @@ import ClinicAdminLogin from './views/clinic/login';
 import ClinicEdit from './views/clinic/editClinic';
 import DocHomePage from './views/doctor/home'
 import PatientsList from './views/doctor/patientsList'
+import MakingAppointment from './views/doctor/makingAppointment'
 import EditProfile from './views/doctor/editProfile'
 import PatientPage from './views/doctor/patientPage'
 import PatientHomePage from './views/patient/patientHomePage'
+
 
 
 import ClinicUser from './views/clinic/user'
@@ -226,6 +228,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <DocHomePage {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/doctor/makingAppointment"
+                            exact
+                            render={(...renderProps) => (
+                                <MakingAppointment {...renderProps} {...this.props} />
                             )}
                         />
 

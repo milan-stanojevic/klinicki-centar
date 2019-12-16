@@ -131,7 +131,7 @@ class Appointments extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            if(!item.verified)
+                            if(!item.verified && item.predef)
                             return (
                                 <Row className="table-row" key={idx}>
                                     <Col lg="2">
