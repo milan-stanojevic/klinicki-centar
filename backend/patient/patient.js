@@ -179,18 +179,27 @@ class Patient {
         let query = {}
         console.log(query);
 
-        if (obj.search) {
-            // if (query.type == 'doctor') {
+        // if (obj.search) {
+        //     // if (query.type == 'doctor') {
 
-            query = { $or: [] }
+        //     query = { $or: [] }
 
-            query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
-            // }
+        //     query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
+        //     // }
+        // }
+        // if (obj.search) {
+        //     // if (query.type == 'doctor') {
+        //     query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
+        //     // }
+        // }
+        if (obj.doctorName) {
+            query.firstName = new RegExp(obj.doctorName, 'i');
         }
-        if (obj.search) {
-            // if (query.type == 'doctor') {
-            query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
-            // }
+        if (obj.doctorLastName) {
+            query.lastName = new RegExp(obj.doctorLastName, 'i');
+        }
+        if (obj.doctorRating) {
+            query.rating = new RegExp(obj.doctorRating, 'i');
         }
 
         let res = await db.collection('clinicUsers').find(query).toArray();
@@ -206,20 +215,23 @@ class Patient {
         return res;
     }
 
-
+    async clinicType() {
+        return await db.collection('types').find({}).toArray();
+    }
     async clinicList(obj) {
         let query = {}
         if (obj.search) {
             query.name = new RegExp(obj.search, 'i');
         }
         if (obj.adress) {
-            query.adress = obj.adress;
+            query.adress = new RegExp(obj.adress, 'i');
         }
 
         let res = await db.collection('clinics').find(query).toArray();
 
         return res;
     }
+    
 
 
 

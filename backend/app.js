@@ -340,6 +340,12 @@ app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
 app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicType());
 });
+
+app.get('/patient/clinic/doctors/type', isPatientAuthenticated, async (req, res) => {
+    res.send(await patientModule.clinicType());
+});
+
+
 app.get('/clinic/ordination', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicOrdination());
 });

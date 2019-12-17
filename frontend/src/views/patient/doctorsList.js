@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Page from '../../containers/admin/page';
 import { Link, Redirect } from 'react-router-dom';
-import SearchForm from '../../components/forms/searchForm';
+import SearchForm from '../../components/forms/searchDoctorForm';
 
 import {
     Container,
@@ -25,7 +25,9 @@ class DoctorsList extends Component {
     }
 
     componentDidMount() {
+        
         this.get();
+       
     }
 
     get() {
@@ -43,6 +45,19 @@ class DoctorsList extends Component {
             this.setState({
                 items: result
             })
+        })
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors/type', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                types: result
+            })
+            console.log(result);
         })
 
     }
@@ -81,7 +96,7 @@ class DoctorsList extends Component {
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm onSubmit={this.search} />
+                            <SearchForm types={this.state.types} onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
@@ -92,7 +107,7 @@ class DoctorsList extends Component {
                             <span className="name">Prezime</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">tip</span>
+                            <span className="name">Ocena</span>
                         </Col>
 
 
@@ -111,7 +126,7 @@ class DoctorsList extends Component {
                                             <span className="value">{item.lastName}</span>
                                         </Col>
                                         <Col lg="4">
-                                            <span className="value">{item.type}</span>
+                                            <span className="value">{item.rating}</span>
                                         </Col>
                                     </Row>
                                 // </Link>
