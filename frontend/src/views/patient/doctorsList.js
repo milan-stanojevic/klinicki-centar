@@ -25,9 +25,9 @@ class DoctorsList extends Component {
     }
 
     componentDidMount() {
-        
+
         this.get();
-       
+
     }
 
     get() {
@@ -114,23 +114,23 @@ class DoctorsList extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            if(item.type == 'doctor')
-                            return (
-                                // <Link to='/patient/clinic/doctors'>
-                                
-                                    <Row className="table-row" key={idx}>
-                                        <Col lg="4">
-                                            <span className="value">{item.firstName}</span>
-                                        </Col>
-                                        <Col lg="4">
-                                            <span className="value">{item.lastName}</span>
-                                        </Col>
-                                        <Col lg="4">
-                                            <span className="value">{item.rating}</span>
-                                        </Col>
-                                    </Row>
-                                // </Link>
-                            )
+                            if (item.type == 'doctor')
+                                return (
+                                    <Link to='/patient/clinic/doctors/id'>
+
+                                        <Row className="table-row" key={idx}>
+                                            <Col lg="4">
+                                                <span className="value">{item.firstName}</span>
+                                            </Col>
+                                            <Col lg="4">
+                                                <span className="value">{item.lastName}</span>
+                                            </Col>
+                                            <Col lg="4">
+                                                <span className="value">{item.rating}</span>
+                                            </Col>
+                                        </Row>
+                                    </Link>
+                                )
                         })
                     }
 
