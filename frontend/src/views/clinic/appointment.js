@@ -113,7 +113,7 @@ class Appointment extends Component {
                             {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni tip</h3> : <h3>Dodaj tip</h3>}
                         </Col>
                     </Row>
-                    {this.state.initialValues ?
+                    {this.state.initialValues ? 
                         <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
                         <AppointmentForm doctors={this.state.doctors} types={this.state.types} ordinations={this.state.ordinations} onSubmit={this.add} />
