@@ -79,13 +79,16 @@ class MedicalRecord extends Component {
     </Col>
 </Row>
 <Row className="table-head">
-    <Col lg="4">
+    <Col lg="3">
         <span className="name">DIJAGNOZA</span>
     </Col>
-    <Col lg="4">
+    <Col lg="3">
         <span className="name">LEKOVI</span>
     </Col>
-    <Col lg="4">
+    <Col lg="3">
+        <span className="name">IZVJESTAJ</span>
+    </Col>
+    <Col lg="3">
         <span className="name">DATUM</span>
     </Col>
 
@@ -96,17 +99,21 @@ class MedicalRecord extends Component {
     this.state.initialValues && this.state.initialValues.illnessHistory && this.state.initialValues.illnessHistory.map((item, idx) => {
         return (
             <Row className="table-row" key={idx}>
-                <Col lg="4">
-                    <span className="value">{item.illnessName}</span>
+                <Col lg="3">
+                    <span className="value">{item.diagnose && item.diagnose.name}</span>
                 </Col>
-                <Col lg="4">
+                <Col lg="3">
                     <span className="value">{
                         item.medications && item.medications.map((medication) => {
-                            return <span>{medication.name}</span>
+                            return <span>{medication.name} {medication.package} | {medication.manufacturer}</span>
                         })
                     }</span>
                 </Col>
-                <Col lg="4">
+                <Col lg="3">
+                    <span className="value">{item.report}</span>
+                </Col>
+
+                <Col lg="3">
                     <span className="value">{item.date}</span>
                 </Col>
             </Row>

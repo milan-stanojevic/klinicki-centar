@@ -20,6 +20,7 @@ const renderMultiSelect = ({
     input,
     placeholder,
     meta: { touched, error },
+    children
 }) => (
 
         <MultiSelect
@@ -28,6 +29,7 @@ const renderMultiSelect = ({
             error={touched && error}
             {...input}
         >
+        {children}
         </MultiSelect>
     )
 
@@ -172,8 +174,9 @@ class form extends React.Component {
                                         validate={[required]}
                                     >
                                         {this.props.medications && this.props.medications.map((item, idx) => {
+                                            console.log(item)
                                             return (
-                                                <option value={item._id} key={idx}>{item.name}</option>
+                                                <option value={item._id} key={idx}>{item.name} {item.package} | {item.manufacturer}</option>
                                             )
                                         })}
 
@@ -181,7 +184,7 @@ class form extends React.Component {
                                 </Col>
                                 <Col lg="7" className="input-wrap">
                                     <Field
-                                        name="price"
+                                        name="report"
                                         component={renderTextArea}
                                         label={"Izvjestaj"}
                                         placeholder="Unesite izvjestaj"

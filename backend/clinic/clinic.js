@@ -540,7 +540,7 @@ class Clinic {
         ob._id = _id;
         ob.patient = id;
         ob.appointment = appointment_id;
-        
+
         await db.collection('appointmentRequests').insertOne(ob);
         await db.collection('appointments').updateOne({ _id: appointment_id }, {
             $set: {
@@ -721,7 +721,7 @@ class Clinic {
 
     async events() {
 
-        let requests = await db.collection('appointmentRequests').find().toArray();
+        let requests = await db.collection('appointmentRequests').find({ examinationDone: null }).toArray();
 
         for (let i = 0; i < requests.length; i++) {
             let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
@@ -754,13 +754,44 @@ class Clinic {
         ]*/
     }
 
-    async diagnoses(){
-        let res = await db.collection('diagnoses').find({}).sort({_id: -1}).toArray();
+    async insertMedicalRecord(uid, id, obj) {
+        let check = await db.collection('appointmentRequests').find({ _id: ObjectID(id), examinationDone: true }).count();
+        if (check){
+            return {
+                error: 'Pregled je zavrsen'
+            }
+        }
+
+        await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                examinationDone: true
+            }
+        });
+
+        let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
+        let appointment = await db.collection('appointments').find({ _id: ObjectID(request[0].appointment) }).toArray();
+
+        await db.collection('illnessHistory').insertOne({
+            doctor: uid,
+            appointmentRequest: id,
+            patient: request[0].patient,
+            date: appointment[0].date,
+            diagnose: obj.diagnose,
+            medications: obj.medications,
+            report: obj.report
+        })
+
+        return {error: null}
+
+    }
+
+    async diagnoses() {
+        let res = await db.collection('diagnoses').find({}).sort({ _id: -1 }).toArray();
         return res;
     }
 
-    async medications(){
-        let res = await db.collection('medications').find({}).sort({_id: -1}).toArray();
+    async medications() {
+        let res = await db.collection('medications').find({}).sort({ _id: -1 }).toArray();
         return res;
     }
 

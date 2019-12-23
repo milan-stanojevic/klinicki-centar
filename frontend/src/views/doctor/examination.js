@@ -31,7 +31,7 @@ class Examination extends Component {
     add(data) {
         console.log(data);
 
-        fetch('http://127.0.0.1:4000/clinic/user/update', {
+        fetch('http://127.0.0.1:4000/doctor/insertMedicalRecord/'+this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,19 +50,6 @@ class Examination extends Component {
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/user', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
-
-            }
-        }).then((res) => res.json()).then((result) => {
-            this.setState({
-                initialValues: result
-            })
-            console.log(result);
-        })
 
         fetch('http://127.0.0.1:4000/doctor/diagnoses', {
             method: 'GET',
@@ -103,7 +90,7 @@ class Examination extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                             <h3>Moj profil</h3>
+                             <h3>Pregled pacijenta</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?

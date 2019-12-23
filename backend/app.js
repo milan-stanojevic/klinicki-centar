@@ -405,6 +405,12 @@ app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
 
 
 
+app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.insertMedicalRecord(uid, req.params.id, req.body));
+});
+
 
 
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
