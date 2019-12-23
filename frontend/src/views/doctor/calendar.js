@@ -51,7 +51,7 @@ class CalendarPage extends Component {
 
     renderEvent({ event }) {
         return (
-            <>
+            <div onClick={() => alert(true)}>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
                     <strong>{event.appointment.type}</strong>
                 </p>
@@ -65,7 +65,7 @@ class CalendarPage extends Component {
                     Sala: {event.appointment.ordination}
                 </p>
 
-            </>
+            </div>
         )
     }
 

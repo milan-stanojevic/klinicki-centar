@@ -63,6 +63,7 @@ import DiagnosesList from './views/admin/diagnosesList';
 import Diagnose from './views/admin/diagnose';
 import MedicalRecord from './views/patient/medicalRecord';
 import Calendar from './views/doctor/calendar';
+import Examination from './views/doctor/examination';
 
 class Routes extends Component {
 
@@ -382,6 +383,16 @@ class Routes extends Component {
                                 <PatientsList {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/doctor/examination/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Examination {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
                         <Route
                             path="/clinic/admin/update"
                             exact

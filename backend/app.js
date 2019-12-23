@@ -393,6 +393,17 @@ app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
 });
 
 
+app.get('/doctor/medications', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('fetch')
+    res.send(await clinicModule.medications());
+});
+
+app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('fetch')
+    res.send(await clinicModule.diagnoses());
+});
+
+
 
 
 

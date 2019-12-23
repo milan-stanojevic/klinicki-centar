@@ -754,6 +754,17 @@ class Clinic {
         ]*/
     }
 
+    async diagnoses(){
+        let res = await db.collection('diagnoses').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+    async medications(){
+        let res = await db.collection('medications').find({}).sort({_id: -1}).toArray();
+        return res;
+    }
+
+
 
 
 }
