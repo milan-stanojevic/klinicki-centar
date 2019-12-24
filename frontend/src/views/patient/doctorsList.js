@@ -99,8 +99,10 @@ class DoctorsList extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
+                            if(item.type == 'doctor')
                             return (
                                 // <Link to='/patient/clinic/doctors'>
+                                
                                     <Row className="table-row" key={idx}>
                                         <Col lg="4">
                                             <span className="value">{item.firstName}</span>

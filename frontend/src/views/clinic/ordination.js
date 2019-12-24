@@ -89,7 +89,6 @@ class Ordination extends Component {
                             :
                             null
                     }
-                    {/* <OrdinationForm></OrdinationForm> */}
                 </Container>
                 
 

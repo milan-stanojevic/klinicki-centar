@@ -242,7 +242,7 @@ class Clinic {
             id: _id
         };
     }
-    
+
     async appointmentRequests() {
         let requests = await db.collection('appointmentRequests').find().toArray();
 
@@ -260,7 +260,7 @@ class Clinic {
         }
         return requests;
     }
-    
+
     async allowReqAppointment(id) {
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
         let appointment = request[0].appointment;
@@ -279,7 +279,7 @@ class Clinic {
             }
         });
     }
-    
+
     async disallowReqAppointment(id) {
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
         let appointment = request[0].appointment;
@@ -391,6 +391,34 @@ class Clinic {
         };
     }
 
+    async clinicOrd(uid, userId) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+
+        if (!admin.length) {
+            return null;
+        }
+
+        let res = await db.collection('ordinations').find({ clinic: admin[0].clinic, _id: ObjectID(userId) }).toArray();
+        if (res.length) {
+            return res[0];
+        } else {
+            return null;
+        }
+    }
+    async clinictype(uid, userId) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+
+        if (!admin.length) {
+            return null;
+        }
+
+        let res = await db.collection('types').find({ clinic: admin[0].clinic, _id: ObjectID(userId) }).toArray();
+        if (res.length) {
+            return res[0];
+        } else {
+            return null;
+        }
+    }
 
 
     async updateClinicOrdinations(uid, id, obj) {
@@ -418,8 +446,8 @@ class Clinic {
         } else {
             _id = id;
             delete obj._id;
-            
-            let check = await db.collection('ordinations').find({tag: obj.tag, _id: { $ne: ObjectID(id) }, clinic: cid }).count();
+
+            let check = await db.collection('ordinations').find({ tag: obj.tag, _id: { $ne: ObjectID(id) }, clinic: cid }).count();
             if (check) {
                 return {
                     error: `Ordination with tag "${obj.tag}" already exists`
@@ -485,6 +513,7 @@ class Clinic {
             _id = ObjectID();
             obj._id = _id;
             obj.clinic = cid;
+            obj.predef = true;
 
             await db.collection('appointments').insertOne(obj);
         }
@@ -492,6 +521,42 @@ class Clinic {
             id: _id
         };
     }
+
+    async makeNewAppointments(uid, id, obj) {
+        let _id;
+
+        let admin = await db.collection('clinicUsers').find({ _id: ObjectID(uid) }).toArray();
+
+        let cid = admin[0].clinic;
+        _id = ObjectID();
+        obj._id = _id;
+        obj.clinic = cid;
+        obj.actionCreated = false;
+        obj.verified = false;
+        await db.collection('appointments').insertOne(obj);
+        let appointment_id = _id;
+        _id = ObjectID();
+        let ob = {}
+        ob._id = _id;
+        ob.patient = id;
+        ob.appointment = appointment_id;
+        
+        await db.collection('appointmentRequests').insertOne(ob);
+        await db.collection('appointments').updateOne({ _id: appointment_id }, {
+            $set: {
+                actionCreated: true
+
+            }
+        });
+        for (let i = 0; i < admin.length; i++) {
+            this.sendMail(admin[i].email, "Zakazivanje pregleda", "Pacijent zeli da zakaze pregled");
+        }
+
+        return {
+            id: _id
+        };
+    }
+
 
 
     async updateClinicAdmin(uid, obj) {
@@ -555,7 +620,7 @@ class Clinic {
         };
     }
 
-    async clinicAppointments(cid,obj) {
+    async clinicAppointments(cid, obj) {
         // let admin = await db.collection('appointments').find({ _id: ObjectID(cid) }).toArray();
         // let query = {}
         // // if (obj.search) {
@@ -567,8 +632,8 @@ class Clinic {
         let query = { clinic: admin[0].clinic }
         return await db.collection('appointments').find(query).toArray();
     }
-  
-    
+
+
 
     async clinicTypes(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
@@ -651,7 +716,7 @@ class Clinic {
     }
 
 
-    async events(){
+    async events() {
 
         let requests = await db.collection('appointmentRequests').find().toArray();
 
