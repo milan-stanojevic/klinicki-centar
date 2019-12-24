@@ -392,7 +392,37 @@ app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
     res.send(await clinicModule.patient(req.params.id));
 });
 
+app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
+    res.send(await clinicModule.medicalRecord(req.params.id));
+});
 
+app.get('/doctor/medicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+    res.send(await clinicModule.medicalRecordItem(req.params.id));
+});
+app.post('/doctor/updateMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await clinicModule.updateMedicalRecord(uid, req.params.id, req.body));
+});
+
+
+app.get('/doctor/medications', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('fetch')
+    res.send(await clinicModule.medications());
+});
+
+app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('fetch')
+    res.send(await clinicModule.diagnoses());
+});
+
+
+
+app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.insertMedicalRecord(uid, req.params.id, req.body));
+});
 
 
 

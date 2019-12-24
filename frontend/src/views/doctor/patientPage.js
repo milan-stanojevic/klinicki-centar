@@ -26,7 +26,7 @@ class PatientPage extends Component {
                     </Row>
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
-                            <Link to="/patient/medicalRecord">
+                            <Link to={"/doctor/patient/"+this.props[0].match.params.id+"/medicalRecord"}>
                             
                                 <div class="table-box">
                                     <p>Zdravstveni karton</p>

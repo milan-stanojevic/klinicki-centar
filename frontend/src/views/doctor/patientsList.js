@@ -3,6 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Page from '../../containers/admin/page'
 import Select from '../../components/forms/fields/select'
 import SearchForm from '../../components/forms/searchPatientsForm'
+import editIcon from '../../assets/svg/edit.svg';
+
 import {
     Container,
     Row,

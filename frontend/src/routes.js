@@ -63,6 +63,9 @@ import DiagnosesList from './views/admin/diagnosesList';
 import Diagnose from './views/admin/diagnose';
 import MedicalRecord from './views/patient/medicalRecord';
 import Calendar from './views/doctor/calendar';
+import Examination from './views/doctor/examination';
+import DoctorMedicalRecord from './views/doctor/medicalRecord';
+import EditMedicalRecord from './views/doctor/editMedicalRecord';
 
 class Routes extends Component {
 
@@ -105,7 +108,7 @@ class Routes extends Component {
                                 <VacationRequest {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/clinic/appointmentRequest"
                             exact
@@ -213,6 +216,13 @@ class Routes extends Component {
                                 <PatientRegisterPage {...renderProps} {...this.props} />
                             )}
                         />
+                        <Route
+                            path="/doctor/patient/:id/medicalRecord"
+                            exact
+                            render={(...renderProps) => (
+                                <DoctorMedicalRecord {...renderProps} {...this.props} />
+                            )}
+                        />
 
 
                         <Route
@@ -231,7 +241,7 @@ class Routes extends Component {
                                 <DocHomePage {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/doctor/makingAppointment"
                             exact
@@ -247,6 +257,15 @@ class Routes extends Component {
                                 <PatientPage {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/doctor/medicalRecord/:patient/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <EditMedicalRecord {...renderProps} {...this.props} />
+                            )}
+                        />
+
 
                         <Route
                             path="/doctor/vacation"
@@ -287,7 +306,7 @@ class Routes extends Component {
                                 <DoctorsList {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/patient/clinic/doctors/:uid"
                             exact
@@ -295,7 +314,7 @@ class Routes extends Component {
                                 <DoctorView {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/patient/clinic/appointements"
                             exact
@@ -303,7 +322,7 @@ class Routes extends Component {
                                 <ClinicAppointments {...renderProps} {...this.props} />
                             )}
                         />
-                        
+
                         <Route
                             path="/patient/clinic"
                             exact
@@ -382,6 +401,16 @@ class Routes extends Component {
                                 <PatientsList {...renderProps} {...this.props} />
                             )}
                         />
+
+                        <Route
+                            path="/doctor/examination/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <Examination {...renderProps} {...this.props} />
+                            )}
+                        />
+
+
                         <Route
                             path="/clinic/admin/update"
                             exact
