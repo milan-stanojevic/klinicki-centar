@@ -1,50 +1,63 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import Isvg from 'react-inlinesvg';
+import React, { Component } from 'react'
 import Page from '../../containers/admin/page';
-
-import editIcon from '../../assets/svg/edit.svg';
-import deleteIcon from '../../assets/svg/delete.svg';
-import SearchForm from '../../components/forms/searchForm';
-import moment from 'moment';
-
+import { Link, Redirect } from 'react-router-dom';
 
 import {
     Container,
     Row,
     Col,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle
 } from 'reactstrap';
 
-class Appointments extends Component {
+
+class DoctorView extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
         // this.delete = this.delete.bind(this);
         // this.search = this.search.bind(this);
+        this.reserve = this.reserve.bind(this);
+
 
         this.state = {
             items: []
         };
     }
+    reserve(id, uid) {
+        if (!localStorage.patientToken) {
+            return;
+        }
+
+        this.setState({
+            modal: uid
+        })
+        let obj = {}
+
+        fetch('http://127.0.0.1:4000/patient/appointmentRequests/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+
+            },
+            body: JSON.stringify(obj)
+        }).then((res) => this.get())
+    }
+
 
     componentDidMount() {
         this.get();
     }
 
     get() {
-        if (!localStorage.clinicAdminToken) {
+        if (!localStorage.patientToken) {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/appointments', {
-            method: 'GET',
+        fetch('http://127.0.0.1:4000/patient/clinic/appointements', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
             },
         }).then((res) => res.json()).then((result) => {
             this.setState({
@@ -53,47 +66,11 @@ class Appointments extends Component {
         })
 
     }
-    // search(data) {
-    //     if (!localStorage.clinicAdminToken) {
-    //         return;
-    //     }
-
-    //     fetch('http://127.0.0.1:4000/clinic/types', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
-    //         },
-    //         body: JSON.stringify(data),
-    //     }).then((res) => res.json()).then((result) => {
-    //         this.setState({
-    //             items: result
-    //         })
-    //     })
-
-    // }
-
-    // delete(id) {
-    //     if (!localStorage.clinicAdminToken) {
-    //         return;
-    //     }
-
-    //     fetch('http://127.0.0.1:4000/clinic/types/' + id, {
-    //         method: 'DELETE',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
-
-    //         },
-    //     }).then((res) => this.get())
-    // }
-
     render() {
-
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
+                    !localStorage.patientToken ? <Redirect to='/login' /> : null
                 }
 
                 <Container fluid className="table">
@@ -115,10 +92,10 @@ class Appointments extends Component {
                         <Col lg="2">
                             <span className="name">Trajanje</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Tip</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Sala</span>
                         </Col>
                         <Col lg="2">
@@ -127,12 +104,17 @@ class Appointments extends Component {
                         <Col lg="2">
                             <span className="name">Cijena</span>
                         </Col>
+                        <Col lg="2" className="actions">
+                            <span className="name">OPCIJE</span>
+                        </Col>
 
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
                             if(!item.verified && item.predef)
                             return (
+                                
+                                
                                 <Row className="table-row" key={idx}>
                                     <Col lg="2">
                                         <span className="value">{item.date}</span>
@@ -140,10 +122,10 @@ class Appointments extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.duration}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.type}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.ordination}</span>
                                     </Col>
                                     <Col lg="2">
@@ -152,8 +134,13 @@ class Appointments extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.price}</span>
                                     </Col>
-
-                                   
+                                    <Col lg="2" className="actions">
+                                        {item.actionCreated ?
+                                                <button className="button1">OBRADA</button>
+                                                :
+                                                <button className="button" onClick={() => { this.reserve(item._id, item.uid) }}>ZAKAZI</button>
+                                        }
+                                    </Col>
                                 </Row>
                             )
                         })
@@ -161,20 +148,11 @@ class Appointments extends Component {
 
                 </Container>
 
-                <Container fluid className="bottom-wrap">
-                    <Row>
-                        <Col lg="12">
-                            <Link to={`/clinic/appointments/new`}>
-                                <button>Novi termin</button>
-                            </Link>
-                        </Col>
-                    </Row>
 
-                </Container>
 
             </div>
         )
     }
 }
 
-export default Page(Appointments);
+export default Page(DoctorView)

@@ -652,8 +652,11 @@ class Clinic {
     async clinicOrdinations(cid, obj) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
-        if (obj.search) {
-            query.tag = new RegExp(obj.search, 'i');
+        if (obj.tag) {
+            query.tag = new RegExp(obj.tag, 'i');
+        }
+        if (obj.name) {
+            query.name = new RegExp(obj.name, 'i');
         }
         return await db.collection('ordinations').find(query).toArray();
     }

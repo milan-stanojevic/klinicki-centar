@@ -31,6 +31,7 @@ import MakingAppointment from './views/doctor/makingAppointment'
 import EditProfile from './views/doctor/editProfile'
 import PatientPage from './views/doctor/patientPage'
 import PatientHomePage from './views/patient/patientHomePage'
+import DoctorView from './views/patient/doctorView'
 
 
 
@@ -284,6 +285,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <DoctorsList {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/patient/clinic/doctors/:uid"
+                            exact
+                            render={(...renderProps) => (
+                                <DoctorView {...renderProps} {...this.props} />
                             )}
                         />
                         

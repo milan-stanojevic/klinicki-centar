@@ -5,7 +5,9 @@ import Page from '../../containers/admin/page';
 
 import editIcon from '../../assets/svg/edit.svg';
 import deleteIcon from '../../assets/svg/delete.svg';
-import SearchForm from '../../components/forms/searchForm';
+import SearchForm from '../../components/forms/searchOrdinationForm';
+import moment from 'moment';
+
 
 
 
@@ -57,14 +59,25 @@ class Ordinations extends Component {
         if (!localStorage.clinicAdminToken) {
             return;
         }
-
+        let date;
+        try {
+            let ts = Math.floor(data.date.getTime() / 1000)
+            date = moment.unix(ts).format('DD.MM.YYYY')
+        }
+        catch (e) {}
+        
+        let obj = {
+            tag: data.tag,
+            name: data.name,
+            date: date
+        }
         fetch('http://127.0.0.1:4000/clinic/ordinations', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(obj),
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
@@ -103,12 +116,15 @@ class Ordinations extends Component {
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm onSubmit={this.search}/>
+                            <SearchForm onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
-                        <Col lg="9">
+                        <Col lg="3">
                             <span className="name">Oznaka</span>
+                        </Col>
+                        <Col lg="6">
+                            <span className="name">Naziv</span>
                         </Col>
 
 
@@ -123,12 +139,15 @@ class Ordinations extends Component {
                             return (
 
                                 <Row className="table-row" key={idx}>
-                                    <Col lg="8">
+                                    <Col lg="3">
                                         <span className="value">{item.tag}</span>
                                     </Col>
-                                    
+                                    <Col lg="6">
+                                        <span className="value">{item.name}</span>
+                                    </Col>
 
-                                    <Col lg="4" className="actions">
+
+                                    <Col lg="3" className="actions">
                                         <Link to={`/clinic/ordination/${item._id}`}><Isvg src={editIcon} /></Link>
                                         <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
                                     </Col>
