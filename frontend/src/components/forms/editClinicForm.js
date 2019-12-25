@@ -74,20 +74,31 @@ const renderSelectField = ({
 const renderMultiSelect = ({
     input,
     placeholder,
+    label,
     meta: { touched, error },
+    children
 }) => (
 
         <MultiSelect
             placeholder={placeholder}
+            label={label}
             errorText={touched && error}
             error={touched && error}
             {...input}
         >
+            {children}
         </MultiSelect>
     )
 
 
 class form extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+    }
+
     render() {
         const { handleSubmit, pristine, reset, submitting } = this.props;
         console.log(this.props);
@@ -108,8 +119,8 @@ class form extends React.Component {
                                     <Field
                                         name="name"
                                         component={renderTextField}
-                                        label={"Ime klinike"}
-                                        placeholder="Unesite ime klinike"
+                                        label={"Naziv klinike"}
+                                        placeholder="Unesite naziv klinike"
                                         validate={[required]}
                                     ></Field>
                                 </Col>
@@ -144,7 +155,13 @@ class form extends React.Component {
                                         component={renderMultiSelect}
                                         label={"Spisak lekara"}
                                         placeholder="Izaberite lekare"
-                                    ></Field>
+                                    >
+                                        {this.props.doctors && this.props.doctors.map((item, idx) => {
+                                            return (
+                                                <option value={item._id}>{item.firstName} {item.lastName}</option>
+                                            )
+                                        })}
+                                    </Field>
                                 </Col>
                             </Row>
                             <Row>
@@ -154,7 +171,13 @@ class form extends React.Component {
                                         component={renderMultiSelect}
                                         label={"Spisak sala"}
                                         placeholder="Izaberite sale"
-                                    ></Field>
+                                    >
+                                        {this.props.ordinations && this.props.ordinations.map((item, idx) => {
+                                            return (
+                                                <option value={item._id}>{item.tag}</option>
+                                            )
+                                        })}
+                                    </Field>
                                 </Col>
                             </Row>
                             <Row>
