@@ -189,7 +189,11 @@ class Patient {
             id: uid
         };
     }
+    async illnessHistory(uid){
+        let res = await db.collection('illnessHistory').find({ patient: uid }).toArray();
+        return res;
 
+    }
 
     async doctorsList(obj) {
 
