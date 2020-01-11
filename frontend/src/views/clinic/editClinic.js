@@ -47,21 +47,47 @@ class Clinic extends Component {
     }
 
     componentDidMount() {
-            fetch('http://127.0.0.1:4000/clinic/data', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+        fetch('http://127.0.0.1:4000/clinic/data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
-                }
-            }).then((res) => res.json()).then((result) => {
-                this.setState({
-                    initialValues: result
-                })
-                console.log(result);
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                initialValues: result
             })
+            console.log(result);
+        })
+        fetch('http://127.0.0.1:4000/clinic/doctors', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
-        
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                doctors: result
+            })
+            console.log(result);
+        })
+        fetch('http://127.0.0.1:4000/clinic/ordination', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                ordinations: result
+            })
+            console.log(result);
+        })
+
+
     }
 
 
@@ -70,7 +96,7 @@ class Clinic extends Component {
             <div className="page-wrap">
                 {
                     !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
-                
+
                 }
 
                 <Container fluid>
@@ -81,9 +107,9 @@ class Clinic extends Component {
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <ClinicForm initialValues={this.state.initialValues} onSubmit={this.add} />
+                        <ClinicForm doctors={this.state.doctors} ordinations={this.state.ordinations} initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
-                        <ClinicForm onSubmit={this.add} />
+                        <ClinicForm doctors={this.state.doctors} ordinations={this.state.ordinations} onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
