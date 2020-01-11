@@ -154,8 +154,6 @@ class form extends React.Component {
                                         validate={[required]}
 
                                     >
-                                        {/* <option value="tip1">tip1</option>
-                                        <option value="tip2">tip2</option> */}
                                         {this.props.diagnoses && this.props.diagnoses.map((item, idx) => {
                                             return (
                                                 <option value={item._id}>{item.name}</option>
