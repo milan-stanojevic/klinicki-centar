@@ -836,6 +836,50 @@ class Clinic {
         return res[0]
     }
 
+
+    async finishedAppointments() {
+        let requests = await db.collection('appointmentRequests').find({ _id: ObjectID(id), examinationDone: true }).count();
+
+
+        let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
+        let illnessHistory = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray()
+        for (let i = 0; i < illnessHistory.length; i++) {
+            let medications = []
+            for (let j = 0; j < illnessHistory[i].medications.length; j++) {
+                let medication = await db.collection('medications').find({ _id: ObjectID(illnessHistory[i].medications[j]) }).toArray();
+                if (medication.length) {
+                    medications.push(medication[0])
+                }
+            }
+            let diagnose = await db.collection('diagnoses').find({ _id: ObjectID(illnessHistory[i].diagnose) }).toArray();
+            illnessHistory[i].diagnose = diagnose[0];
+
+            illnessHistory[i].medications = medications;
+        }
+
+        res[0].illnessHistory = illnessHistory;
+
+        /*res[0].illnessHistory = [
+            {
+                date: '05.04.2019',
+                illnessName: 'dijareja',
+                medications: [{
+                    name: 'Brufen'
+                }, { name: 'Probiotik' }]
+            },
+            {
+                date: '10.04.2019',
+                illnessName: 'temperatura',
+                medications: [{
+                    name: 'Brufen'
+                }]
+            }
+        ]*/
+
+        return res[0]
+
+    }
+
     async medicalRecordItem(id) {
         let illnessHistory = await db.collection('illnessHistory').find({ _id: ObjectID(id) }).toArray()
 
