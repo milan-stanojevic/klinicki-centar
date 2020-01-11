@@ -165,7 +165,7 @@ class AppointmentRequest extends Component {
                                         <span className="value">{item.appointment.date}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.patient.firstName + " " + item.patient.lastName}</span>
+                                        <span className="value">{item.patient && item.patient.firstName + " " + item.patient && item.patient.lastName}</span>
                                     </Col>
 
                                     <Col lg="2">

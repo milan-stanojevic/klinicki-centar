@@ -444,6 +444,13 @@ class Routes extends Component {
                         />
 
 
+                        <Route
+                            path="/doctor/makingAppointment/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <MakingAppointment {...renderProps} {...this.props} />
+                            )}
+                        />
 
 
                     </Switch>
