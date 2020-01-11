@@ -838,46 +838,49 @@ class Clinic {
 
 
     async finishedAppointments() {
-        let requests = await db.collection('appointmentRequests').find({ _id: ObjectID(id), examinationDone: true }).count();
+        let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
+        console.log(requests)
+        for (let i = 0; i < requests.length; i++) {
 
 
-        let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
-        let illnessHistory = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray()
-        for (let i = 0; i < illnessHistory.length; i++) {
+            let illnessHistory = await db.collection('illnessHistory').find({ appointmentRequest: requests[i]._id.toString() }).toArray()
+            console.log(illnessHistory[0].doctor)
+            let doctor = await db.collection('clinicUsers').find({ _id: ObjectID(illnessHistory[0].doctor) }).toArray();
+            illnessHistory[0].doctor = doctor[0];
+            let patient = await db.collection('patients').find({ _id: illnessHistory[0].patient }).toArray();
+            illnessHistory[0].patient = patient[0];
+
             let medications = []
-            for (let j = 0; j < illnessHistory[i].medications.length; j++) {
-                let medication = await db.collection('medications').find({ _id: ObjectID(illnessHistory[i].medications[j]) }).toArray();
+            for (let j = 0; j < illnessHistory[0].medications.length; j++) {
+                let medication = await db.collection('medications').find({ _id: ObjectID(illnessHistory[0].medications[j]) }).toArray();
                 if (medication.length) {
                     medications.push(medication[0])
                 }
             }
-            let diagnose = await db.collection('diagnoses').find({ _id: ObjectID(illnessHistory[i].diagnose) }).toArray();
-            illnessHistory[i].diagnose = diagnose[0];
+            let diagnose = await db.collection('diagnoses').find({ _id: ObjectID(illnessHistory[0].diagnose) }).toArray();
+            illnessHistory[0].diagnose = diagnose[0];
 
-            illnessHistory[i].medications = medications;
+            illnessHistory[0].medications = medications;
+
+            requests[i].illnessHistory = illnessHistory[0];
         }
 
-        res[0].illnessHistory = illnessHistory;
 
-        /*res[0].illnessHistory = [
-            {
-                date: '05.04.2019',
-                illnessName: 'dijareja',
-                medications: [{
-                    name: 'Brufen'
-                }, { name: 'Probiotik' }]
-            },
-            {
-                date: '10.04.2019',
-                illnessName: 'temperatura',
-                medications: [{
-                    name: 'Brufen'
-                }]
+
+        return requests
+
+    }
+
+    async recipeVerify(id) {
+        await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                recipeVerified: true
             }
-        ]*/
+        })
 
-        return res[0]
-
+        return {
+            error: null
+        }
     }
 
     async medicalRecordItem(id) {

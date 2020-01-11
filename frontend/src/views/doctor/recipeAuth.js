@@ -21,9 +21,7 @@ class RecipeAuth extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
-        this.allow = this.allow.bind(this);
-        this.disallow = this.disallow.bind(this);
-        this.notify = this.notify.bind(this);
+        this.verify = this.verify.bind(this);
 
         this.state = {
             items: []
@@ -35,15 +33,15 @@ class RecipeAuth extends Component {
     }
 
     get() {
-        if (!localStorage.token) {
+        if (!localStorage.clinicUserToken) {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/admin/patients', {
+        fetch('http://127.0.0.1:4000/doctor/finishedAppointments', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
         }).then((res) => res.json()).then((result) => {
             this.setState({
@@ -53,8 +51,8 @@ class RecipeAuth extends Component {
 
     }
 
-    allow(id) {
-        if (!localStorage.token) {
+    verify(id) {
+        if (!localStorage.clinicUserToken) {
             return;
         }
 
@@ -64,66 +62,25 @@ class RecipeAuth extends Component {
 
 
 
-        fetch('http://127.0.0.1:4000/admin/patients/allow/' + id, {
+        fetch('http://127.0.0.1:4000/doctor/recipeAuth/verify/' + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
 
             },
         }).then((res) => this.get())
     }
 
 
-    disallow(id) {
-        if (!localStorage.token) {
-            return;
-        }
-
-
-        this.setState({
-            modal: id
-        })
-
-        fetch('http://127.0.0.1:4000/admin/patients/disallow/' + id, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-
-            },
-        }).then((res) => this.get())
-    }
-
-    notify(data) {
-        if (!localStorage.token) {
-            return;
-        }
-
-
-
-        fetch('http://127.0.0.1:4000/admin/patients/notify/' + this.state.modal, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-
-            },
-            body: JSON.stringify(data)
-        }).then((res) => {
-            this.setState({ modal: null })
-            this.get()
-        })
-    }
-
-
+  
 
     render() {
 
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.token ? <Redirect to='/login' /> : null
+                    !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
                 }
 
                 <Container fluid className="table">
@@ -134,19 +91,26 @@ class RecipeAuth extends Component {
                         </Col>
                     </Row>
                     <Row className="table-head">
-                        <Col lg="3">
-                            <span className="name">DIJAGNOZA</span>
-                        </Col>
-                        <Col lg="3">
-                            <span className="name">LEKOVI</span>
-                        </Col>
-                        <Col lg="3">
-                            <span className="name">IZVJESTAJ</span>
-                        </Col>
-                        <Col lg="2">
-                            <span className="name">DATUM</span>
+                    <Col lg="2">
+                            <span className="name">DOKTOR</span>
                         </Col>
                         <Col lg="1">
+                            <span className="name">PACIJENT</span>
+                        </Col>
+
+                        <Col lg="2">
+                            <span className="name">DIJAGNOZA</span>
+                        </Col>
+                        <Col lg="2">
+                            <span className="name">LEKOVI</span>
+                        </Col>
+                        <Col lg="2">
+                            <span className="name">IZVJESTAJ</span>
+                        </Col>
+                        <Col lg="1">
+                            <span className="name">DATUM</span>
+                        </Col>
+                        <Col lg="2">
                             <span className="name">OPCIJE</span>
                         </Col>
 
@@ -155,27 +119,34 @@ class RecipeAuth extends Component {
                         this.state.items.map((item, idx) => {
                             return (
                                 <Row className="table-row" key={idx}>
-                                    <Col lg="3">
-                                        <span className="value">{item.diagnose && item.diagnose.name}</span>
+                                                                       <Col lg="2">
+                                        <span className="value">{item.illnessHistory.doctor && item.illnessHistory.doctor.firstName} {item.illnessHistory.doctor && item.illnessHistory.doctor.lastName}</span>
                                     </Col>
-                                    <Col lg="3">
-                                        <span className="value">{
-                                            item.medications && item.medications.map((medication) => {
-                                                return <span>{medication.name} {medication.package} | {medication.manufacturer}</span>
-                                            })
-                                        }</span>
-                                    </Col>
-                                    <Col lg="3">
-                                        <span className="value">{item.report}</span>
+                                    <Col lg="1">
+                                    <span className="value">{item.illnessHistory.patient && item.illnessHistory.patient.firstName} {item.illnessHistory.patient && item.illnessHistory.patient.lastName}</span>
                                     </Col>
 
                                     <Col lg="2">
-                                        <span className="value">{item.date}</span>
+                                        <span className="value">{item.illnessHistory.diagnose && item.illnessHistory.diagnose.name}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{
+                                            item.illnessHistory.medications && item.illnessHistory.medications.map((medication) => {
+                                                return <p>{medication.name} {medication.package} | {medication.manufacturer}</p>
+                                            })
+                                        }</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.illnessHistory.report}</span>
                                     </Col>
 
-                                    <Col lg="1" className="actions">
+                                    <Col lg="1">
+                                        <span className="value">{item.illnessHistory.date}</span>
+                                    </Col>
+
+                                    <Col lg="2" className="actions">
                                         {
-                                            item.verified ?
+                                            !item.recipeVerified ?
                                                 <button className="button1" onClick={() => { this.verify(item._id) }}>OVERI</button>
                                                 :
                                                 <span>Overeno</span>}
@@ -189,30 +160,6 @@ class RecipeAuth extends Component {
 
 
                 </Container>
-                {this.state.modal ?
-                    <div className="modal-container">
-                        <h3>Razlog</h3>
-
-                        <PatientNotifyForm onSubmit={this.notify} />
-                    </div>
-
-                    :
-
-                    null
-
-                }
-
-                {/*<Container fluid className="bottom-wrap">
-                    <Row>
-                        <Col lg="12">
-                            <Link to='/pages/new'>
-                                <button>Add page</button>
-                            </Link>
-                        </Col>
-                    </Row>
-
-                </Container>*/}
-
 
             </div>
         );

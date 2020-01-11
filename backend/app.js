@@ -425,6 +425,17 @@ app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (r
 });
 
 
+app.get('/doctor/finishedAppointments', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('finishedApp')
+    res.send(await clinicModule.finishedAppointments());
+})
+
+app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('finishedApp')
+    res.send(await clinicModule.recipeVerify(req.params.id));
+})
+
+
 
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.events());

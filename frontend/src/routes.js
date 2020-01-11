@@ -66,6 +66,7 @@ import Calendar from './views/doctor/calendar';
 import Examination from './views/doctor/examination';
 import DoctorMedicalRecord from './views/doctor/medicalRecord';
 import EditMedicalRecord from './views/doctor/editMedicalRecord';
+import RecipeAuth from './views/doctor/recipeAuth';
 
 class Routes extends Component {
 
@@ -434,6 +435,14 @@ class Routes extends Component {
                                 <Calendar {...renderProps} {...this.props} />
                             )}
                         />
+                        <Route
+                            path="/doctor/recipeAuth"
+                            exact
+                            render={(...renderProps) => (
+                                <RecipeAuth {...renderProps} {...this.props} />
+                            )}
+                        />
+
 
 
 
