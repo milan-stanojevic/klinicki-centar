@@ -246,9 +246,18 @@ class Clinic {
     }
 
     async reserveRoom(id, obj){
+
+        let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
+
+
         await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {$set: {
-            ordination: obj.ordination
+            ordination: obj.ordination.tag,
+            date: obj.start
         }});
+
+        if (obj.start != appointment[0].date){
+            //this.sendMail(user[0].email, obj.subject, obj.message);
+        }
 
         return {error: null}
     }

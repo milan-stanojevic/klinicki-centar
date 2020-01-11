@@ -214,7 +214,7 @@ class AppointmentRequest extends Component {
                                                             {
                                                                 item.freeOrdinations.map((ordination, oidx) => {
                                                                     return (
-                                                                        <option value={ordination.ordination.tag}>{ordination.ordination.tag} | {ordination.start}</option>
+                                                                        <option value={ordination}>{ordination.ordination.tag} | {ordination.start}</option>
                                                                     )
                                                                 })
                                                             }
