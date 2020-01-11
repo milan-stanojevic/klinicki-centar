@@ -282,14 +282,6 @@ class Clinic {
             requests[i].patient = patient[0];
             requests[i].appointment = appointment[0];
 
-
-
-            // console.log(requests[i]);
-            // requests[i].date = appointment[0].date;
-            // requests[i].doctor = appointment[0].doctor;
-            // requests[i].patientName = patient[0].firstName;
-            // requests[i].patientLastName = patient[0].lastName;
-            // console.log(requests[i].date + " " + requests[i].doctor  + " " + requests[i].patientName  + " " + requests[i].patientLastName );
         }
 
 
