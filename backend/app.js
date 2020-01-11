@@ -235,11 +235,15 @@ app.get('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
 });
 app.get('/clinic/appointmentRequests', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.appointmentRequests());
+    res.send(await clinicModule.appointmentRequests(uid));
 });
 app.get('/clinic/appointmentRequests/allow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.allowReqAppointment(req.params.id));
 });
+app.post('/clinic/appointmentRequests/reserveRoom/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.reserveRoom(req.params.id, req.body));
+});
+
 app.get('/clinic/appointmentRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.disallowReqAppointment(req.params.id));
 });
