@@ -44,7 +44,10 @@ class IllnessHistory extends Component {
             this.setState({
                 items: result
             })
+            console.log(result);
         })
+        
+        
     }
     
     render() {
@@ -68,14 +71,17 @@ class IllnessHistory extends Component {
                     </Row> */}
                     <Row className="table-head">
                         
-                        <Col lg="4">
+                        <Col lg="3">
                             <span className="name">Doktor</span>
                         </Col>
                         <Col lg="2">
                             <span className="name">Datum</span>
                         </Col>
-                        <Col lg="4">
+                        <Col lg="3">
                             <span className="name">Dijagnoza</span>
+                        </Col>
+                        <Col lg="2">
+                            <span className="name">Lekovi</span>
                         </Col>
                         <Col lg="2">
                             <span className="name">Izvestaj</span>
@@ -90,14 +96,17 @@ class IllnessHistory extends Component {
                                     // <Link to='/patient/clinic/doctors/id'>
 
                                         <Row className="table-row" key={idx}>
-                                            <Col lg="4">
+                                            <Col lg="3">
                                                 <span className="value">{item.doctor}</span>
                                             </Col>
                                             <Col lg="2">
                                                 <span className="value">{item.date}</span>
                                             </Col>
-                                            <Col lg="4">
+                                            <Col lg="3">
                                                 <span className="value">{item.diagnose}</span>
+                                            </Col>
+                                            <Col lg="2">
+                                                <span className="value">{item.medications}</span>
                                             </Col>
                                             <Col lg="2">
                                                 <span className="value">{item.report}</span>
