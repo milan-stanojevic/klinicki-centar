@@ -89,8 +89,9 @@ class AppointmentRequest extends Component {
                 'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
             },
-            body: JSON.stringify({ordination: ordination})
+            body: JSON.stringify(ordination)
         }).then((res) => this.get())
+        console.log(ordination);
     }
 
 

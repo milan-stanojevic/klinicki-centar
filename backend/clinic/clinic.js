@@ -325,13 +325,13 @@ class Clinic {
                     } else {
                         ordinationBusy = false;
                         while (1) {
-                            start++;
+                            start+=6000;
                             for (let k = 0; k < requests.length; k++) {
-                                if (i == k) {
+                                if (i == k) { 
                                     continue;
                                 }
         
-                                if (requests[k].appointment.ordination == ordinationBusy[j].tag) {
+                                if (requests[k].appointment.ordination == ordinations[j].tag) {
                                     let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                     let d = requests[k].appointment.duration * 60;
         
@@ -351,6 +351,8 @@ class Clinic {
 
                             if (ordinationBusy == false){
                                 ordinationsMap[ordinations[j].tag] = {ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm')};
+                                console.log("start");
+                                break;
                             }
         
                         }
