@@ -19,6 +19,7 @@ import PatientRegisterPage from './views/patient/register';
 import PatientEdit from './views/patient/editProfile';
 import PatientClinicList from './views/patient/clinicList';
 import DoctorsList from './views/patient/doctorsList'
+import IllnessHistory from './views/patient/illnessHistory'
 import ClinicView from './views/patient/clinicView'
 import ClinicAppointments from './views/patient/clinicAppointments'
 
@@ -305,6 +306,13 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <DoctorsList {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/patient/clinic/history"
+                            exact
+                            render={(...renderProps) => (
+                                <IllnessHistory {...renderProps} {...this.props} />
                             )}
                         />
 

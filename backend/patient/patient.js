@@ -15,13 +15,13 @@ dbConnect()
     .catch((e) => {
         // handle err
     })
-    
- 
-    const SMTPServer = 'mail.hugemedia.online';
-    const SMTPPort = 465;
-    const SMTPUsername = 'admin@hugemedia.online';
-    const SMTPPassword = 'tSwFq%8e;LC%'
-    
+
+
+const SMTPServer = 'mail.hugemedia.online';
+const SMTPPort = 465;
+const SMTPUsername = 'admin@hugemedia.online';
+const SMTPPassword = 'tSwFq%8e;LC%'
+
 class Patient {
     constructor(props) {
 
@@ -118,16 +118,16 @@ class Patient {
 
     async medicalRecord(uid) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
-        let illnessHistory = await db.collection('illnessHistory').find({patient: ObjectID(uid) }).toArray()
-        for(let i=0;i<illnessHistory.length;i++){
+        let illnessHistory = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray()
+        for (let i = 0; i < illnessHistory.length; i++) {
             let medications = []
-            for(let j=0;j<illnessHistory[i].medications.length;j++){
-                let medication = await db.collection('medications').find({_id: ObjectID(illnessHistory[i].medications[j])}).toArray();
-                if (medication.length){
+            for (let j = 0; j < illnessHistory[i].medications.length; j++) {
+                let medication = await db.collection('medications').find({ _id: ObjectID(illnessHistory[i].medications[j]) }).toArray();
+                if (medication.length) {
                     medications.push(medication[0])
                 }
             }
-            let diagnose = await db.collection('diagnoses').find({_id: ObjectID(illnessHistory[i].diagnose)}).toArray();
+            let diagnose = await db.collection('diagnoses').find({ _id: ObjectID(illnessHistory[i].diagnose) }).toArray();
             illnessHistory[i].diagnose = diagnose[0];
 
             illnessHistory[i].medications = medications;
@@ -189,6 +189,24 @@ class Patient {
             id: uid
         };
     }
+    async illnessHistory(uid) {
+        let res = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray();
+
+        for (let j = 0; j < res.length; j++) {
+            let doc = await db.collection('clinicUsers').find({ _id: ObjectID(res[j].doctor) }).toArray();
+            res[j].doctor = doc[0].firstName + " " + doc[0].lastName;
+
+            let dig = await db.collection('diagnoses').find({ _id: ObjectID(res[j].diagnose) }).toArray();
+            res[j].diagnose = dig[0].name;
+
+            for (let i = 0; i < res[j].medications.length; i++) {
+                let med = await db.collection('medications').find({ _id: ObjectID(res[j].medications[i]) }).toArray();
+                res[j].medications[i] = med[0].name;
+            }
+        }
+
+        return res;
+    }
 
 
     async doctorsList(obj) {
@@ -248,7 +266,7 @@ class Patient {
 
         return res;
     }
-    
+
 
 
 
@@ -263,7 +281,7 @@ class Patient {
     async sendRequest(id, uid, obj) {
         let _id;
         let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
-        let patient = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();        
+        let patient = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
         let clinic = appointment[0].clinic;
         let admin = await db.collection('clinicAdmins').find({ clinic: clinic }).toArray();
 
@@ -279,11 +297,11 @@ class Patient {
         await db.collection('appointments').updateOne({ _id: appointment[0]._id }, {
             $set: {
                 actionCreated: true
-              
+
             }
         });
-        
-        for(let i=0; i<admin.length; i++){
+
+        for (let i = 0; i < admin.length; i++) {
             this.sendMail(admin[i].email, "Zakazivanje pregleda", "Pacijent zeli da zakaze pregled");
         }
     }

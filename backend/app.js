@@ -198,6 +198,11 @@ app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req,
     let uid = res.locals.uid;
     res.send(await patientModule.sendRequest(req.params.id,uid,req.body));
 });
+app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await patientModule.illnessHistory(uid));
+});
 
 
 
