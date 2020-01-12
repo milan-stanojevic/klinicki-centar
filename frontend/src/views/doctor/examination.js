@@ -24,7 +24,8 @@ class Examination extends Component {
         this.add = this.add.bind(this);
         this.state = {
             diagnoses: [],
-            medications: []
+            medications: [],
+            appointmentRequest: {}
         };
     }
 
@@ -74,6 +75,21 @@ class Examination extends Component {
             })
         })
 
+        fetch('http://127.0.0.1:4000/clinic/appointmentRequests/'+this.props[0].match.params.id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                appointmentRequest: result
+            })
+        })
+
+
+        
+
 
     }
 
@@ -106,6 +122,17 @@ class Examination extends Component {
                             null
                     }
                 </Container>
+                <Container fluid className="bottom-wrap">
+                    <Row>
+                        <Col lg="12">
+                            <a  target="_blank" href={`/doctor/makingAppointment/`+this.state.appointmentRequest.patient}>
+                                <button>Zakazi novi pregled</button>
+                            </a>
+                        </Col>
+                    </Row>
+
+                </Container>
+
 
 
             </div>

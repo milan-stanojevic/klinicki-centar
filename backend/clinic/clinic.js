@@ -4,6 +4,8 @@ const ObjectID = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
+const moment = require('moment');
+
 var nodemailer = require('nodemailer');
 let db;
 const dbConnect = require('../db');
@@ -243,21 +245,124 @@ class Clinic {
         };
     }
 
-    async appointmentRequests() {
+    async reserveRoom(id, obj){
+
+        let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
+
+
+        await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {$set: {
+            ordination: obj.ordination.tag,
+            date: obj.start
+        }});
+
+        if (obj.start != appointment[0].date){
+            //this.sendMail(user[0].email, obj.subject, obj.message);
+        }
+
+        return {error: null}
+    }
+
+    async appointmentRequests(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+
+        if (!admin.length) {
+            return null;
+        }
+
+        let ordinations = await db.collection('ordinations').find({ clinic: admin[0].clinic}).toArray();
+
+
         let requests = await db.collection('appointmentRequests').find().toArray();
+
+
 
         for (let i = 0; i < requests.length; i++) {
             let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
             let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
             requests[i].patient = patient[0];
             requests[i].appointment = appointment[0];
-            // console.log(requests[i]);
-            // requests[i].date = appointment[0].date;
-            // requests[i].doctor = appointment[0].doctor;
-            // requests[i].patientName = patient[0].firstName;
-            // requests[i].patientLastName = patient[0].lastName;
-            // console.log(requests[i].date + " " + requests[i].doctor  + " " + requests[i].patientName  + " " + requests[i].patientLastName );
+
         }
+
+
+        for (let i = 0; i < requests.length; i++) {
+
+            let start = Math.floor(moment(requests[i].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+            let duration = requests[i].appointment.duration * 60;
+
+
+            if (!requests[i].appointment.ordination) {
+                requests[i].freeOrdinations = [];
+                let ordinationsMap = {}
+
+                for (let j = 0; j < ordinations.length; j++) {
+                    let ordinationBusy = false;
+
+                    for (let k = 0; k < requests.length; k++) {
+                        if (i == k) {
+                            continue;
+                        }
+
+                        if (requests[k].appointment.ordination == ordinations[j].tag) {
+                            let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+                            let d = requests[k].appointment.duration * 60;
+
+                            if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                ordinationBusy = true;
+                                break;
+                            }
+
+                        }
+
+                        if (ordinationBusy == true) {
+                            break;
+                        }
+
+
+                    }
+                    if (!ordinationBusy) {
+                        ordinationsMap[ordinations[j].tag] = {ordination: ordinations[j], start: requests[i].appointment.date};
+                    } else {
+                        ordinationBusy = false;
+                        while (1) {
+                            start++;
+                            for (let k = 0; k < requests.length; k++) {
+                                if (i == k) {
+                                    continue;
+                                }
+        
+                                if (requests[k].appointment.ordination == ordinationBusy[j].tag) {
+                                    let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+                                    let d = requests[k].appointment.duration * 60;
+        
+                                    if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                        ordinationBusy = true;
+                                        break;
+                                    }
+        
+                                }
+        
+                                if (ordinationBusy == true) {
+                                    break;
+                                }
+        
+        
+                            }
+
+                            if (ordinationBusy == false){
+                                ordinationsMap[ordinations[j].tag] = {ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm')};
+                            }
+        
+                        }
+                    }
+                }
+
+                requests[i].freeOrdinations = Object.values(ordinationsMap)
+
+
+            }
+        }
+
         return requests;
     }
 
@@ -718,6 +823,11 @@ class Clinic {
         };
     }
 
+    async clinicAppointmentRequest(id) {
+        let requests = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
+
+        return requests[0] ? requests[0] : {};
+    }
 
     async events() {
 
@@ -726,32 +836,10 @@ class Clinic {
         for (let i = 0; i < requests.length; i++) {
             let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
             let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
-            requests[i].patient = patient[0];
+            requests[i].patient = patient[0] ? patient[0] : {};
             requests[i].appointment = appointment[0];
         }
         return requests;
-
-        /*return [
-            {
-                id: 0,
-                patientName: 'Pero Peric',
-                medicalStaff: 'Dr. Jankovic, Sestra Jelena',
-                start: new Date(2019, 11, 11, 3, 0, 0).getTime() / 1000,
-                end: new Date(2019, 11, 11, 4, 30, 0).getTime() / 1000,
-                type: 0,
-                ordination: '200'
-            },
-            {
-                id: 1,
-                patientName: 'Pero Peric',
-                medicalStaff: 'Dr. Jankovic, Sestra Jelena',
-                start: new Date(2019, 11, 11, 5, 20, 0).getTime() / 1000,
-                end: new Date(2019, 11, 11, 10, 30, 0).getTime() / 1000,
-                type: 1,
-                ordination: '204'
-            },
-
-        ]*/
     }
 
     async insertMedicalRecord(uid, id, obj) {
@@ -834,6 +922,53 @@ class Clinic {
         ]*/
 
         return res[0]
+    }
+
+
+    async finishedAppointments() {
+        let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
+        console.log(requests)
+        for (let i = 0; i < requests.length; i++) {
+
+
+            let illnessHistory = await db.collection('illnessHistory').find({ appointmentRequest: requests[i]._id.toString() }).toArray()
+            console.log(illnessHistory[0].doctor)
+            let doctor = await db.collection('clinicUsers').find({ _id: ObjectID(illnessHistory[0].doctor) }).toArray();
+            illnessHistory[0].doctor = doctor[0];
+            let patient = await db.collection('patients').find({ _id: illnessHistory[0].patient }).toArray();
+            illnessHistory[0].patient = patient[0];
+
+            let medications = []
+            for (let j = 0; j < illnessHistory[0].medications.length; j++) {
+                let medication = await db.collection('medications').find({ _id: ObjectID(illnessHistory[0].medications[j]) }).toArray();
+                if (medication.length) {
+                    medications.push(medication[0])
+                }
+            }
+            let diagnose = await db.collection('diagnoses').find({ _id: ObjectID(illnessHistory[0].diagnose) }).toArray();
+            illnessHistory[0].diagnose = diagnose[0];
+
+            illnessHistory[0].medications = medications;
+
+            requests[i].illnessHistory = illnessHistory[0];
+        }
+
+
+
+        return requests
+
+    }
+
+    async recipeVerify(id) {
+        await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                recipeVerified: true
+            }
+        })
+
+        return {
+            error: null
+        }
     }
 
     async medicalRecordItem(id) {

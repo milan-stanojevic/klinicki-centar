@@ -235,11 +235,15 @@ app.get('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
 });
 app.get('/clinic/appointmentRequests', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.appointmentRequests());
+    res.send(await clinicModule.appointmentRequests(uid));
 });
 app.get('/clinic/appointmentRequests/allow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.allowReqAppointment(req.params.id));
 });
+app.post('/clinic/appointmentRequests/reserveRoom/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.reserveRoom(req.params.id, req.body));
+});
+
 app.get('/clinic/appointmentRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.disallowReqAppointment(req.params.id));
 });
@@ -278,9 +282,15 @@ app.post('/clinic/appointments/:uid', isClinicAdminAuthenticated, async (req, re
     res.send(await clinicModule.updateClinicAppointments(uid, req.params.uid, req.body));
 });
 app.post('/doctor/makingAppointment/:uid', isClinicAdminAuthenticated, async (req, res) => {
-    let id = "5df65193d3cb84034cfcf9a6"; //potrebno je proslijediti id pacijente nad kojim se trenutno vrsi pregled
+    //let id = "5df65193d3cb84034cfcf9a6"; //potrebno je proslijediti id pacijente nad kojim se trenutno vrsi pregled
     let uid = res.locals.uid;
-    res.send(await clinicModule.makeNewAppointments(uid,id, req.body));
+    res.send(await clinicModule.makeNewAppointments(uid,req.params.uid, req.body));
+});
+
+
+app.get('/clinic/appointmentRequests/:id', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicAppointmentRequest(req.params.id));
 });
 
 
@@ -423,6 +433,17 @@ app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (r
 
     res.send(await clinicModule.insertMedicalRecord(uid, req.params.id, req.body));
 });
+
+
+app.get('/doctor/finishedAppointments', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('finishedApp')
+    res.send(await clinicModule.finishedAppointments());
+})
+
+app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req, res) => {
+    console.log('finishedApp')
+    res.send(await clinicModule.recipeVerify(req.params.id));
+})
 
 
 

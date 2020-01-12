@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Page from '../../containers/admin/page';
-import MakingAppointmentForm from '../../components/forms/makingAppointmentForm'
+import MakingAppointmentForm from '../../components/forms/makingAppointmentForm1'
 import moment from 'moment';
 
 import {

@@ -574,3 +574,13 @@ color: $red;
         }
     }
     }
+
+    .choose-room{
+        .select-field{
+            min-width: 150px !important;
+        }
+        a{
+            margin: 0 !important;
+            text-align: left !important;
+        }
+    }
