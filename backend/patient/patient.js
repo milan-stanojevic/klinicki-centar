@@ -114,6 +114,55 @@ class Patient {
         }
 
     }
+    
+    async clinicGrading(uid) {
+        return await db.collection('clinics').find().toArray();
+    }
+    async doctorGrading(uid) {
+        return await db.collection('clinicUsers').find({ type : 'doctor' }).toArray();
+    }
+    
+    async clinicRating(obj) {
+        let cl = await db.collection('clinics').find({ _id : ObjectID(obj.clinic) }).toArray();
+        if(cl[0].rating == null)
+        {
+            cl[0].rating = '0';
+            cl[0].numberOfRating = '0';
+        }
+        let inc_rating = Number(cl[0].rating) + Number(obj.ratingClinic);
+        let inc_num = Number(cl[0].numberOfRating) + 1;
+        await db.collection('clinics').updateOne({ _id: ObjectID(obj.clinic) }, {
+            $set: {
+                rating: String(inc_rating),
+                numberOfRating: String(inc_num)
+
+            }
+        });
+
+
+        return await db.collection('clinics').find().toArray();
+    }
+    async doctorRating(obj) {
+        let cl = await db.collection('clinicUsers').find({ _id : ObjectID(obj.doctor) }).toArray();
+        if(cl[0].rating == null)
+        {
+            cl[0].rating = '0';
+            cl[0].numberOfRating = '0';
+        }
+        let inc_rating = Number(cl[0].rating) + Number(obj.ratingDoctor);
+        let inc_num = Number(cl[0].numberOfRating) + 1;
+        await db.collection('clinicUsers').updateOne({ _id: ObjectID(obj.doctor) }, {
+            $set: {
+                rating: String(inc_rating),
+                numberOfRating: String(inc_num)
+
+            }
+        });
+
+
+        return await db.collection('clinicUsers').find().toArray();
+    }
+    
 
 
     async medicalRecord(uid) {
