@@ -180,6 +180,42 @@ class Clinic {
             return null;
         }
     }
+    
+    async clinicRating(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        //console.log(id);
+        let id = admin[0].clinic;
+        console.log(id);
+        return await db.collection('clinics').find({ _id: ObjectID(id) }).toArray();
+    }
+    async clinicIncome(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        //console.log(id);
+        let clinic_id = admin[0].clinic;
+        let appointments = await db.collection('appointments').find({ clinic : clinic_id }).toArray();
+        let income = 0;
+        for (let i = 0; i < appointments.length; i++) {
+           income += Number(appointments[i].price);
+        }
+        // console.log(income);
+        // console.log(String(income));
+       
+
+        return String(income);
+    }
+    async completedEvents(uid) {
+       
+        let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
+
+        for (let i = 0; i < requests.length; i++) {
+            let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+            let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+            requests[i].patient = patient[0] ? patient[0] : {};
+            requests[i].appointment = appointment[0];
+        }
+        return requests;
+    }
+    
     async clinicDoctors() {
         return await db.collection('clinicUsers').find({ type: "doctor" }).toArray();
     }
@@ -843,6 +879,7 @@ class Clinic {
         }
         return requests;
     }
+    
 
     async insertMedicalRecord(uid, id, obj) {
         let check = await db.collection('appointmentRequests').find({ _id: ObjectID(id), examinationDone: true }).count();

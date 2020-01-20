@@ -274,6 +274,15 @@ app.post('/clinic/data', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicUpdate(uid, req.body));
 });
+app.get('/clinic/clinicRating', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicRating(uid));
+});
+app.get('/clinic/income', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicIncome(uid));
+});
+
 
 
 
@@ -455,6 +464,11 @@ app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req,
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.events());
 });
+app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.completedEvents(uid));
+});
+
 
 
 

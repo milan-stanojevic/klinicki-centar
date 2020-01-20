@@ -15,6 +15,48 @@ import {
 
 
 class BusinessReport extends Component {
+    constructor(props) {
+        super(props);
+        this.get = this.get.bind(this);
+
+        this.state = {
+            items: []
+        };
+    }
+    get() {
+        if (!localStorage.clinicAdminToken) {
+            return;
+        }
+
+        fetch('http://127.0.0.1:4000/clinic/clinicRating', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items: result
+            })
+        })
+        fetch('http://127.0.0.1:4000/clinic/income', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items1: result
+            })
+        })
+
+
+    }
+
+    componentDidMount() {
+        this.get();
+    }
     render() {
         return (
             <div className="page-wrap">
@@ -32,8 +74,26 @@ class BusinessReport extends Component {
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
                             <div class="table-box">
-                                <p>Prosecna ocena klinike</p>
-                                <p>(4)</p>
+                                <p>Prosecna ocena klinike (
+                                {
+                                        this.state.items.map((item, idx) => {
+                                            return (
+                                                item.name
+                                            )
+                                        })
+                                    }
+                                    )
+                                </p>
+                                <p>(
+                                    {
+                                        this.state.items.map((item, idx) => {
+                                            return (
+                                                item.rating / item.numberOfRating
+                                            )
+                                        })
+                                    }
+                                    )
+                                </p>
                             </div>
                         </div>
 
@@ -52,7 +112,14 @@ class BusinessReport extends Component {
                         <div class="col-6 col-lg-6">
                             <div class="table-box">
                                 <p>Prihodi klinike</p>
-                                <p>(4000)</p>
+                                <p>(
+                                    {/* {
+                                        this.state.items1.map((item, idx) => {
+                                            return (
+                                            )
+                                        })
+                                    } */}
+                                    )</p>
                             </div>
                         </div>
                     </Row>

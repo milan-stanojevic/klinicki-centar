@@ -30,11 +30,11 @@ class CompletedExaminations extends Component {
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/events', {
+        fetch('http://127.0.0.1:4000/clinic/completedEvents', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
 
             }
         }).then((res) => res.json()).then((result) => {
@@ -53,9 +53,7 @@ class CompletedExaminations extends Component {
 
     renderEvent({ event }) {
         return (
-            <div onClick={() => {
-                this.props[0].history.push(`/doctor/examination/${event._id}`)
-            }}>
+            <div>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
                     <strong>{event.appointment.type}</strong>
                 </p>
