@@ -196,6 +196,15 @@ class Sidebar extends Component {
                                     </li>
 
                                 </ul>
+                                <h6>Izvjestaji</h6>
+                                <ul>
+                                    <li>
+                                        <Link to='/clinic/businessReport' className={this.props[0].location.pathname == '/clinic/businessReport' ? 'active' : null}>
+                                            <Isvg src={list} />
+                                            Poslovanje
+                                        </Link>
+                                    </li>
+                                </ul>
                             </>
                             :
                             null
