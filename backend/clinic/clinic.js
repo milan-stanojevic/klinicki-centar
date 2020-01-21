@@ -245,21 +245,23 @@ class Clinic {
         };
     }
 
-    async reserveRoom(id, obj){
+    async reserveRoom(id, obj) {
 
         let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
 
 
-        await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {$set: {
-            ordination: obj.ordination.tag,
-            date: obj.start
-        }});
+        await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                ordination: obj.ordination.tag,
+                date: obj.start
+            }
+        });
 
-        if (obj.start != appointment[0].date){
+        if (obj.start != appointment[0].date) {
             //this.sendMail(user[0].email, obj.subject, obj.message);
         }
 
-        return {error: null}
+        return { error: null }
     }
 
     async appointmentRequests(uid) {
@@ -269,7 +271,7 @@ class Clinic {
             return null;
         }
 
-        let ordinations = await db.collection('ordinations').find({ clinic: admin[0].clinic}).toArray();
+        let ordinations = await db.collection('ordinations').find({ clinic: admin[0].clinic }).toArray();
 
 
         let requests = await db.collection('appointmentRequests').find().toArray();
@@ -321,40 +323,40 @@ class Clinic {
 
                     }
                     if (!ordinationBusy) {
-                        ordinationsMap[ordinations[j].tag] = {ordination: ordinations[j], start: requests[i].appointment.date};
+                        ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: requests[i].appointment.date };
                     } else {
                         ordinationBusy = false;
                         while (1) {
-                            start+=6000;
+                            start += 6000;
                             for (let k = 0; k < requests.length; k++) {
-                                if (i == k) { 
+                                if (i == k) {
                                     continue;
                                 }
-        
+
                                 if (requests[k].appointment.ordination == ordinations[j].tag) {
                                     let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                     let d = requests[k].appointment.duration * 60;
-        
+
                                     if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
                                         ordinationBusy = true;
                                         break;
                                     }
-        
+
                                 }
-        
+
                                 if (ordinationBusy == true) {
                                     break;
                                 }
-        
-        
+
+
                             }
 
-                            if (ordinationBusy == false){
-                                ordinationsMap[ordinations[j].tag] = {ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm')};
+                            if (ordinationBusy == false) {
+                                ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                 console.log("start");
                                 break;
                             }
-        
+
                         }
                     }
                 }
@@ -367,6 +369,114 @@ class Clinic {
 
         return requests;
     }
+
+
+
+    async allAppointmentRequests() {
+
+        let clinics = await db.collection('clinics').find({}).toArray();
+
+        for (let c = 0; c < clinics.length; c++) {
+            let ordinations = await db.collection('ordinations').find({ clinic: clinics[c]._id.toString() }).toArray();
+
+
+            let requests = await db.collection('appointmentRequests').find().toArray();
+
+
+
+            for (let i = 0; i < requests.length; i++) {
+                let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+                let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+                requests[i].patient = patient[0];
+                requests[i].appointment = appointment[0];
+
+            }
+
+
+            for (let i = 0; i < requests.length; i++) {
+
+                let start = Math.floor(moment(requests[i].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+                let duration = requests[i].appointment.duration * 60;
+
+
+                if (!requests[i].appointment.ordination) {
+                    requests[i].freeOrdinations = [];
+                    let ordinationsMap = {}
+
+                    for (let j = 0; j < ordinations.length; j++) {
+                        let ordinationBusy = false;
+
+                        for (let k = 0; k < requests.length; k++) {
+                            if (i == k) {
+                                continue;
+                            }
+
+                            if (requests[k].appointment.ordination == ordinations[j].tag) {
+                                let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+                                let d = requests[k].appointment.duration * 60;
+
+                                if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                    ordinationBusy = true;
+                                    break;
+                                }
+
+                            }
+
+                            if (ordinationBusy == true) {
+                                break;
+                            }
+
+
+                        }
+                        if (!ordinationBusy) {
+                            ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: requests[i].appointment.date };
+                        } else {
+                            ordinationBusy = false;
+                            while (1) {
+                                start += 6000;
+                                for (let k = 0; k < requests.length; k++) {
+                                    if (i == k) {
+                                        continue;
+                                    }
+
+                                    if (requests[k].appointment.ordination == ordinations[j].tag) {
+                                        let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
+                                        let d = requests[k].appointment.duration * 60;
+
+                                        if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                            ordinationBusy = true;
+                                            break;
+                                        }
+
+                                    }
+
+                                    if (ordinationBusy == true) {
+                                        break;
+                                    }
+
+
+                                }
+
+                                if (ordinationBusy == false) {
+                                    ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
+                                    console.log("start");
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+
+                    requests[i].freeOrdinations = Object.values(ordinationsMap)
+
+
+                }
+            }
+            clinics[c].requests = requests;
+        }
+        return clinics;
+    }
+
 
     async allowReqAppointment(id) {
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
