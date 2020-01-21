@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
-import moment from 'moment';
 
-import MedicalStaff from '../../components/forms/medicalStaff';
+import ExaminationForm from '../../components/forms/examinationForm';
 
 
 
@@ -19,38 +18,26 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class EditProfile extends Component {
+class EditMedicalRecord extends Component {
     constructor(props) {
         super(props);
         this.add = this.add.bind(this);
         this.state = {
-
+            diagnoses: [],
+            medications: []
         };
     }
 
     add(data) {
         console.log(data);
-        let ts = Math.floor(data.date.getTime() / 1000)
-        let date = moment.unix(ts).format('DD.MM.YYYY')
-        let obj = {
-            username: data.username,
-            // date: date,
-            password: data.password,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            image: data.image,
-            pol: data.pol,
-            email: data.email,
-            adress: data.adress
-        }
 
-        fetch('http://127.0.0.1:4000/clinic/user/update', {
+        fetch('http://127.0.0.1:4000/doctor/updateMedicalRecord/'+this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(data)
         }).then((res) => res.json()).then((result) => {
             if (result.error) {
                 this.setState({
@@ -58,24 +45,46 @@ class EditProfile extends Component {
                 })
                 return;
             }
-            this.props[0].history.push('/doctor')
+            this.props[0].history.push('/doctor/patient/'+this.props[0].match.params.patient+'/medicalRecord')
         })
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/user', {
+
+        fetch('http://127.0.0.1:4000/doctor/diagnoses', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
-
-            }
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                diagnoses: result
+            })
+        })
+        fetch('http://127.0.0.1:4000/doctor/medications', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                medications: result
+            })
+        })
+        fetch('http://127.0.0.1:4000/doctor/medicalRecord/'+this.props[0].match.params.id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+            },
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 initialValues: result
             })
-            console.log(result);
         })
+
 
     }
 
@@ -92,13 +101,13 @@ class EditProfile extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                             <h3>Moj profil</h3>
+                             <h3>Pregled pacijenta</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <MedicalStaff initialValues={this.state.initialValues} onSubmit={this.add} /> //ClinicForm
+                        <ExaminationForm medications={this.state.medications} diagnoses={this.state.diagnoses} initialValues={this.state.initialValues} onSubmit={this.add} /> //ClinicForm
                         :
-                        <MedicalStaff onSubmit={this.add} />
+                        <ExaminationForm medications={this.state.medications} diagnoses={this.state.diagnoses} onSubmit={this.add} />
                     }
                     {
                         this.state.error ?
@@ -115,4 +124,4 @@ class EditProfile extends Component {
     }
 }
 
-export default Page(EditProfile);
+export default Page(EditMedicalRecord);

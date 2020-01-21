@@ -80,7 +80,7 @@ const renderSelectField = ({
             {children}
         </Select>
     )
- 
+
 
 
 
@@ -152,22 +152,6 @@ class form extends React.Component {
                                     </Field>
                                 </Col>
 
-                                <Col lg="7" className="input-wrap">
-                                    <Field
-                                        name="ordination"
-                                        component={renderSelectField}
-                                        label={"Sala"}
-                                        placeholder="Izaberite salu za pregled"
-                                        validate={[required]}
-                                    >
-                                        {this.props.ordinations && this.props.ordinations.map((item, idx) => {
-                                            return (
-                                                <option value={item.tag}>{item.tag}</option>
-                                            )
-                                        })}
-
-                                    </Field>
-                                </Col>
                                 <Col lg="7" className="input-wrap">
                                     <Field
                                         name="doctor"

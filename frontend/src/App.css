@@ -412,6 +412,13 @@
   margin-bottom: 0;
   font-size: 14px; }
 
+.choose-room .select-field {
+  min-width: 150px !important; }
+
+.choose-room a {
+  margin: 0 !important;
+  text-align: left !important; }
+
 .login-page {
   min-height: 100vh;
   background-image: linear-gradient(to left, #0B9DEC, #3F51B5); }

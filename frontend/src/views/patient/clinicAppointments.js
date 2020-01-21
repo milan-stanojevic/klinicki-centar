@@ -77,7 +77,7 @@ class ClinicAppointments extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista slobodnih termina</h3>
+                            <h3>Lista slobodnih termina</h3> 
                         </Col>
                     </Row>
                     {/* <Row>
@@ -111,7 +111,7 @@ class ClinicAppointments extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            if(!item.verified)
+                            if(!item.verified && item.predef)
                             return (
                                 
                                 

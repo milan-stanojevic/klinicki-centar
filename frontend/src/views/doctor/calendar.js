@@ -22,6 +22,8 @@ const localizer = momentLocalizer(moment)
 class CalendarPage extends Component {
     constructor(props) {
         super(props);
+        this.renderEvent = this.renderEvent.bind(this);
+
         this.state = {
             events: []
         };
@@ -51,7 +53,9 @@ class CalendarPage extends Component {
 
     renderEvent({ event }) {
         return (
-            <>
+            <div onClick={() => {
+                this.props[0].history.push(`/doctor/examination/${event._id}`)
+            }}>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
                     <strong>{event.appointment.type}</strong>
                 </p>
@@ -65,7 +69,7 @@ class CalendarPage extends Component {
                     Sala: {event.appointment.ordination}
                 </p>
 
-            </>
+            </div>
         )
     }
 

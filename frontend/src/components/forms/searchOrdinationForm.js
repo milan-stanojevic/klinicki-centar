@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import Isvg from 'react-inlinesvg';
+import Date from './fields/date';
+
 
 import Text from './fields/text';
-import Image from './fields/image';
-import Select from './fields/select';
 
 import {
     Container,
@@ -29,106 +28,63 @@ const renderTextField = ({
             {...input}
         />
     )
-
-const renderImageField = ({
+const renderDateField = ({
     input,
     placeholder,
+    label,
+    type,
     meta: { touched, error },
 }) => (
-
-        <Image
+        <Date
             placeholder={placeholder}
+            label={label}
             errorText={touched && error}
+            type={type}
             error={touched && error}
-
             {...input}
         />
     )
 
-const renderSelectField = ({
-    input,
-    placeholder,
-    label,
-    meta: { touched, error },
-    children
-}) => (
-
-        <Select
-            placeholder={placeholder}
-            label={label}
-            errorText={touched && error}
-            error={touched && error}
-            {...input}
-        >
-            {children}
-        </Select>
-    )
-
-
-
-
-
-
 class form extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
-    componentDidMount() {
-
-
-
-    }
-
     render() {
-
         const { handleSubmit, pristine, reset, submitting } = this.props;
         console.log(this.props);
-
         return (
             <form onSubmit={handleSubmit}>
                 <Row>
                     <Col lg="12" >
                         <Container fluid className="form-box">
                             <Row>
-                                
-
-
                                 <Col lg="6" className="input-wrap">
                                     <Field
                                         name="tag"
                                         component={renderTextField}
-                                        label={"Oznaka"}
-                                        placeholder="Unesite oznaku sale"
-                                        validate={[required]}
+                                        placeholder='Unesite oznaku sale'
                                     ></Field>
-
                                 </Col>
                                 <Col lg="6" className="input-wrap">
                                     <Field
                                         name="name"
                                         component={renderTextField}
-                                        label={"Naziv"}
-                                        placeholder="Unesite naziv sale"
-                                        validate={[required]}
+                                        placeholder='Unesite naziv sale'
                                     ></Field>
-
                                 </Col>
-                                
-
-
+                                <Col lg="6" className="input-wrap">
+                                    <Field
+                                        name="date"
+                                        component={renderDateField}
+                                        label={"Unesite datum"}
+                                        placeholder="Izaberite datum"
+                                    >
+                                    </Field>
+                                </Col>
+                                <Col lg="6">
+                                    <button className="button">Trazi</button>
+                                </Col>
                             </Row>
+
                         </Container>
                     </Col>
-
-                    <Col lg="12">
-                        <button className="button">Sacuvaj</button>
-
-                    </Col>
-
                 </Row>
 
             </form>

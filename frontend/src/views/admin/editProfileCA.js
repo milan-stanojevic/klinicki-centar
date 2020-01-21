@@ -25,11 +25,11 @@ class EditProfileCA extends Component {
 
     add(data) {
         console.log(data);
-        let ts = Math.floor(data.datum.getTime() / 1000)
+        let ts = Math.floor(data.date.getTime() / 1000)
         let date = moment.unix(ts).format('DD.MM.YYYY')
         let obj = {
             username: data.username,
-            date: date,
+            // date: date,
             password: data.password,
             firstName: data.firstName,
             lastName: data.lastName,

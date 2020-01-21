@@ -146,7 +146,7 @@ class RecipeAuth extends Component {
 
                                     <Col lg="2" className="actions">
                                         {
-                                            !item.recipeVerified ? 
+                                            !item.recipeVerified ?
                                                 <button className="button1" onClick={() => { this.verify(item._id) }}>OVERI</button>
                                                 :
                                                 <span>Overeno</span>}

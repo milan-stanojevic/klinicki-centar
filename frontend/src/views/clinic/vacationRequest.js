@@ -53,7 +53,7 @@ class vacationRequest extends Component {
 
     }
 
-    allow(id,uid) {
+    allow(id, uid) {
         if (!localStorage.clinicAdminToken) {
             return;
         }
@@ -75,7 +75,7 @@ class vacationRequest extends Component {
     }
 
 
-    disallow(id,uid) {
+    disallow(id, uid) {
         if (!localStorage.clinicAdminToken) {
             return;
         }
@@ -162,14 +162,8 @@ class vacationRequest extends Component {
                         </Col>
 
 
-                        <Col lg="3">
-                            {/*<div className="sort-wrap">
-                                <button><Isvg src={upArrow} /><Isvg src={downArrow} /></button>
-
-        </div>*/}
-                            <span className="name">IME</span>
-                        </Col>
-                        <Col lg="3" className="actions">
+                        <Col lg="2"></Col>
+                        <Col lg="4" className="actions">
 
                             <span className="name">OPCIJE</span>
                         </Col>
@@ -196,11 +190,11 @@ class vacationRequest extends Component {
                                         <span className="value">{item.user.username}</span>
                                     </Col>
 
-                                    <Col lg="3">
+                                    <Col lg="2">
                                     </Col>
 
-                                    <Col lg="3" className="actions">
-                                        {item.actionCreated ?
+                                    <Col lg="4" className="actions">
+                                        {/* {item.actionCreated ?
                                             item.verified ?
                                                 <button className="button1" onClick={() => { this.disallow(item._id, item.uid) }}>ODBIJ</button>
                                                 :
@@ -208,7 +202,11 @@ class vacationRequest extends Component {
                                             :
                                             <button className="button" onClick={() => { this.allow(item._id, item.uid) }}>ODOBRI</button>
 
-                                        }
+                                        } */}
+                                        <Row>
+                                            <button className="button" onClick={() => { this.allow(item._id, item.uid) }}>ODOBRI</button>
+                                            <button className="button1" onClick={() => { this.disallow(item._id, item.uid) }}>ODBIJ</button>
+                                        </Row>
                                     </Col>
 
                                 </Row>

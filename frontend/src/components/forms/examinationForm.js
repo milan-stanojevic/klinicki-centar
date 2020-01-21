@@ -6,6 +6,8 @@ import Text from './fields/text';
 import Image from './fields/image';
 import Select from './fields/select';
 import Date from './fields/date_time';
+import TextArea from './fields/textarea';
+import MultiSelect from './fields/multiSelect';
 
 import {
     Container,
@@ -14,6 +16,23 @@ import {
 } from 'reactstrap';
 
 const required = value => value ? undefined : "Required"
+const renderMultiSelect = ({
+    input,
+    placeholder,
+    meta: { touched, error },
+    children
+}) => (
+
+        <MultiSelect
+            placeholder={placeholder}
+            errorText={touched && error}
+            error={touched && error}
+            {...input}
+        >
+        {children}
+        </MultiSelect>
+    )
+
 
 const renderTextField = ({
     input,
@@ -61,7 +80,22 @@ const renderImageField = ({
             {...input}
         />
     )
-
+    const renderTextArea = ({
+        input,
+        placeholder,
+        label,
+        meta: { touched, error },
+    }) => (
+    
+            <TextArea
+                placeholder={placeholder}
+                label={label}
+                errorText={touched && error}
+                error={touched && error}
+                {...input}
+            />
+        )
+    
 const renderSelectField = ({
     input,
     placeholder,
@@ -80,7 +114,7 @@ const renderSelectField = ({
             {children}
         </Select>
     )
- 
+
 
 
 
@@ -111,41 +145,18 @@ class form extends React.Component {
                     <Col lg="12" >
                         <Container fluid className="form-box">
                             <Row>
-
                                 <Col lg="7" className="input-wrap">
                                     <Field
-                                        name="date"
-                                        component={renderDateField}
-                                        label={"Datum i vrijeme pregleda"}
-                                        placeholder="Izaberite datum"
-                                        validate={[required]}
-                                    >
-                                    </Field>
-                                </Col>
-                                <Col lg="7" className="input-wrap">
-                                    <Field
-                                        name="duration"
-                                        component={renderTextField}
-                                        label={"Trajanje pregleda"}
-                                        placeholder="Unesite duzinu trajanja pregleda"
-                                        validate={[required]}
-                                    ></Field>
-                                </Col>
-
-                                <Col lg="7" className="input-wrap">
-                                    <Field
-                                        name="type"
+                                        name="diagnose"
                                         component={renderSelectField}
-                                        label={"Tip pregleda"}
-                                        placeholder="Izaberite tip pregleda"
+                                        label={"Dijagnoza"}
+                                        placeholder="Izaberite dijagnozu"
                                         validate={[required]}
 
                                     >
-                                        {/* <option value="tip1">tip1</option>
-                                        <option value="tip2">tip2</option> */}
-                                        {this.props.types && this.props.types.map((item, idx) => {
+                                        {this.props.diagnoses && this.props.diagnoses.map((item, idx) => {
                                             return (
-                                                <option value={item.tag}>{item.tag}</option>
+                                                <option value={item._id}>{item.name}</option>
                                             )
                                         })}
 
@@ -154,15 +165,16 @@ class form extends React.Component {
 
                                 <Col lg="7" className="input-wrap">
                                     <Field
-                                        name="ordination"
-                                        component={renderSelectField}
-                                        label={"Sala"}
-                                        placeholder="Izaberite salu za pregled"
+                                        name="medications"
+                                        component={renderMultiSelect}
+                                        label={"Recept"}
+                                        placeholder="Izaberite lijekove"
                                         validate={[required]}
                                     >
-                                        {this.props.ordinations && this.props.ordinations.map((item, idx) => {
+                                        {this.props.medications && this.props.medications.map((item, idx) => {
+                                            console.log(item)
                                             return (
-                                                <option value={item.tag}>{item.tag}</option>
+                                                <option value={item._id} key={idx}>{item.name} {item.package} | {item.manufacturer}</option>
                                             )
                                         })}
 
@@ -170,28 +182,10 @@ class form extends React.Component {
                                 </Col>
                                 <Col lg="7" className="input-wrap">
                                     <Field
-                                        name="doctor"
-                                        component={renderSelectField}
-                                        label={"Doktor"}
-                                        placeholder="Izaberite doktora"
-                                        validate={[required]}
-                                    >
-                                        {/* <option value="Petar Petrovic">Petar Petrovic</option> */}
-                                        {/* <option value="Ivan Ivanic">Ivan Ivanic</option> */}
-                                        {this.props.doctors && this.props.doctors.map((item, idx) => {
-                                            return (
-                                                <option value={item.firstName + " " + item.lastName}>{item.firstName} {item.lastName}</option>
-                                            )
-                                        })}
-
-                                    </Field>
-                                </Col>
-                                <Col lg="7" className="input-wrap">
-                                    <Field
-                                        name="price"
-                                        component={renderTextField}
-                                        label={"Cijena pregleda"}
-                                        placeholder="Unesite cijenu pregleda"
+                                        name="report"
+                                        component={renderTextArea}
+                                        label={"Izvjestaj"}
+                                        placeholder="Unesite izvjestaj"
                                         validate={[required]}
                                     ></Field>
                                 </Col>
@@ -203,7 +197,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Dodaj</button>
+                        <button className="button">Zavrsi pregled</button>
 
                     </Col>
 
