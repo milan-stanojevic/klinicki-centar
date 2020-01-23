@@ -264,6 +264,21 @@ class Clinic {
         return { error: null }
     }
 
+    async setDoctors(id, obj) {
+
+
+
+        await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                doctors: obj,
+            }
+        });
+
+
+        return { error: null }
+    }
+
+
     async appointmentRequests(uid) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
 

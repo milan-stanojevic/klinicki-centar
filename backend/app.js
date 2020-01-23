@@ -248,6 +248,10 @@ app.get('/clinic/appointmentRequests/allow/:id', isClinicAdminAuthenticated, asy
 app.post('/clinic/appointmentRequests/reserveRoom/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.reserveRoom(req.params.id, req.body));
 });
+app.post('/clinic/appointmentRequests/setDoctors/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.setDoctors(req.params.id, req.body));
+});
+
 
 app.get('/clinic/appointmentRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.disallowReqAppointment(req.params.id));
