@@ -366,8 +366,16 @@ app.post('/clinic/users', isClinicAdminAuthenticated, async (req, res) => {
 app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicDoctors());
 });
+app.get('/clinic/doctorss', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicDoctorss(uid));
+});
 app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicType());
+});
+app.get('/clinic/typee', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicTypee(uid));
 });
 
 app.get('/patient/clinic/grading', isPatientAuthenticated, async (req, res) => {
@@ -397,6 +405,10 @@ app.get('/patient/clinic/doctors/type', isPatientAuthenticated, async (req, res)
 
 app.get('/clinic/ordination', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicOrdination());
+});
+app.get('/clinic/ordinationn', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicOrdinationn(uid));
 });
 
 app.delete('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {

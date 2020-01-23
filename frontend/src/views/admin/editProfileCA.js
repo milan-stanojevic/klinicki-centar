@@ -53,7 +53,7 @@ class EditProfileCA extends Component {
                 })
                 return;
             }
-            // this.props[0].history.push('/clinic/users')
+            this.props[0].history.push('/clinic/users')
         })
     }
 

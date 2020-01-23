@@ -219,13 +219,28 @@ class Clinic {
     async clinicDoctors() {
         return await db.collection('clinicUsers').find({ type: "doctor" }).toArray();
     }
+    async clinicDoctorss(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { $and : [{ clinic : admin[0].clinic }, { type: "doctor" }]};
+        return await db.collection('clinicUsers').find(query).toArray();
+    }
 
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
+    async clinicTypee(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { clinic : admin[0].clinic };
+        return await db.collection('types').find(query).toArray();
+    }
 
     async clinicOrdination() {
         return await db.collection('ordinations').find({}).toArray();
+    }
+    async clinicOrdinationn(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { clinic : admin[0].clinic };
+        return await db.collection('ordinations').find(query).toArray();
     }
 
     async updateClinicUser(uid, id, obj) {
