@@ -22,6 +22,12 @@ import DoctorsList from './views/patient/doctorsList'
 import IllnessHistory from './views/patient/illnessHistory'
 import ClinicView from './views/patient/clinicView'
 import ClinicAppointments from './views/patient/clinicAppointments'
+import Grading from './views/patient/grading'
+import GradingDoctor from './views/patient/gradingDoctor'
+
+
+
+
 
 
 import ClinicAdminLogin from './views/clinic/login';
@@ -331,6 +337,23 @@ class Routes extends Component {
                                 <ClinicAppointments {...renderProps} {...this.props} />
                             )}
                         />
+                         <Route
+                            path="/patient/clinic/history/grading"
+                            exact
+                            render={(...renderProps) => (
+                                <Grading {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/patient/clinic/history/gradingDoctor"
+                            exact
+                            render={(...renderProps) => (
+                                <GradingDoctor {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+
+
 
                         <Route
                             path="/patient/clinic"

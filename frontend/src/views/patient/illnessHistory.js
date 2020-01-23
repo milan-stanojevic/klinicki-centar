@@ -46,10 +46,10 @@ class IllnessHistory extends Component {
             })
             console.log(result);
         })
-        
-        
+
+
     }
-    
+
     render() {
         return (
             <div className="page-wrap">
@@ -70,7 +70,7 @@ class IllnessHistory extends Component {
                         </Col>
                     </Row> */}
                     <Row className="table-head">
-                        
+
                         <Col lg="3">
                             <span className="name">Doktor</span>
                         </Col>
@@ -86,38 +86,54 @@ class IllnessHistory extends Component {
                         <Col lg="2">
                             <span className="name">Izvestaj</span>
                         </Col>
-                        
-                        
+
+
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            
-                                return (
-                                    // <Link to='/patient/clinic/doctors/id'>
 
-                                        <Row className="table-row" key={idx}>
-                                            <Col lg="3">
-                                                <span className="value">{item.doctor}</span>
-                                            </Col>
-                                            <Col lg="2">
-                                                <span className="value">{item.date}</span>
-                                            </Col>
-                                            <Col lg="3">
-                                                <span className="value">{item.diagnose}</span>
-                                            </Col>
-                                            <Col lg="2">
-                                                <span className="value">{item.medications}</span>
-                                            </Col>
-                                            <Col lg="2">
-                                                <span className="value">{item.report}</span>
-                                            </Col>
-                                        </Row>
-                                    // </Link>
-                                )
+                            return (
+
+
+                                <Row className="table-row" key={idx}>
+                                    <Col lg="3">
+                                        <span className="value">{item.doctor}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.date}</span>
+                                    </Col>
+                                    <Col lg="3">
+                                        <span className="value">{item.diagnose}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.medications}</span>
+                                    </Col>
+                                    <Col lg="2">
+                                        <span className="value">{item.report}</span>
+                                    </Col>
+                                </Row>
+
+                            )
                         })
                     }
 
                 </Container>
+                <Container fluid className="bottom-wrap">
+                    <Row>
+                        <Col lg="3">
+                            <Link to={`/patient/clinic/history/grading`}>
+                                <button>Oceni kliniku</button>
+                            </Link>
+                        </Col>
+                        <Col lg="9">
+                            <Link to={`/patient/clinic/history/gradingDoctor`}>
+                                <button>Oceni doktora</button>
+                            </Link>
+                        </Col>
+                    </Row>
+
+                </Container>
+                
             </div>
         );
     }

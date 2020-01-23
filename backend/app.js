@@ -208,6 +208,7 @@ app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
 
 
 
+
 app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.medicalRecord(uid));
@@ -364,6 +365,26 @@ app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
 app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicType());
 });
+
+app.get('/patient/clinic/grading', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.clinicGrading(uid));
+});
+app.post('/patient/clinic/rating', isPatientAuthenticated, async (req, res) => {
+    console.log("===========");
+    console.log(req.body);
+    res.send(await patientModule.clinicRating(req.body));
+});
+app.get('/patient/clinic/gradingDoctor', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    res.send(await patientModule.doctorGrading(uid));
+});
+app.post('/patient/doctor/rating', isPatientAuthenticated, async (req, res) => {
+    console.log(req.body);
+    res.send(await patientModule.doctorRating(req.body));
+});
+
+
 
 app.get('/patient/clinic/doctors/type', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.clinicType());
