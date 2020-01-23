@@ -249,6 +249,10 @@ app.get('/clinic/appointmentRequests/allow/:id', isClinicAdminAuthenticated, asy
 app.post('/clinic/appointmentRequests/reserveRoom/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.reserveRoom(req.params.id, req.body));
 });
+app.post('/clinic/appointmentRequests/setDoctors/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.setDoctors(req.params.id, req.body));
+});
+
 
 app.get('/clinic/appointmentRequests/disallow/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.disallowReqAppointment(req.params.id));
@@ -491,6 +495,34 @@ app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) 
 });
 
 
+
+let lastCheckedTime = 0;
+
+setInterval(async () => {
+    let date = new Date();
+    let timestamp = date.getTime() / 1000;
+
+    if (date.getHours() == 0 && date.getMinutes() == 0 && timestamp - lastCheckedTime > 12 * 60 * 60){
+        lastCheckedTime = timestamp;
+
+        
+        let clinics = await clinicModule.allAppointmentRequests();
+
+        for(let i=0;i<clinics.length;i++){
+            for(let j=0;j<clinics[i].requests.length;j++){
+                if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length){
+                    console.log('reserving room')
+                    await clinicModule.reserveRoom(clinics[i].requests[j].appointment._id, clinics[i].requests[j].freeOrdinations[0]);
+                }
+            }
+
+        }
+
+
+    }else{
+        return;
+    }
+}, 30000 );
 
 
 export default app;

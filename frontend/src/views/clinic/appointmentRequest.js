@@ -3,6 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 import Select from '../../components/forms/fields/select'
+import Multiselect from '../../components/forms/fields/multiSelect'
+
 import {
     Container,
     Row,
@@ -24,9 +26,11 @@ class AppointmentRequest extends Component {
         this.disallow = this.disallow.bind(this);
         this.notify = this.notify.bind(this);
         this.reserveRoom = this.reserveRoom.bind(this);
+        this.setDoctors = this.setDoctors.bind(this);
 
         this.state = {
-            items: []
+            items: [],
+            doctors: []
         };
     }
 
@@ -48,6 +52,19 @@ class AppointmentRequest extends Component {
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
+            })
+        })
+
+
+        fetch('http://127.0.0.1:4000/clinic/doctors', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                doctors: result
             })
         })
 
@@ -93,6 +110,25 @@ class AppointmentRequest extends Component {
         }).then((res) => this.get())
         console.log(ordination);
     }
+    setDoctors(id, doctors) {
+        if (!localStorage.clinicAdminToken) {
+            return;
+        }
+
+
+
+
+        fetch('http://127.0.0.1:4000/clinic/appointmentRequests/setDoctors/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+
+            },
+            body: JSON.stringify(doctors)
+        }).then((res) => this.get())
+    }
+
 
 
     disallow(id, uid) {
@@ -210,7 +246,7 @@ class AppointmentRequest extends Component {
                                                 item.verified && !item.appointment.ordination ?
 
                                                     <div className="choose-room">
-                                                        
+
                                                         <Select placeholder="Izaberi salu" value={item.appointment.ordination} onChange={(val) => this.reserveRoom(item.appointment._id, val)}>
                                                             {
                                                                 item.freeOrdinations.map((ordination, oidx) => {
@@ -220,6 +256,26 @@ class AppointmentRequest extends Component {
                                                                 })
                                                             }
                                                         </Select>
+                                                    </div>
+
+                                                    : null
+
+                                            }
+
+                                            {
+                                                item.verified && item.appointment.ordination ?
+
+                                                    <div className="choose-room">
+
+                                                        <Multiselect placeholder="Izaberi lekare" value={item.appointment.doctors ? item.appointment.doctors : []} onChange={(val) => this.setDoctors(item.appointment._id, val)}>
+                                                            {
+                                                                this.state.doctors.map((doctor, oidx) => {
+                                                                    return (
+                                                                        <option value={doctor._id}>{doctor.firstName}  {doctor.lastName}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Multiselect>
                                                     </div>
 
                                                     : null
