@@ -176,8 +176,8 @@ class LoginPage extends Component {
                                         <Container>
                                             <Row>
                                                 <Col lg="12">
-                                                    <h3>Login</h3>
-                                                    <h6>Hello there! Sign in and start managing your website</h6>
+                                                    <h3>Prijava</h3>
+                                                    <h6></h6>
                                                 </Col>
                                             </Row>
                                             <LoginForm onSubmit={this.login} />

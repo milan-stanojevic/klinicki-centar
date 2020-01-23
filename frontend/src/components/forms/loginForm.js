@@ -84,7 +84,7 @@ const form = (props) => {
                         placeholder="Izaberite tip"
                         validate={[required]}
                     >
-                        <option value="admin">Admin klinickog centra</option>
+                        <option value="admin">Admin kliničkog centra</option>
                         <option value="clinicAdmin">Admin klinike</option>
                         <option value="clinicUser">Medecinsko osoblje</option>
                         <option value="patient">Pacijent</option>
@@ -97,14 +97,14 @@ const form = (props) => {
                     <Field
                         name="username"
                         component={renderTextField}
-                        placeholder="Username"
+                        placeholder="Korisničko ime"
                     ></Field>
                 </Col>
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="password"
                         component={renderTextField}
-                        placeholder="Password"
+                        placeholder="Lozinka"
                         type="password"
                     ></Field>
                 </Col>
@@ -125,7 +125,7 @@ const form = (props) => {
                 }
 
                 <Col lg="12">
-                    <button>SIGN IN NOW</button>
+                    <button>PRIJAVI SE</button>
                 </Col>
             </Row>
         </form>
