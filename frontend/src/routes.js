@@ -35,7 +35,8 @@ import PatientHomePage from './views/patient/patientHomePage'
 import DoctorView from './views/patient/doctorView'
 
 
-
+import DoctorsRating from './views/clinic/doctorsRating'
+import BusinessReport from './views/clinic/businessReport'
 import ClinicUser from './views/clinic/user'
 import ClinicUsers from './views/clinic/users'
 import Ordinations from './views/clinic/ordinations'
@@ -43,8 +44,7 @@ import Types from './views/clinic/types'
 import Type from './views/clinic/type'
 import Appointments from './views/clinic/appointments'
 import Appointment from './views/clinic/appointment'
-
-
+import CompletedExaminations from './views/clinic/completedExaminations'
 
 
 import Ordination from './views/clinic/ordination'
@@ -402,6 +402,30 @@ class Routes extends Component {
                                 <Type {...renderProps} {...this.props} />
                             )}
                         />
+                        
+                        <Route
+                            path="/clinic/businessReport"
+                            exact
+                            render={(...renderProps) => (
+                                <BusinessReport {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/clinic/businessReport/doctors"
+                            exact
+                            render={(...renderProps) => (
+                                <DoctorsRating {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/clinic/businessReport/completedExaminations"
+                            exact
+                            render={(...renderProps) => (
+                                <CompletedExaminations {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
 
                         <Route
                             path="/doctor/patients"
