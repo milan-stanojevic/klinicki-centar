@@ -242,6 +242,31 @@ class Clinic {
         let query = { clinic : admin[0].clinic };
         return await db.collection('ordinations').find(query).toArray();
     }
+    async checkPasswordChangeCA(id){
+        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(id)}).toArray();
+        if (admin[0].changePasswordRequired){
+            return {
+                required: true
+            }
+        }else{
+            return {
+                required: false
+            }
+        }
+    }
+    async clinicAdminChangePassword(id, obj){
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(obj.password, salt);
+
+        await db.collection('clinicAdmins').updateOne({_id: ObjectID(id)}, {$set: {
+            pk: hash,
+            changePasswordRequired: false
+        }})
+
+        return {
+            
+        }
+    }
 
     async updateClinicUser(uid, id, obj) {
         let _id;

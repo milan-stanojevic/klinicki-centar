@@ -127,7 +127,7 @@ class form extends React.Component {
                                         name="duration"
                                         component={renderTextField}
                                         label={"Trajanje pregleda"}
-                                        placeholder="Unesite duzinu trajanja pregleda"
+                                        placeholder="Unesite dužinu trajanja pregleda"
                                         validate={[required]}
                                     ></Field>
                                 </Col>

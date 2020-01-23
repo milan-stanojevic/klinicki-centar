@@ -145,11 +145,23 @@ app.post('/admin/changePassword', isAdminAuthenticated, async (req, res) => {
 
     res.send(await adminModule.adminChangePassword(uid, req.body));
 });
+app.post('/clinic/changePasswordCA', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.clinicAdminChangePassword(uid, req.body));
+});
+
+
 
 app.get('/admin/checkPasswordChange', isAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
 
     res.send(await adminModule.checkPasswordChange(uid));
+});
+app.get('/admin/checkPasswordChangeCA', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.checkPasswordChangeCA(uid));
 });
 
 app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {

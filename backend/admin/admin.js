@@ -342,6 +342,8 @@ class Admin {
             var hash = bcrypt.hashSync(obj.password, salt);
             delete obj.password;
             obj.pk = hash;
+            obj.changePasswordRequired = true;
+
 
             await db.collection('clinicAdmins').insertOne(obj);
         } else {
