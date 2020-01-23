@@ -60,6 +60,8 @@ import editProfileCA from './views/admin/editProfileCA';
 import Admin from './views/admin/admin';
 import Admins from './views/admin/admins';
 
+
+import ChangePasswordDoc from './views/clinic/changePasswordDoc';
 import ChangePassword from './views/admin/changePassword';
 import ChangePasswordCA from './views/clinic/changePasswordCA';
 import Vacation from './views/doctor/vacation'
@@ -138,6 +140,13 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <ChangePasswordCA {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/doctor/changePassword"
+                            exact
+                            render={(...renderProps) => (
+                                <ChangePasswordDoc {...renderProps} {...this.props} />
                             )}
                         />
 

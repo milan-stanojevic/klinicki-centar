@@ -126,8 +126,29 @@ class LoginPage extends Component {
                 })
             }).then((res) => res.json()).then((result) => {
                 if (!result.error) {
-                    localStorage.setItem('clinicUserToken', result.token);
-                    this.props[0].history.push('/doctor');
+                    let token = result.token;
+
+                    fetch('http://127.0.0.1:4000/admin/checkPasswordChangeDoc', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                    }).then((res) => res.json()).then((result) => {
+
+                        
+                        localStorage.setItem('clinicUserToken', token);
+                        if (result.required){
+                            this.props[0].history.push('/doctor/changePassword');
+
+                        }else{
+                            this.props[0].history.push('/doctor');
+   
+                        }
+
+                       
+                    })
+                    // localStorage.setItem('clinicUserToken', result.token);
+                    // this.props[0].history.push('/doctor');
                 } else {
                     this.setState({
                         error: result.error

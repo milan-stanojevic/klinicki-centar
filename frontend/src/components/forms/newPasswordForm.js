@@ -81,7 +81,7 @@ const form = (props) => {
                     <Field
                         name="password"
                         component={renderTextField}
-                        placeholder="Lozinka"
+                        placeholder="Nova lozinka"
                         type="password"
                     ></Field>
                 </Col>

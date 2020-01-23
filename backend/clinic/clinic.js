@@ -254,11 +254,37 @@ class Clinic {
             }
         }
     }
+    async checkPasswordChangeDoc(id){
+        let admin = await db.collection('clinicUsers').find({_id: ObjectID(id)}).toArray();
+        if (admin[0].changePasswordRequired){
+            return {
+                required: true
+            }
+        }else{
+            return {
+                required: false
+            }
+        }
+    }
+    
     async clinicAdminChangePassword(id, obj){
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
 
         await db.collection('clinicAdmins').updateOne({_id: ObjectID(id)}, {$set: {
+            pk: hash,
+            changePasswordRequired: false
+        }})
+
+        return {
+            
+        }
+    }
+    async doctorChangePassword(id, obj){
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(obj.password, salt);
+
+        await db.collection('clinicUsers').updateOne({_id: ObjectID(id)}, {$set: {
             pk: hash,
             changePasswordRequired: false
         }})
@@ -286,7 +312,7 @@ class Clinic {
             _id = ObjectID();
             obj._id = _id;
             obj.clinic = cid;
-
+            obj.changePasswordRequired = true;
             var salt = bcrypt.genSaltSync(10);
             var hash = bcrypt.hashSync(obj.password, salt);
             delete obj.password;
