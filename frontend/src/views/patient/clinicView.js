@@ -35,13 +35,13 @@ class ClinicView extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-6"><Link to='/patient/clinic/doctors'>
+                        <div class="col-6 col-lg-6"><Link to={`/patient/clinic/doctors/${this.props[0].match.params.id}`}>
                             <div class="table-box">
                                 <p>Lista svih doktora</p>
                             </div>
                         </Link></div>
 
-                        <div class="col-6 col-lg-6"><Link to='/patient/clinic/appointements'>
+                        <div class="col-6 col-lg-6"><Link to={`/patient/clinic/appointements/${this.props[0].match.params.id}`}>
                             <div class="table-box">
                                 <p>Lista unaprijed kreiranih pregleda</p>
                             </div>

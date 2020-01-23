@@ -79,12 +79,12 @@ class MedicationsList extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista lekova</h3>
+                            <h3>Lista lijekova</h3>
                         </Col>
                     </Row>
                     <Row className="table-head">
                         <Col lg="9">
-                            <span className="name">IME</span>
+                            <span className="name">NAZIV</span>
                         </Col>
                         <Col lg="3" className="actions">
 

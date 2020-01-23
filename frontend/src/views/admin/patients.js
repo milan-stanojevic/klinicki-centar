@@ -158,7 +158,7 @@ class Patients extends Component {
                                 <button><Isvg src={upArrow} /><Isvg src={downArrow} /></button>
 
         </div>*/}
-                            <span className="name">KORISNICKO IME</span>
+                            <span className="name">KORISNIČKO IME</span>
                         </Col>
 
 

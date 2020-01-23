@@ -325,7 +325,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/doctors"
+                            path="/patient/clinic/doctors/:id"
                             exact
                             render={(...renderProps) => (
                                 <DoctorsList {...renderProps} {...this.props} />
@@ -348,7 +348,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/appointements"
+                            path="/patient/clinic/appointements/:id"
                             exact
                             render={(...renderProps) => (
                                 <ClinicAppointments {...renderProps} {...this.props} />
@@ -373,7 +373,7 @@ class Routes extends Component {
 
 
                         <Route
-                            path="/patient/clinic"
+                            path="/patient/clinic/:id"
                             exact
                             render={(...renderProps) => (
                                 <ClinicView {...renderProps} {...this.props} />

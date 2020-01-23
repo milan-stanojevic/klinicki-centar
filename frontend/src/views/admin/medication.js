@@ -80,7 +80,7 @@ class Medication extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni lek</h3> : <h3>Dodaj lek</h3>}
+                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni lijek</h3> : <h3>Dodaj lijek</h3>}
                         </Col>
                     </Row>
                     {this.state.initialValues ?

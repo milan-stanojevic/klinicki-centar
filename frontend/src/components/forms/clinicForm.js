@@ -85,8 +85,8 @@ class form extends React.Component {
                                     <Field
                                         name="name"
                                         component={renderTextField}
-                                        label={"Ime klinike"}
-                                        placeholder="Unesite ime klinike"
+                                        label={"Naziv klinike"}
+                                        placeholder="Unesite naziv klinike"
                                         validate={[required]}
                                     ></Field>
 
@@ -97,7 +97,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Save</button>
+                        <button className="button">Sačuvaj</button>
 
                     </Col>
 

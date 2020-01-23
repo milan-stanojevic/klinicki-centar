@@ -84,7 +84,7 @@ class DiagnosesList extends Component {
                     </Row>
                     <Row className="table-head">
                         <Col lg="9">
-                            <span className="name">IME</span>
+                            <span className="name">NAZIV</span>
                         </Col>
                         <Col lg="3" className="actions">
 

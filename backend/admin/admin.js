@@ -173,6 +173,7 @@ class Admin {
 
 
     async clinic(id){
+        
         let res = await db.collection('clinics').find({_id: ObjectID(id)}).toArray();
         if (res.length){
             return res[0];

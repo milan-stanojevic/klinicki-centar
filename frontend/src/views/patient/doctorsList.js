@@ -35,7 +35,7 @@ class DoctorsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class DoctorsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ class DoctorsList extends Component {
                     </Row>
                     <Row className="table-head">
                         <Col lg="4">
-                            <span className="name">IME</span>
+                            <span className="name">Ime</span>
                         </Col>
                         <Col lg="4">
                             <span className="name">Prezime</span>
@@ -126,7 +126,7 @@ class DoctorsList extends Component {
                                                 <span className="value">{item.lastName}</span>
                                             </Col>
                                             <Col lg="4">
-                                                <span className="value">{item.rating}</span>
+                                                <span className="value">{item.rating/item.numberOfRating}</span>
                                             </Col>
                                         </Row>
                                     </Link>

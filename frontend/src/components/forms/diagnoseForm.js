@@ -117,7 +117,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Save</button>
+                        <button className="button">Sačuvaj</button>
 
                     </Col>
 
