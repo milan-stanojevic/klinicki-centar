@@ -61,35 +61,35 @@ const form = (props) => {
                     <Field
                         name="email"
                         component={renderTextField}
-                        placeholder="E-mail address"
+                        placeholder="E-mail"
                     ></Field>
                 </Col>
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="firstName"
                         component={renderTextField}
-                        placeholder="First Name"
+                        placeholder="Ime"
                     ></Field>
                 </Col>
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="lastName"
                         component={renderTextField}
-                        placeholder="Last Name"
+                        placeholder="Prezime"
                     ></Field>
                 </Col>
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="username"
                         component={renderTextField}
-                        placeholder="Username"
+                        placeholder="Korisničko ime"
                     ></Field>
                 </Col>
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="password"
                         component={renderTextField}
-                        placeholder="Password"
+                        placeholder="Lozinka"
                         type="password"
                     ></Field>
                 </Col>
@@ -110,7 +110,7 @@ const form = (props) => {
                 }
 
                 <Col lg="12">
-                    <button>REGISTER NOW</button>
+                    <button>REGISTRUJ SE</button>
                 </Col>
             </Row>
         </form>

@@ -77,7 +77,7 @@ class Register extends Component {
                                             <Row>
                                                 <Col lg="12">
                                                     <h3>Registracija pacijenta</h3>
-                                                    <h6>Hello there! Sign in and start managing your website</h6>
+                                                    <h6></h6>
                                                 </Col>
                                             </Row>
                                             <RegisterForm onSubmit={this.register} />
