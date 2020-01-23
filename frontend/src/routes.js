@@ -340,7 +340,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/doctors/:uid"
+                            path="/patient/clinic/doctors/:uid/:id"
                             exact
                             render={(...renderProps) => (
                                 <DoctorView {...renderProps} {...this.props} />
