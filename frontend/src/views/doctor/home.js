@@ -1,6 +1,19 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Page from '../../containers/admin/page';
+import Isvg from 'react-inlinesvg';
+
+
+import list from '../../assets/svg/list2.svg';
+import calendar from '../../assets/svg/calendar.svg';
+import vacation from '../../assets/svg/vacation.svg';
+import profile from '../../assets/svg/profile.svg';
+import prescription from '../../assets/svg/prescription.svg';
+import appointment from '../../assets/svg/appointment.svg';
+
+
+
+
 
 import {
     Container,
@@ -52,6 +65,7 @@ class Test extends Component {
                     <Row className="table-row">
                         <div class="col-6 col-lg-4"><Link to="/doctor/patients">
                             <div class="table-box">
+                                <p><Isvg src={list} /></p>
                                 <p>Lista pacijenata</p>
                             </div>
                         </Link></div>
@@ -60,6 +74,7 @@ class Test extends Component {
 
                             <div class="col-6 col-lg-4"><a href="">
                                 <div class="table-box">
+                                    <p><Isvg src={appointment} /></p>
                                     <p>Novi pregled</p>
                                 </div>
                             </a></div>
@@ -70,18 +85,21 @@ class Test extends Component {
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/calendar">
                             <div class="table-box">
+                                <p><Isvg src={calendar} /></p>
                                 <p>Radni kalendar</p>
                             </div>
                         </Link></div>
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/vacation">
                             <div class="table-box">
-                                <p>Zahtjevi za godišnji i odsustvo</p>
+                                <p><Isvg src={vacation} /></p>
+                                <p>Zahtjevi za godišnji</p>
                             </div>
                         </Link></div>
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/edit">
                             <div class="table-box">
+                                <p><Isvg src={profile} /></p>
                                 <p>Moj profil</p>
                             </div>
                         </Link></div>
@@ -89,9 +107,10 @@ class Test extends Component {
 
                             <div class="col-6 col-lg-4"><Link to="/doctor/makingAppointment">
                                 <div class="table-box">
-                                    <p>Zakazivanje pregleda/operacija</p>
+                                    <p><Isvg src={appointment} /></p>
+                                    <p>Zakazivanje pregleda</p>
                                 </div>
-                                </Link></div>
+                            </Link></div>
                             :
                             null
                         }
@@ -99,6 +118,7 @@ class Test extends Component {
                         {this.state.type == 'nurse' ?
                             <div class="col-6 col-lg-4"><Link to="/doctor/recipeAuth">
                                 <div class="table-box">
+                                    <p><Isvg src={prescription} /></p>
                                     <p>Ovjera recepata</p>
                                 </div>
                             </Link></div>
