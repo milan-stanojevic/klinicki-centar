@@ -221,7 +221,7 @@ class form extends React.Component {
                                         label={"Pol"}
                                         placeholder="Izaberite pol"
                                     >
-                                        <option value="1">Muski</option>
+                                        <option value="1">Muški</option>
                                         <option value="2">Zenski</option>
 
                                     </Field>

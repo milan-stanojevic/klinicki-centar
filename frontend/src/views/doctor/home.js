@@ -46,7 +46,7 @@ class Test extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Pocetna stranica</h3>
+                            <h3>Početna stranica</h3>
                         </Col>
                     </Row>
                     <Row className="table-row">
@@ -76,7 +76,7 @@ class Test extends Component {
 
                         <div class="col-6 col-lg-4"><Link to="/doctor/vacation">
                             <div class="table-box">
-                                <p>Zahtevi za godisnji i odsustvo</p>
+                                <p>Zahtjevi za godišnji i odsustvo</p>
                             </div>
                         </Link></div>
 
@@ -99,7 +99,7 @@ class Test extends Component {
                         {this.state.type == 'nurse' ?
                             <div class="col-6 col-lg-4"><Link to="/doctor/recipeAuth">
                                 <div class="table-box">
-                                    <p>Overa recepata</p>
+                                    <p>Ovjera recepata</p>
                                 </div>
                             </Link></div>
 

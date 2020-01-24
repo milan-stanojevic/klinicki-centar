@@ -74,7 +74,7 @@ class Vacation extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                             <h3>Moj profil</h3>
+                             <h3>Godišnji odmor ili odsustvo</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?
