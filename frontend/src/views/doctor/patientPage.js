@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Page from '../../containers/admin/page';
+import Isvg from 'react-inlinesvg';
+import patient from '../../assets/svg/patient.svg';
+import appointment from '../../assets/svg/appointment.svg';
+
 
 import {
     Container,
@@ -26,9 +30,10 @@ class PatientPage extends Component {
                     </Row>
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
-                            <Link to={"/doctor/patient/"+this.props[0].match.params.id+"/medicalRecord"}>
-                            
+                            <Link to={"/doctor/patient/" + this.props[0].match.params.id + "/medicalRecord"}>
+
                                 <div class="table-box">
+                                    <p><Isvg src={patient} /></p>
                                     <p>Zdravstveni karton</p>
                                 </div>
                             </Link>
@@ -36,6 +41,7 @@ class PatientPage extends Component {
                         <div class="col-6 col-lg-6">
                             <Link to="/doctor/patients">
                                 <div class="table-box">
+                                    <p><Isvg src={appointment} /></p>
                                     <p>Zapocni pregled</p>
                                 </div>
                             </Link>

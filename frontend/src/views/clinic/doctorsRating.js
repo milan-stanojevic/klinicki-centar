@@ -94,7 +94,7 @@ class DoctorsRating extends Component {
                                         <span className="value">{item.lastName}</span>
                                     </Col>
                                     <Col lg="3">
-                                        <span className="value">{item.rating/item.numberOfRating}</span>
+                                        <span className="value">{parseFloat(Number(item.rating/item.numberOfRating)).toFixed(2)}</span>
                                     </Col>
 
                                 </Row>
