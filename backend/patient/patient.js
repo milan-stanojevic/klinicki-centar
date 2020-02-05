@@ -114,18 +114,17 @@ class Patient {
         }
 
     }
-    
+
     async clinicGrading(uid) {
         return await db.collection('clinics').find().toArray();
     }
     async doctorGrading(uid) {
-        return await db.collection('clinicUsers').find({ type : 'doctor' }).toArray();
+        return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
     }
-    
+
     async clinicRating(obj) {
-        let cl = await db.collection('clinics').find({ _id : ObjectID(obj.clinic) }).toArray();
-        if(cl[0].rating == null)
-        {
+        let cl = await db.collection('clinics').find({ _id: ObjectID(obj.clinic) }).toArray();
+        if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
         }
@@ -143,9 +142,8 @@ class Patient {
         return await db.collection('clinics').find().toArray();
     }
     async doctorRating(obj) {
-        let cl = await db.collection('clinicUsers').find({ _id : ObjectID(obj.doctor) }).toArray();
-        if(cl[0].rating == null)
-        {
+        let cl = await db.collection('clinicUsers').find({ _id: ObjectID(obj.doctor) }).toArray();
+        if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
         }
@@ -162,7 +160,7 @@ class Patient {
 
         return await db.collection('clinicUsers').find().toArray();
     }
-    
+
 
 
     async medicalRecord(uid) {
@@ -207,7 +205,19 @@ class Patient {
 
     async patient(uid, obj) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
-        console.log(res[0]);
+        // podesavanje datuma
+        // if (res[0].date) {
+        //     let datum = res[0].date.split('.');
+        //     let dat = Date.parse(datum[0] + ' ' + datum[1] + ' ' + datum[2]);
+        //     res[0].date = dat;
+        // }
+
+        if (res[0].date) {
+            let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
+            res[0].date = dat;
+        }
+
+        //console.log(res[0]);
         return res[0];
     }
 
@@ -259,8 +269,8 @@ class Patient {
 
 
     async doctorsList(obj, id) {
-       
-        let query = { clinic : id }
+
+        let query = { clinic: id }
 
         // if (obj.search) {
         //     // if (query.type == 'doctor') {
@@ -284,7 +294,7 @@ class Patient {
         if (obj.doctorRating) {
             query.rating = new RegExp(obj.doctorRating, 'i');
         }
-        
+
 
         let res = await db.collection('clinicUsers').find(query).toArray();
 
@@ -292,7 +302,7 @@ class Patient {
     }
     async appointementsList(id) {
 
-        let query = { clinic : id }
+        let query = { clinic: id }
 
         let res = await db.collection('appointments').find(query).toArray();
 
