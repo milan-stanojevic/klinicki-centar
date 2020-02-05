@@ -84,8 +84,29 @@ class LoginPage extends Component {
                 })
             }).then((res) => res.json()).then((result) => {
                 if (!result.error) {
-                    localStorage.setItem('clinicAdminToken', result.token);
-                    this.props[0].history.push('/clinic/users');
+                    let token = result.token;
+
+                    fetch('http://127.0.0.1:4000/admin/checkPasswordChangeCA', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                    }).then((res) => res.json()).then((result) => {
+
+                        
+                        localStorage.setItem('clinicAdminToken', token);
+                        if (result.required){
+                            this.props[0].history.push('/admin/changePasswordCA');
+
+                        }else{
+                            this.props[0].history.push('/clinic/users');
+   
+                        }
+
+                       
+                    })
+                    // localStorage.setItem('clinicAdminToken', result.token);
+                    // this.props[0].history.push('/clinic/users');
                 } else {
                     this.setState({
                         error: result.error
@@ -105,8 +126,29 @@ class LoginPage extends Component {
                 })
             }).then((res) => res.json()).then((result) => {
                 if (!result.error) {
-                    localStorage.setItem('clinicUserToken', result.token);
-                    this.props[0].history.push('/doctor');
+                    let token = result.token;
+
+                    fetch('http://127.0.0.1:4000/admin/checkPasswordChangeDoc', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                    }).then((res) => res.json()).then((result) => {
+
+                        
+                        localStorage.setItem('clinicUserToken', token);
+                        if (result.required){
+                            this.props[0].history.push('/doctor/changePassword');
+
+                        }else{
+                            this.props[0].history.push('/doctor');
+   
+                        }
+
+                       
+                    })
+                    // localStorage.setItem('clinicUserToken', result.token);
+                    // this.props[0].history.push('/doctor');
                 } else {
                     this.setState({
                         error: result.error
@@ -176,8 +218,8 @@ class LoginPage extends Component {
                                         <Container>
                                             <Row>
                                                 <Col lg="12">
-                                                    <h3>Login</h3>
-                                                    <h6>Hello there! Sign in and start managing your website</h6>
+                                                    <h3>Prijava</h3>
+                                                    <h6></h6>
                                                 </Col>
                                             </Row>
                                             <LoginForm onSubmit={this.login} />

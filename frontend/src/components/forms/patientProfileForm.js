@@ -30,6 +30,7 @@ const renderTextField = ({
     label,
     type,
     meta: { touched, error },
+    disabled
 }) => (
         <Text
             placeholder={placeholder}
@@ -38,6 +39,7 @@ const renderTextField = ({
             type={type}
             error={touched && error}
             {...input}
+            disabled={disabled}
         />
     )
 
@@ -151,8 +153,8 @@ class form extends React.Component {
                                     <Field
                                         name="username"
                                         component={renderTextField}
-                                        label={"Korisnicko ime"}
-                                        placeholder="Unesite korisnicko ime"
+                                        label={"Korisničko ime"}
+                                        placeholder="Unesite korisničko ime"
                                         validate={[required]}
                                     ></Field>
                                 </Col>
@@ -207,7 +209,7 @@ class form extends React.Component {
                                     <Field
                                         name="date"
                                         component={renderDateField}
-                                        label={"Datum rodjenja"}
+                                        label={"Datum rođenja"}
                                         placeholder="Izaberite datum"
                                     >
                                     </Field>
@@ -235,6 +237,7 @@ class form extends React.Component {
                                         label={"E-mail adresa"}
                                         placeholder="Unesite e-mail adresu"
                                         validate={[required]}
+                                        disabled
                                     ></Field>
                                 </Col>
                             </Row>
@@ -254,7 +257,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Sacuvaj</button>
+                        <button className="button">Sačuvaj</button>
 
                     </Col>
 

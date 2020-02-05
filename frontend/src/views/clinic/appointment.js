@@ -57,7 +57,7 @@ class Appointment extends Component {
     }
 
     componentDidMount() {
-        fetch('http://127.0.0.1:4000/clinic/doctors', {
+        fetch('http://127.0.0.1:4000/clinic/doctorss', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ class Appointment extends Component {
             })
             console.log(result);
         })
-        fetch('http://127.0.0.1:4000/clinic/type', {
+        fetch('http://127.0.0.1:4000/clinic/typee', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ class Appointment extends Component {
             })
             console.log(result);
         })
-        fetch('http://127.0.0.1:4000/clinic/ordination', {
+        fetch('http://127.0.0.1:4000/clinic/ordinationn', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

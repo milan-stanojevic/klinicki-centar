@@ -173,6 +173,7 @@ class Admin {
 
 
     async clinic(id){
+        
         let res = await db.collection('clinics').find({_id: ObjectID(id)}).toArray();
         if (res.length){
             return res[0];
@@ -342,6 +343,8 @@ class Admin {
             var hash = bcrypt.hashSync(obj.password, salt);
             delete obj.password;
             obj.pk = hash;
+            obj.changePasswordRequired = true;
+
 
             await db.collection('clinicAdmins').insertOne(obj);
         } else {

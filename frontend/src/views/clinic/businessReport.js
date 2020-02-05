@@ -68,13 +68,13 @@ class BusinessReport extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Izvestaj o poslovanju</h3>
+                            <h3>Izvještaj o poslovanju</h3>
                         </Col>
                     </Row>
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
                             <div class="table-box">
-                                <p>Prosecna ocena klinike (
+                                <p>Prosječna ocijena klinike (
                                 {
                                         this.state.items.map((item, idx) => {
                                             return (
@@ -99,13 +99,13 @@ class BusinessReport extends Component {
 
                         <div class="col-6 col-lg-6"><Link to='/clinic/businessReport/doctors'>
                             <div class="table-box">
-                                <p>Prosecne ocene lekara</p>
+                                <p>Prosječne ocijene doktora</p>
                             </div>
                         </Link></div>
 
                         <div class="col-6 col-lg-6"><Link to='/clinic/businessReport/completedExaminations'>
                             <div class="table-box">
-                                <p>Prikaz grafika zavrsenih pregleda</p>
+                                <p>Prikaz grafika završenih pregleda</p>
                             </div>
                         </Link></div>
 

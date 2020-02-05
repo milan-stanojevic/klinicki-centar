@@ -18,7 +18,7 @@ import {
     DropdownToggle
 } from 'reactstrap';
 
-class ChangePassword extends Component {
+class ChangePasswordDoc extends Component {
     constructor(props) {
         super(props);
         this.login = this.login.bind(this);
@@ -31,18 +31,18 @@ class ChangePassword extends Component {
     login(data) {
 
 
-        fetch('http://127.0.0.1:4000/admin/changePassword', {
+        fetch('http://127.0.0.1:4000/doctor/changePassword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
             body: JSON.stringify({
                 password: data.password
             })
         }).then((res) => res.json()).then((result) => {
             if (!result.error) {
-                this.props[0].history.push('/admin/clinic');
+                this.props[0].history.push('/doctor');
             } else {
                 this.setState({
                     error: result.error
@@ -108,4 +108,4 @@ class ChangePassword extends Component {
     }
 }
 
-export default ChangePassword;
+export default ChangePasswordDoc;

@@ -151,8 +151,8 @@ class form extends React.Component {
                                     <Field
                                         name="username"
                                         component={renderTextField}
-                                        label={"Korisnicko ime"}
-                                        placeholder="Unesite korisnicko ime"
+                                        label={"Korisničko ime"}
+                                        placeholder="Unesite korisničko ime"
                                         validate={[required]}
                                     ></Field>
                                 </Col>
@@ -207,7 +207,7 @@ class form extends React.Component {
                                     <Field
                                         name="date"
                                         component={renderDateField}
-                                        label={"Datum rodjenja"}
+                                        label={"Datum rođenja"}
                                         placeholder="Izaberite datum"
                                     >
                                     </Field>
@@ -254,7 +254,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Sacuvaj</button>
+                        <button className="button">Sačuvaj</button>
 
                     </Col>
 

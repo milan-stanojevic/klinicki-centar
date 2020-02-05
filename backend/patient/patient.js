@@ -258,10 +258,9 @@ class Patient {
     }
 
 
-    async doctorsList(obj) {
-
-        let query = {}
-        console.log(query);
+    async doctorsList(obj, id) {
+       
+        let query = { clinic : id }
 
         // if (obj.search) {
         //     // if (query.type == 'doctor') {
@@ -285,14 +284,15 @@ class Patient {
         if (obj.doctorRating) {
             query.rating = new RegExp(obj.doctorRating, 'i');
         }
+        
 
         let res = await db.collection('clinicUsers').find(query).toArray();
 
         return res;
     }
-    async appointementsList(obj) {
+    async appointementsList(id) {
 
-        let query = {}
+        let query = { clinic : id }
 
         let res = await db.collection('appointments').find(query).toArray();
 

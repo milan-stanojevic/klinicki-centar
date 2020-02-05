@@ -78,16 +78,16 @@ class Admins extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista administratora klinickog centra</h3>
+                            <h3>Lista administratora kliničkog centra</h3>
                         </Col>
                     </Row>
                     <Row className="table-head">
                         <Col lg="9">
-                            <span className="name">KORISNICKO IME</span>
+                            <span className="name">KORISNIČKO IME</span>
                         </Col>
                         <Col lg="3" className="actions">
 
-                            <span className="name">OPCIJE</span>
+                            {/* <span className="name">OPCIJE</span> */}
                         </Col>
 
                     </Row>
@@ -113,7 +113,7 @@ class Admins extends Component {
                     <Row>
                         <Col lg="12">
                             <Link to={`/admin/admins/new`}>
-                                <button>New admin</button>
+                                <button>Novi administrator</button>
                             </Link>
                         </Col>
                     </Row>

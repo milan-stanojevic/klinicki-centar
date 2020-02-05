@@ -143,7 +143,7 @@ class form extends React.Component {
                         <Container fluid className="form-box">
                             <Row>
                                 <Col lg="12">
-                                    <h3 className="title">Zahtjev za godisnji odmor ili odsustvo</h3>
+                                    <h3 className="title">Zahtjev za godšnji odmor ili odsustvo</h3>
                                 </Col>
                             </Row>
 
@@ -176,8 +176,8 @@ class form extends React.Component {
                                     <Field
                                         name="reason"
                                         component={renderTextArea}
-                                        label={"Obrazlozenje"}
-                                        placeholder="Unesite obrazlozenje"
+                                        label={"Obrazloženje"}
+                                        placeholder="Unesite obrazloženje"
                                         validate={[required]}
                                     ></Field>
                                 </Col>

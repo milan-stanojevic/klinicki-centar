@@ -99,16 +99,16 @@ class PatientsList extends Component {
                     </Row>
                     <Row className="table-head">
                         <Col lg="3">
-                            <span className="name">IME</span>
+                            <span className="name">Ime</span>
                         </Col>
                         <Col lg="3">
                             <span className="name">Prezime</span>
                         </Col>
                         <Col lg="3">
-                            <span className="name">Datum rodjenja</span>
+                            <span className="name">Datum rođenja</span>
                         </Col>
                         <Col lg="3" className="actions">
-                            <span className="name">OPCIJE</span>
+                            <span className="name">E-mail</span>
                         </Col>
 
                     </Row>
@@ -128,7 +128,7 @@ class PatientsList extends Component {
                                             {/* <span className="value">{item.date}</span> */}
                                         </Col>
                                         <Col lg="3" className="actions">
-
+                                            <span className="value">{item.email}</span>
                                         </Col>
                                     </Row>
                                 </Link>

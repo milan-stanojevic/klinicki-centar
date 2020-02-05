@@ -68,8 +68,8 @@ class form extends React.Component {
                         <Container fluid className="form-box">
                             <Row>
                                 <Col lg="12">
-                                    <h3 className="title">Lek</h3>
-                                    <h6 className="subtitle">Unesite potrebne informacije za lek</h6>
+                                    <h3 className="title">Lijek</h3>
+                                    <h6 className="subtitle">Unesite potrebne informacije za lijek</h6>
 
                                 </Col>
                                 <Col lg="6" className="input-wrap">
@@ -85,8 +85,8 @@ class form extends React.Component {
                                     <Field
                                         name="name"
                                         component={renderTextField}
-                                        label={"Ime leka"}
-                                        placeholder="Unesite ime leka"
+                                        label={"Naziv lijeka"}
+                                        placeholder="Unesite naziv lijeka"
                                         validate={[required]}
                                     ></Field>
 
@@ -95,8 +95,8 @@ class form extends React.Component {
                                     <Field
                                         name="manufacturer"
                                         component={renderTextField}
-                                        label={"Proizvodjac"}
-                                        placeholder="Unesite ime proizvodjaca"
+                                        label={"Proizvođač"}
+                                        placeholder="Unesite naziv proizvođača"
                                         validate={[required]}
                                     ></Field>
 
@@ -117,7 +117,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Save</button>
+                        <button className="button">Sačuvaj</button>
 
                     </Col>
 

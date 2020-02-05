@@ -53,7 +53,7 @@ class ClinicAppointments extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/appointements', {
+        fetch('http://127.0.0.1:4000/patient/clinic/appointements/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

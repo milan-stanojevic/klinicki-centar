@@ -60,7 +60,10 @@ import editProfileCA from './views/admin/editProfileCA';
 import Admin from './views/admin/admin';
 import Admins from './views/admin/admins';
 
+
+import ChangePasswordDoc from './views/clinic/changePasswordDoc';
 import ChangePassword from './views/admin/changePassword';
+import ChangePasswordCA from './views/clinic/changePasswordCA';
 import Vacation from './views/doctor/vacation'
 import VacationRequest from './views/clinic/vacationRequest';
 import AppointmentRequest from './views/clinic/appointmentRequest';
@@ -130,6 +133,20 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <ChangePassword {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/admin/changePasswordCA"
+                            exact
+                            render={(...renderProps) => (
+                                <ChangePasswordCA {...renderProps} {...this.props} />
+                            )}
+                        />
+                        <Route
+                            path="/doctor/changePassword"
+                            exact
+                            render={(...renderProps) => (
+                                <ChangePasswordDoc {...renderProps} {...this.props} />
                             )}
                         />
 
@@ -308,7 +325,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/doctors"
+                            path="/patient/clinic/doctors/:id"
                             exact
                             render={(...renderProps) => (
                                 <DoctorsList {...renderProps} {...this.props} />
@@ -323,7 +340,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/doctors/:uid"
+                            path="/patient/clinic/doctors/:uid/:id"
                             exact
                             render={(...renderProps) => (
                                 <DoctorView {...renderProps} {...this.props} />
@@ -331,7 +348,7 @@ class Routes extends Component {
                         />
 
                         <Route
-                            path="/patient/clinic/appointements"
+                            path="/patient/clinic/appointements/:id"
                             exact
                             render={(...renderProps) => (
                                 <ClinicAppointments {...renderProps} {...this.props} />
@@ -356,7 +373,7 @@ class Routes extends Component {
 
 
                         <Route
-                            path="/patient/clinic"
+                            path="/patient/clinic/:id"
                             exact
                             render={(...renderProps) => (
                                 <ClinicView {...renderProps} {...this.props} />

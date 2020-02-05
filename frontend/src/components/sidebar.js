@@ -83,19 +83,19 @@ class Sidebar extends Component {
 
 
 
-                            <h6>LEKOVI</h6>
+                            <h6>LIJEKOVI</h6>
                             <ul>
 
                                 <li>
                                     <Link to='/admin/medications' className={this.props[0].location.pathname == '/admin/medications' ? 'active' : null}>
                                         <Isvg src={list} />
-                                        Lista lekova
+                                        Lista lijekova
                             </Link>
                                 </li>
                                 <li>
                                     <Link to='/admin/medications/new' className={this.props[0].location.pathname == '/admin/medications/new' ? 'active' : null}>
                                         <Isvg src={list} />
-                                        Dodaj lek
+                                        Dodaj lijek
                             </Link>
                                 </li>
 
@@ -168,7 +168,7 @@ class Sidebar extends Component {
                                     <li>
                                         <Link to='/clinic/vacationRequests' className={this.props[0].location.pathname == '/clinic/vacationRequests' ? 'active' : null}>
                                             <Isvg src={list} />
-                                            Godisnji odmor
+                                            Godišnji odmor
                                         </Link>
                                     </li>
                                     <li>
@@ -180,7 +180,7 @@ class Sidebar extends Component {
 
                                 </ul>
 
-                                <h6>Uredjivanje profila</h6>
+                                <h6>Uređivanje profila</h6>
                                 <ul>
                                     <li>
                                         <Link to='/clinic/admin/edit' className={this.props[0].location.pathname == '/clinic/admin/edit' ? 'active' : null}>
@@ -196,7 +196,7 @@ class Sidebar extends Component {
                                     </li>
 
                                 </ul>
-                                <h6>Izvjestaji</h6>
+                                <h6>Izvještaji</h6>
                                 <ul>
                                     <li>
                                         <Link to='/clinic/businessReport' className={this.props[0].location.pathname == '/clinic/businessReport' ? 'active' : null}>

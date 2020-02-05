@@ -219,13 +219,79 @@ class Clinic {
     async clinicDoctors() {
         return await db.collection('clinicUsers').find({ type: "doctor" }).toArray();
     }
+    async clinicDoctorss(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { $and : [{ clinic : admin[0].clinic }, { type: "doctor" }]};
+        return await db.collection('clinicUsers').find(query).toArray();
+    }
 
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
+    async clinicTypee(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { clinic : admin[0].clinic };
+        return await db.collection('types').find(query).toArray();
+    }
 
     async clinicOrdination() {
         return await db.collection('ordinations').find({}).toArray();
+    }
+    async clinicOrdinationn(uid) {
+        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
+        let query = { clinic : admin[0].clinic };
+        return await db.collection('ordinations').find(query).toArray();
+    }
+    async checkPasswordChangeCA(id){
+        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(id)}).toArray();
+        if (admin[0].changePasswordRequired){
+            return {
+                required: true
+            }
+        }else{
+            return {
+                required: false
+            }
+        }
+    }
+    async checkPasswordChangeDoc(id){
+        let admin = await db.collection('clinicUsers').find({_id: ObjectID(id)}).toArray();
+        if (admin[0].changePasswordRequired){
+            return {
+                required: true
+            }
+        }else{
+            return {
+                required: false
+            }
+        }
+    }
+    
+    async clinicAdminChangePassword(id, obj){
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(obj.password, salt);
+
+        await db.collection('clinicAdmins').updateOne({_id: ObjectID(id)}, {$set: {
+            pk: hash,
+            changePasswordRequired: false
+        }})
+
+        return {
+            
+        }
+    }
+    async doctorChangePassword(id, obj){
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(obj.password, salt);
+
+        await db.collection('clinicUsers').updateOne({_id: ObjectID(id)}, {$set: {
+            pk: hash,
+            changePasswordRequired: false
+        }})
+
+        return {
+            
+        }
     }
 
     async updateClinicUser(uid, id, obj) {
@@ -246,7 +312,7 @@ class Clinic {
             _id = ObjectID();
             obj._id = _id;
             obj.clinic = cid;
-
+            obj.changePasswordRequired = true;
             var salt = bcrypt.genSaltSync(10);
             var hash = bcrypt.hashSync(obj.password, salt);
             delete obj.password;

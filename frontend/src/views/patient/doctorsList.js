@@ -35,7 +35,7 @@ class DoctorsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class DoctorsList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/doctors', {
+        fetch('http://127.0.0.1:4000/patient/clinic/doctors/' + this.props[0].match.params.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,13 +101,13 @@ class DoctorsList extends Component {
                     </Row>
                     <Row className="table-head">
                         <Col lg="4">
-                            <span className="name">IME</span>
+                            <span className="name">Ime</span>
                         </Col>
                         <Col lg="4">
                             <span className="name">Prezime</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">Ocena</span>
+                            <span className="name">Ocijena</span>
                         </Col>
 
 
@@ -116,7 +116,7 @@ class DoctorsList extends Component {
                         this.state.items.map((item, idx) => {
                             if (item.type == 'doctor')
                                 return (
-                                    <Link to='/patient/clinic/doctors/id'>
+                                    // <Link to={`/patient/clinic/doctors/${this.props[0].match.params.id}/${item._id}`}>
 
                                         <Row className="table-row" key={idx}>
                                             <Col lg="4">
@@ -126,10 +126,10 @@ class DoctorsList extends Component {
                                                 <span className="value">{item.lastName}</span>
                                             </Col>
                                             <Col lg="4">
-                                                <span className="value">{item.rating}</span>
+                                                <span className="value">{item.rating/item.numberOfRating}</span>
                                             </Col>
                                         </Row>
-                                    </Link>
+                                    // </Link>
                                 )
                         })
                     }

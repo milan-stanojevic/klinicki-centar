@@ -87,7 +87,7 @@ class RecipeAuth extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Overa recepta</h3>
+                            <h3>Ovjera recepta</h3>
                         </Col>
                     </Row>
                     <Row className="table-head">
@@ -102,10 +102,10 @@ class RecipeAuth extends Component {
                             <span className="name">DIJAGNOZA</span>
                         </Col>
                         <Col lg="2">
-                            <span className="name">LEKOVI</span>
+                            <span className="name">LIJEKOVI</span>
                         </Col>
                         <Col lg="2">
-                            <span className="name">IZVJESTAJ</span>
+                            <span className="name">IZVJEŠTAJ</span>
                         </Col>
                         <Col lg="1">
                             <span className="name">DATUM</span>
@@ -147,9 +147,9 @@ class RecipeAuth extends Component {
                                     <Col lg="2" className="actions">
                                         {
                                             !item.recipeVerified ?
-                                                <button className="button1" onClick={() => { this.verify(item._id) }}>OVERI</button>
+                                                <button className="button1" onClick={() => { this.verify(item._id) }}>OVJERI</button>
                                                 :
-                                                <span>Overeno</span>}
+                                                <span>OVJERENO</span>}
                                     </Col>
 
                                 </Row>
