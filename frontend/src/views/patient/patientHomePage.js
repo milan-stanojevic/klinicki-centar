@@ -43,7 +43,7 @@ class patientHomePage extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-6"><Link to='/patient/clinics'>
+                        <div class="col-6 col-lg-6"><Link to='/patient/clinics' id="patient-clinics">
                             <div class="table-box">
                                 <p><Isvg src={list} /></p>
                                 <p>Lista svih klinika</p>

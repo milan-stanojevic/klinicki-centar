@@ -20,6 +20,7 @@ const renderTextField = ({
     placeholder,
     label,
     meta: { touched, error },
+    id
 }) => (
 
         <Text
@@ -28,6 +29,7 @@ const renderTextField = ({
             errorText={touched && error}
             error={touched && error}
             {...input}
+            id={id}
         />
     )
 const renderDateField = ({
@@ -36,6 +38,7 @@ const renderDateField = ({
     label,
     type,
     meta: { touched, error },
+    id
 }) => (
         <Date
             placeholder={placeholder}
@@ -44,6 +47,7 @@ const renderDateField = ({
             type={type}
             error={touched && error}
             {...input}
+            id={id}
         />
     )
 
@@ -67,7 +71,8 @@ const renderSelectField = ({
     placeholder,
     label,
     meta: { touched, error },
-    children
+    children,
+    id
 }) => (
 
         <Select
@@ -76,6 +81,7 @@ const renderSelectField = ({
             errorText={touched && error}
             error={touched && error}
             {...input}
+            id={id}
         >
             {children}
         </Select>
@@ -119,6 +125,7 @@ class form extends React.Component {
                                         label={"Datum i vrijeme pregleda"}
                                         placeholder="Izaberite datum"
                                         validate={[required]}
+                                        id="date"
                                     >
                                     </Field>
                                 </Col>
@@ -129,6 +136,7 @@ class form extends React.Component {
                                         label={"Trajanje pregleda"}
                                         placeholder="Unesite dužinu trajanja pregleda"
                                         validate={[required]}
+                                        id="duration"
                                     ></Field>
                                 </Col>
 
@@ -139,6 +147,7 @@ class form extends React.Component {
                                         label={"Tip pregleda"}
                                         placeholder="Izaberite tip pregleda"
                                         validate={[required]}
+                                        id="type"
 
                                     >
                                         {/* <option value="tip1">tip1</option>
@@ -159,6 +168,7 @@ class form extends React.Component {
                                         label={"Sala"}
                                         placeholder="Izaberite salu za pregled"
                                         validate={[required]}
+                                        id="ordination"
                                     >
                                         {this.props.ordinations && this.props.ordinations.map((item, idx) => {
                                             return (
@@ -175,6 +185,7 @@ class form extends React.Component {
                                         label={"Doktor"}
                                         placeholder="Izaberite doktora"
                                         validate={[required]}
+                                        id="doctor"
                                     >
                                         {/* <option value="Petar Petrovic">Petar Petrovic</option> */}
                                         {/* <option value="Ivan Ivanic">Ivan Ivanic</option> */}
@@ -193,6 +204,7 @@ class form extends React.Component {
                                         label={"Cijena pregleda"}
                                         placeholder="Unesite cijenu pregleda"
                                         validate={[required]}
+                                        id="price"
                                     ></Field>
                                 </Col>
 
@@ -203,7 +215,7 @@ class form extends React.Component {
                     </Col>
 
                     <Col lg="12">
-                        <button className="button">Dodaj</button>
+                        <button className="button" id="create-appointment-button">Dodaj</button>
 
                     </Col>
 

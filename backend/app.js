@@ -16,6 +16,7 @@ const isPatientAuthenticated = require('./patient/auth');
 
 const clinicModule = new (require('./clinic/clinic'))();
 const isClinicAdminAuthenticated = require('./clinic/auth');
+const { Builder, By, Key, until } = require('selenium-webdriver');
 
 
 const app = express();
@@ -189,13 +190,13 @@ app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {
 app.post('/patient/login', async (req, res) => {
     console.log(req.body);
     let result = await patientModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 app.post('/patient/register', async (req, res) => {
     console.log(req.body);
     let result = await patientModule.register(req.body);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
@@ -214,7 +215,7 @@ app.post('/patient/clinic', isPatientAuthenticated, async (req, res) => {
 });
 app.post('/patient/clinic/doctors/:id', isPatientAuthenticated, async (req, res) => {
     // console.log(req.params.id);
-    res.send(await patientModule.doctorsList(req.body,req.params.id));
+    res.send(await patientModule.doctorsList(req.body, req.params.id));
 });
 app.post('/patient/clinic/appointements/:id', isPatientAuthenticated, async (req, res) => {
     console.log(req.params.id);
@@ -222,7 +223,7 @@ app.post('/patient/clinic/appointements/:id', isPatientAuthenticated, async (req
 });
 app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await patientModule.sendRequest(req.params.id,uid,req.body));
+    res.send(await patientModule.sendRequest(req.params.id, uid, req.body));
 });
 app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -250,14 +251,14 @@ app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
 app.post('/clinic/admin/login', async (req, res) => {
     console.log(req.body);
     let result = await clinicModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 
 app.post('/clinic/user/login', async (req, res) => {
     console.log(req.body);
     let result = await clinicModule.userLogin(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 
@@ -329,7 +330,7 @@ app.post('/clinic/appointments/:uid', isClinicAdminAuthenticated, async (req, re
 app.post('/doctor/makingAppointment/:uid', isClinicAdminAuthenticated, async (req, res) => {
     //let id = "5df65193d3cb84034cfcf9a6"; //potrebno je proslijediti id pacijente nad kojim se trenutno vrsi pregled
     let uid = res.locals.uid;
-    res.send(await clinicModule.makeNewAppointments(uid,req.params.uid, req.body));
+    res.send(await clinicModule.makeNewAppointments(uid, req.params.uid, req.body));
 });
 
 
@@ -341,7 +342,7 @@ app.get('/clinic/appointmentRequests/:id', isClinicAdminAuthenticated, async (re
 
 app.get('/clinic/appointments', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicAppointments(uid,req.body));
+    res.send(await clinicModule.clinicAppointments(uid, req.body));
 });
 
 app.post('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
@@ -350,7 +351,7 @@ app.post('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
 });
 app.post('/clinic/types', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicTypes(uid,req.body));
+    res.send(await clinicModule.clinicTypes(uid, req.body));
 });
 app.delete('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -362,7 +363,7 @@ app.post('/clinic/ordination/:uid', isClinicAdminAuthenticated, async (req, res)
 });
 app.post('/clinic/ordinations', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicOrdinations(uid,req.body));
+    res.send(await clinicModule.clinicOrdinations(uid, req.body));
 });
 app.delete('/clinic/ordinations/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -387,7 +388,7 @@ app.get('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
 
 app.post('/clinic/users', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicUsers(uid,req.body));
+    res.send(await clinicModule.clinicUsers(uid, req.body));
 });
 app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicDoctors());
@@ -475,15 +476,15 @@ app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => 
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicAdmin(uid));
 });
-app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/patient/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.patient(req.params.id));
 });
 
-app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/patient/:id/medicalRecord', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.medicalRecord(req.params.id));
 });
 
-app.get('/doctor/medicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/medicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.medicalRecordItem(req.params.id));
 });
 app.post('/doctor/updateMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
@@ -505,7 +506,7 @@ app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
 
 
 
-app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+app.post('/doctor/insertMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
 
     res.send(await clinicModule.insertMedicalRecord(uid, req.params.id, req.body));
@@ -533,6 +534,75 @@ app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) 
 });
 
 
+app.get('/test', async (req, res) => {
+
+    
+    let driver = await new Builder().forBrowser('chrome').build();
+    try {
+        await driver.manage().setTimeouts({implicit: 20000})
+
+        await driver.get('http://127.0.0.1:3000/login');
+
+        await driver.findElement(By.xpath("//*[@id='type']")).click();
+        await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Admin klinike']")).click();
+        await driver.findElement(By.id('username')).sendKeys('clinic_admin');
+        await driver.findElement(By.id('password')).sendKeys('clinic_admin');
+        await driver.findElement(By.id('login-button')).click();
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointments'))),10000);
+
+        await driver.executeScript("document.getElementById('clinic-appointments').click();")
+        //await driver.findElement(By.id("clinic-appointments")).click();
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('create-appointment'))),10000);
+        await driver.executeScript("document.getElementById('create-appointment').click();")
+
+        //await driver.executeScript("document.getElementById('create-appointment').click();")
+
+        await driver.findElement(By.id('date')).sendKeys('02/10/2020, 12:00 AM', Key.ENTER);
+        await driver.findElement(By.id('duration')).sendKeys('60');
+        await driver.findElement(By.id('price')).sendKeys('25');
+        await driver.findElement(By.xpath("//*[@id='type']")).click();
+        await driver.findElement(By.xpath("//*[@id='type']/div/button[1]")).click();
+
+        await driver.findElement(By.xpath("//*[@id='ordination']")).click();
+        await driver.findElement(By.xpath("//*[@id='ordination']/div/button[1]")).click();
+
+        await driver.findElement(By.xpath("//*[@id='doctor']")).click();
+        await driver.findElement(By.xpath("//*[@id='doctor']/div/button[1]")).click();
+
+
+        //await driver.findElement(By.xpath("//*[@id='create-appointment-button']")).click();
+        await driver.executeScript("document.getElementById('create-appointment-button').click();")
+
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('logout'))),10000);
+
+        await driver.executeScript("document.getElementById('logout').click();window.location.href='/login';")
+
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('type'))),10000);
+
+        await driver.findElement(By.xpath("//*[@id='type']")).click();
+        await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Pacijent']")).click();
+        await driver.findElement(By.id('username')).sendKeys('pacijent');
+        await driver.findElement(By.id('password')).sendKeys('pacijent');
+        await driver.findElement(By.id('login-button')).click();
+
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),10000);
+        await driver.executeScript("document.getElementById('patient-clinics').click();")
+        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='table-row row']/div[.='Clinic']"))),10000).click();
+        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[.='Lista unaprijed kreiranih pregleda']"))),10000).click();
+
+        
+
+
+        //await driver.findElement(By.name('q')).sendKeys('webdriver', Key.RETURN);
+
+        //await driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+    } finally {
+        //await driver.quit();
+    }
+
+
+    res.send({ error: false })
+});
 
 let lastCheckedTime = 0;
 
@@ -540,15 +610,15 @@ setInterval(async () => {
     let date = new Date();
     let timestamp = date.getTime() / 1000;
 
-    if (date.getHours() == 0 && date.getMinutes() == 0 && timestamp - lastCheckedTime > 12 * 60 * 60){
+    if (date.getHours() == 0 && date.getMinutes() == 0 && timestamp - lastCheckedTime > 12 * 60 * 60) {
         lastCheckedTime = timestamp;
 
-        
+
         let clinics = await clinicModule.allAppointmentRequests();
 
-        for(let i=0;i<clinics.length;i++){
-            for(let j=0;j<clinics[i].requests.length;j++){
-                if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length){
+        for (let i = 0; i < clinics.length; i++) {
+            for (let j = 0; j < clinics[i].requests.length; j++) {
+                if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length) {
                     console.log('reserving room')
                     await clinicModule.reserveRoom(clinics[i].requests[j].appointment._id, clinics[i].requests[j].freeOrdinations[0]);
                 }
@@ -557,10 +627,13 @@ setInterval(async () => {
         }
 
 
-    }else{
+    } else {
         return;
     }
-}, 30000 );
+}, 30000);
+
+
+
 
 
 export default app;

@@ -157,7 +157,7 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to='/clinic/appointments' className={this.props[0].location.pathname == '/clinic/appointments' ? 'active' : null}>
+                                        <Link style={{display: 'block'}} id="clinic-appointments" to='/clinic/appointments' className={this.props[0].location.pathname == '/clinic/appointments' ? 'active' : null}>
                                             <Isvg src={list} />
                                             Slobodni termini
                                         </Link>
@@ -172,7 +172,7 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to='/clinic/appointmentRequest' className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
+                                        <Link  to='/clinic/appointmentRequest' className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
                                             <Isvg src={list} />
                                             Termin za pregled
                                         </Link>
@@ -212,8 +212,8 @@ class Sidebar extends Component {
                     }
 
                     <ul className="logout">
-                        <li onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken'); }}>
-                            <Link to='/login' >
+                        <li  id="logout" onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('clinicAdminToken'); localStorage.removeItem('clinicUserToken'); localStorage.removeItem('patientToken'); }}>
+                            <Link to='/login' id="logout-link" >
                                 <Isvg src={exit} />
                                 Odjavi se
                             </Link>

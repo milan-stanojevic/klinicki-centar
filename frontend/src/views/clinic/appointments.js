@@ -164,7 +164,7 @@ class Appointments extends Component {
                 <Container fluid className="bottom-wrap">
                     <Row>
                         <Col lg="12">
-                            <Link to={`/clinic/appointments/new`}>
+                            <Link id ="create-appointment"to={`/clinic/appointments/new`}>
                                 <button>Novi termin</button>
                             </Link>
                         </Col>

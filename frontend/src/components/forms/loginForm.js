@@ -20,13 +20,15 @@ const renderTextField = ({
     placeholder,
     label,
     meta: { touched, error },
-    type
+    type,
+    id
 }) => (
 
         <Text
             placeholder={placeholder}
             label={label}
             errorText={touched && error}
+            id={id}
             type={type}
             error={touched && error}
             {...input}
@@ -53,12 +55,14 @@ const renderSelectField = ({
     placeholder,
     label,
     meta: { touched, error },
-    children
+    children,
+    id
 }) => (
 
         <Select
             placeholder={placeholder}
             label={label}
+            id={id}
             errorText={touched && error}
             error={touched && error}
             {...input}
@@ -83,6 +87,7 @@ const form = (props) => {
                         label={"Tip korisnika"}
                         placeholder="Izaberite tip"
                         validate={[required]}
+                        id="type"
                     >
                         <option value="admin">Admin kliničkog centra</option>
                         <option value="clinicAdmin">Admin klinike</option>
@@ -96,6 +101,7 @@ const form = (props) => {
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="username"
+                        id="username"
                         component={renderTextField}
                         placeholder="Korisničko ime"
                     ></Field>
@@ -103,6 +109,7 @@ const form = (props) => {
                 <Col lg="12" className="input-wrap">
                     <Field
                         name="password"
+                        id="password"
                         component={renderTextField}
                         placeholder="Lozinka"
                         type="password"
@@ -125,7 +132,7 @@ const form = (props) => {
                 }
 
                 <Col lg="12">
-                    <button>PRIJAVI SE</button>
+                    <button id="login-button">PRIJAVI SE</button>
                 </Col>
             </Row>
         </form>
