@@ -88,7 +88,7 @@ class BusinessReport extends Component {
                                     {
                                         this.state.items.map((item, idx) => {
                                             return (
-                                                item.rating / item.numberOfRating
+                                                parseFloat(Number(item.rating / item.numberOfRating)).toFixed(2)
                                             )
                                         })
                                     }
