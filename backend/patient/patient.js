@@ -206,18 +206,12 @@ class Patient {
     async patient(uid, obj) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
         // podesavanje datuma
-        // if (res[0].date) {
-        //     let datum = res[0].date.split('.');
-        //     let dat = Date.parse(datum[0] + ' ' + datum[1] + ' ' + datum[2]);
-        //     res[0].date = dat;
-        // }
 
         if (res[0].date) {
             let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
             res[0].date = dat;
         }
 
-        //console.log(res[0]);
         return res[0];
     }
 

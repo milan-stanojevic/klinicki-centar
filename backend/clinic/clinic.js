@@ -928,21 +928,6 @@ class Clinic {
         let _id;
         let res = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         // podesavanje datuma
-        console.log(res[0].date);
-        //if (res[0].date) {
-        //let datum = res[0].date.split('.');
-        //let dat = Date.parse(datum[0] + ' ' + datum[1] + ' ' + datum[2]);
-        // console.log(dat);
-        //res[0].date = dat;
-        //}
-        //let dat = moment('2013-09-05 15:34:00', 'YYYY-MM-DD HH:MM:ss').unix();
-        //let dat = moment(datum[1] + '/' + datum[0] + '/' + datum[2], 'MM/DD/YYYY').unix();
-
-        //console.log(dat/1000);
-        //let dateObj = new Date(dat*1000);
-        //let datee = moment(new Date(dat*1000)).unix();
-        //console.log(datee);
-        //console.log(dateObj);
         if (res[0].date) {
             let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
             res[0].date = dat;
@@ -1030,21 +1015,12 @@ class Clinic {
         let user = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
 
         // podesavanje datuma
-        //let dat = user[0].date;
-        // if (user[0].date) {
-        //     console.log('1: ' + user[0].date);
-        //     let datum = user[0].date.split('.');
-        //     dat = Date.parse(datum[0] + ' ' + datum[1] + ' ' + datum[2]);
-        //     console.log(datum[0] + ' ' + datum[1] + ' ' + datum[2]);
-
-        //     console.log('3: ' + dat);
-        // }
-        // user[0].date = dat;
+       
         if (user[0].date) {
             let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
             user[0].date = dat;
         }
-        //console.log(user[0].date);
+       
         return user[0];
     }
 
