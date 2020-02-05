@@ -209,6 +209,7 @@ class form extends React.Component {
                                         component={renderDateField}
                                         label={"Datum rođenja"}
                                         placeholder="Izaberite datum"
+                                        validate={[required]}
                                     >
                                     </Field>
                                 </Col>

@@ -180,7 +180,7 @@ class Clinic {
             return null;
         }
     }
-    
+
     async clinicRating(uid) {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         //console.log(id);
@@ -192,19 +192,19 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         //console.log(id);
         let clinic_id = admin[0].clinic;
-        let appointments = await db.collection('appointments').find({ clinic : clinic_id }).toArray();
+        let appointments = await db.collection('appointments').find({ clinic: clinic_id }).toArray();
         let income = 0;
         for (let i = 0; i < appointments.length; i++) {
-           income += Number(appointments[i].price);
+            income += Number(appointments[i].price);
         }
         // console.log(income);
         // console.log(String(income));
-       
+
 
         return String(income);
     }
     async completedEvents(uid) {
-       
+
         let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
 
         for (let i = 0; i < requests.length; i++) {
@@ -215,13 +215,13 @@ class Clinic {
         }
         return requests;
     }
-    
+
     async clinicDoctors() {
         return await db.collection('clinicUsers').find({ type: "doctor" }).toArray();
     }
     async clinicDoctorss(uid) {
-        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
-        let query = { $and : [{ clinic : admin[0].clinic }, { type: "doctor" }]};
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        let query = { $and: [{ clinic: admin[0].clinic }, { type: "doctor" }] };
         return await db.collection('clinicUsers').find(query).toArray();
     }
 
@@ -229,8 +229,8 @@ class Clinic {
         return await db.collection('types').find({}).toArray();
     }
     async clinicTypee(uid) {
-        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
-        let query = { clinic : admin[0].clinic };
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        let query = { clinic: admin[0].clinic };
         return await db.collection('types').find(query).toArray();
     }
 
@@ -238,59 +238,63 @@ class Clinic {
         return await db.collection('ordinations').find({}).toArray();
     }
     async clinicOrdinationn(uid) {
-        let admin = await db.collection('clinicAdmins').find({ _id : ObjectID(uid) }).toArray();
-        let query = { clinic : admin[0].clinic };
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        let query = { clinic: admin[0].clinic };
         return await db.collection('ordinations').find(query).toArray();
     }
-    async checkPasswordChangeCA(id){
-        let admin = await db.collection('clinicAdmins').find({_id: ObjectID(id)}).toArray();
-        if (admin[0].changePasswordRequired){
+    async checkPasswordChangeCA(id) {
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(id) }).toArray();
+        if (admin[0].changePasswordRequired) {
             return {
                 required: true
             }
-        }else{
+        } else {
             return {
                 required: false
             }
         }
     }
-    async checkPasswordChangeDoc(id){
-        let admin = await db.collection('clinicUsers').find({_id: ObjectID(id)}).toArray();
-        if (admin[0].changePasswordRequired){
+    async checkPasswordChangeDoc(id) {
+        let admin = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
+        if (admin[0].changePasswordRequired) {
             return {
                 required: true
             }
-        }else{
+        } else {
             return {
                 required: false
             }
         }
     }
-    
-    async clinicAdminChangePassword(id, obj){
+
+    async clinicAdminChangePassword(id, obj) {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
 
-        await db.collection('clinicAdmins').updateOne({_id: ObjectID(id)}, {$set: {
-            pk: hash,
-            changePasswordRequired: false
-        }})
+        await db.collection('clinicAdmins').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                pk: hash,
+                changePasswordRequired: false
+            }
+        })
 
         return {
-            
+
         }
     }
-    async doctorChangePassword(id, obj){
+    async doctorChangePassword(id, obj) {
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
 
-        await db.collection('clinicUsers').updateOne({_id: ObjectID(id)}, {$set: {
-            pk: hash,
-            changePasswordRequired: false
-        }})
+        await db.collection('clinicUsers').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                pk: hash,
+                changePasswordRequired: false
+            }
+        })
 
         return {
-            
+
         }
     }
 
@@ -923,6 +927,11 @@ class Clinic {
     async clinicAdmin(uid, obj) {
         let _id;
         let res = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        // podesavanje datuma
+        if (res[0].date) {
+            let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
+            res[0].date = dat;
+        }
         return res[0];
     }
 
@@ -1004,6 +1013,14 @@ class Clinic {
 
     async clinicUser(id) {
         let user = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
+
+        // podesavanje datuma
+       
+        if (user[0].date) {
+            let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
+            user[0].date = dat;
+        }
+       
         return user[0];
     }
 
@@ -1070,7 +1087,7 @@ class Clinic {
         }
         return requests;
     }
-    
+
 
     async insertMedicalRecord(uid, id, obj) {
         let check = await db.collection('appointmentRequests').find({ _id: ObjectID(id), examinationDone: true }).count();
