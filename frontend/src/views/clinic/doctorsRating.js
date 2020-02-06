@@ -57,7 +57,7 @@ class DoctorsRating extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista doktora i njihove ocijene</h3>
+                            <h3>Lista doktora i njihove ocjene</h3>
                         </Col>
                     </Row>
                   
@@ -74,7 +74,7 @@ class DoctorsRating extends Component {
                         </Col>
 
                         <Col lg="3">
-                            <span className="name">OCIJENA</span>
+                            <span className="name">OCJENA</span>
                         </Col>
 
                     </Row>

@@ -1017,7 +1017,7 @@ class Clinic {
         // podesavanje datuma
        
         if (user[0].date) {
-            let dat = new Date(res[0].date.split(".").reverse().join(".")).getTime();
+            let dat = new Date(user[0].date.split(".").reverse().join(".")).getTime();
             user[0].date = dat;
         }
        
@@ -1150,6 +1150,13 @@ class Clinic {
         }
 
         res[0].illnessHistory = illnessHistory;
+        if(res[0].pol)
+        {
+            if(res[0].pol == '1')
+                res[0].pol = 'Muski';
+            else if(res[0].pol == '2')
+                res[0].pol = 'Zenski';
+        }
 
         /*res[0].illnessHistory = [
             {
