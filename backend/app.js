@@ -25,6 +25,11 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use('/uploads', express.static('uploads'))
 const server = http.createServer(app);
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 
@@ -548,11 +553,11 @@ app.get('/test', async (req, res) => {
         await driver.findElement(By.id('username')).sendKeys('clinic_admin');
         await driver.findElement(By.id('password')).sendKeys('clinic_admin');
         await driver.findElement(By.id('login-button')).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointments'))),10000);
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointments'))),3000);
 
         await driver.executeScript("document.getElementById('clinic-appointments').click();")
         //await driver.findElement(By.id("clinic-appointments")).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('create-appointment'))),10000);
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('create-appointment'))),3000);
         await driver.executeScript("document.getElementById('create-appointment').click();")
 
         //await driver.executeScript("document.getElementById('create-appointment').click();")
@@ -573,11 +578,12 @@ app.get('/test', async (req, res) => {
         //await driver.findElement(By.xpath("//*[@id='create-appointment-button']")).click();
         await driver.executeScript("document.getElementById('create-appointment-button').click();")
 
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('logout'))),10000);
+        await sleep(2000);
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('logout'))),3000);
 
         await driver.executeScript("document.getElementById('logout').click();window.location.href='/login';")
 
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('type'))),10000);
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('type'))),3000);
 
         await driver.findElement(By.xpath("//*[@id='type']")).click();
         await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Pacijent']")).click();
@@ -585,19 +591,18 @@ app.get('/test', async (req, res) => {
         await driver.findElement(By.id('password')).sendKeys('pacijent');
         await driver.findElement(By.id('login-button')).click();
 
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),10000);
+        await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),3000);
         await driver.executeScript("document.getElementById('patient-clinics').click();")
-        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='table-row row']/div[.='Clinic']"))),10000).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[.='Lista unaprijed kreiranih pregleda']"))),10000).click();
+        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='table-row row']/div[.='Clinic']"))),3000).click();
+        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[.='Lista unaprijed kreiranih pregleda']"))),3000).click();
 
-        
+        await driver.wait(until.elementIsVisible(await driver.findElement(By.xpath("//div[.='10.02.2020, 00:00']/../div[@class='actions col-lg-2']/button[.='ZAKAZI']"))),3000).click();
 
-
-        //await driver.findElement(By.name('q')).sendKeys('webdriver', Key.RETURN);
-
-        //await driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+    
+    } catch(e){
+        console.log('error')
     } finally {
-        //await driver.quit();
+        await driver.quit();
     }
 
 
