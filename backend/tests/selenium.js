@@ -8,9 +8,57 @@ function sleep(ms) {
   
 
 describe('SeleniumTest', () => {
-    let driver = new Builder().forBrowser('chrome').build();
+
+    it('1_6_clinic_filter', async () => {
+        let driver = new Builder().forBrowser('chrome').build();
+
+        let result = true;
+        try {
+
+            await driver.manage().setTimeouts({implicit: 20000})
+    
+            await driver.get('http://127.0.0.1:3000/login');
+        
+            await driver.findElement(By.xpath("//*[@id='type']")).click();
+            await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Pacijent']")).click();
+            await driver.findElement(By.id('username')).sendKeys('pacijent');
+            await driver.findElement(By.id('password')).sendKeys('pacijent');
+            await driver.findElement(By.id('login-button')).click();
+    
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),20000);
+            await driver.executeScript("document.getElementById('patient-clinics').click();");
+
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('search-clinic-name'))),20000).sendKeys('Clinic');
+            await driver.executeScript("document.getElementById('search-clinic-button').click();");
+            await sleep(2000);
+            let results = await driver.findElements(By.xpath("//div[@class='table-row row']/div[1]/span"));
+            for(let i =0;i<results.length;i++){
+                let text = await results[i].getText();
+                if (text && text.indexOf('Clinic') === -1){
+                    result = false;
+                    break;
+                }
+            }
+
+            
+        
+        } catch(e){
+            console.log(e);
+            result = false;
+        } finally{
+            await driver.quit();
+
+        }
+
+        expect(result).to.equal(true);
+        
+        //done();
+
+
+    });
 
     it('1_5_creating_free_period_and_sending_request_for_free_period_as_patient', async () => {
+        let driver = new Builder().forBrowser('chrome').build();
 
         let result = true;
         try {
@@ -65,7 +113,7 @@ describe('SeleniumTest', () => {
             await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),20000);
             await driver.executeScript("document.getElementById('patient-clinics').click();")
             await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='table-row row']/div[.='Clinic']"))),20000).click();
-            await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[.='Lista unaprijed kreiranih pregleda']"))),20000).click();
+            await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//*[.='Lista unaprijed kreiranih pregleda']"))),20000).click();
     
             await driver.wait(until.elementIsVisible(await driver.findElement(By.xpath("//div[.='10.02.2020, 00:00']/../div[@class='actions col-lg-2']/button[.='ZAKAZI']"))),3000).click();
     
@@ -73,10 +121,14 @@ describe('SeleniumTest', () => {
         } catch(e){
             console.log(e);
             result = false;
+        }finally{
+            await driver.quit();
+
         }
 
         expect(result).to.equal(true);
     });
 
-    after(async () => driver.quit());
+
+    //after(async () => driver.quit());
 });

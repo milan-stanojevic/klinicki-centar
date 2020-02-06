@@ -16,6 +16,7 @@ const renderTextField = ({
     placeholder,
     label,
     meta: { touched, error },
+    id
 }) => (
 
         <Text
@@ -23,6 +24,7 @@ const renderTextField = ({
             label={label}
             errorText={touched && error}
             error={touched && error}
+            id={id}
             {...input}
         />
     )
@@ -43,6 +45,7 @@ class form extends React.Component {
                                         name="search"
                                         component={renderTextField}
                                         placeholder= 'Unesite naziv klinike'
+                                        id="search-clinic-name"
                                     ></Field>
                                 </Col>
                                 <Col lg="6" className="input-wrap">
@@ -53,7 +56,7 @@ class form extends React.Component {
                                     ></Field>
                                 </Col>
                                 <Col lg="6">
-                                    <button className="button">Trazi</button>
+                                    <button id="search-clinic-button" className="button">Trazi</button>
                                 </Col>
                             </Row>
 
