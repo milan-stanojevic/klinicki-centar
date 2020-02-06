@@ -502,6 +502,12 @@ app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
     console.log('fetch')
     res.send(await clinicModule.diagnoses());
 });
+app.get('/doctor/appointments', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await clinicModule.scheduledAppointments(uid));
+});
+
 
 
 

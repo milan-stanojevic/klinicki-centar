@@ -213,6 +213,22 @@ class Clinic {
             requests[i].patient = patient[0] ? patient[0] : {};
             requests[i].appointment = appointment[0];
         }
+        for (let i = 0; i < requests.length; i++) {
+
+            if (requests[i].appointment.doctor) {
+                let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
+                requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+            }
+
+            if (requests[i].appointment.ordination) {
+                let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
+                requests[i].ordinationTag = ord[0].tag;
+            }
+
+            let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
+            requests[i].typeTag = type[0].tag;
+
+        }
         return requests;
     }
 
@@ -404,8 +420,23 @@ class Clinic {
             let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
             requests[i].patient = patient[0];
             requests[i].appointment = appointment[0];
+        }
+        for (let i = 0; i < requests.length; i++) {
+            if (requests[i].appointment.doctor) {
+                let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
+                requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+            }
+            if (requests[i].appointment.ordination) {
+                let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
+                requests[i].ordinationTag = ord[0].tag;
+            }
+
+            let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
+            requests[i].typeTag = type[0].tag;
+
 
         }
+
 
 
         for (let i = 0; i < requests.length; i++) {
@@ -973,7 +1004,20 @@ class Clinic {
 
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
-        return await db.collection('appointments').find(query).toArray();
+        let res = await db.collection('appointments').find(query).toArray();
+        for (let i = 0; i < res.length; i++) {
+
+            let doc = await db.collection('clinicUsers').find({ _id: ObjectID(res[i].doctor) }).toArray();
+            res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+
+            let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
+            res[i].ordinationTag = ord[0].tag;
+
+            let type = await db.collection('types').find({ _id: ObjectID(res[i].type) }).toArray();
+            res[i].typeTag = type[0].tag;
+
+        }
+        return res;
     }
 
 
@@ -1015,12 +1059,12 @@ class Clinic {
         let user = await db.collection('clinicUsers').find({ _id: ObjectID(id) }).toArray();
 
         // podesavanje datuma
-       
+
         if (user[0].date) {
             let dat = new Date(user[0].date.split(".").reverse().join(".")).getTime();
             user[0].date = dat;
         }
-       
+
         return user[0];
     }
 
@@ -1085,6 +1129,24 @@ class Clinic {
             requests[i].patient = patient[0] ? patient[0] : {};
             requests[i].appointment = appointment[0];
         }
+        for (let i = 0; i < requests.length; i++) {
+
+            if (requests[i].appointment.doctor) {
+                let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
+                requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+            }
+
+            if (requests[i].appointment.ordination) {
+                let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
+                requests[i].ordinationTag = ord[0].tag;
+            }
+
+            let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
+            requests[i].typeTag = type[0].tag;
+
+        }
+
+
         return requests;
     }
 
@@ -1150,11 +1212,10 @@ class Clinic {
         }
 
         res[0].illnessHistory = illnessHistory;
-        if(res[0].pol)
-        {
-            if(res[0].pol == '1')
+        if (res[0].pol) {
+            if (res[0].pol == '1')
                 res[0].pol = 'Muski';
-            else if(res[0].pol == '2')
+            else if (res[0].pol == '2')
                 res[0].pol = 'Zenski';
         }
 
@@ -1224,9 +1285,38 @@ class Clinic {
             error: null
         }
     }
+    async scheduledAppointments(uid) {
+        let appointments = await db.collection('appointments').find({ doctor: uid }).toArray();
+
+        for (let i = 0; i < appointments.length; i++) {
+            let req = await db.collection('appointmentRequests').find({ appointment: appointments[i]._id }).toArray();
+            appointments[i].patient = req[0].patient;
+            appointments[i].examinationDone = req[0].examinationDone;
+            appointments[i].appReq = req[0]._id;
+            let pat = await db.collection('patients').find({ _id: appointments[i].patient }).toArray();
+            appointments[i].patientName = pat[0].firstName + ' ' + pat[0].lastName;
+        }
+        for (let i = 0; i < appointments.length; i++) {
+
+            let doc = await db.collection('clinicUsers').find({ _id: ObjectID(appointments[i].doctor) }).toArray();
+            appointments[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+
+            let ord = await db.collection('ordinations').find({ _id: ObjectID(appointments[i].ordination) }).toArray();
+            appointments[i].ordinationTag = ord[0].tag;
+
+            let type = await db.collection('types').find({ _id: ObjectID(appointments[i].type) }).toArray();
+            appointments[i].typeTag = type[0].tag;
+
+        }
+
+
+
+        return appointments;
+
+    }
 
     async medicalRecordItem(id) {
-        let illnessHistory = await db.collection('illnessHistory').find({ _id: ObjectID(id) }).toArray()
+        let illnessHistory = await db.collection('illnessHistory').find({ _id: ObjectID(id) }).toArray();
 
         return illnessHistory[0]
     }

@@ -72,12 +72,12 @@ class Test extends Component {
 
                         {this.state.type != 'nurse' ?
 
-                            <div class="col-6 col-lg-4"><a href="">
+                            <div class="col-6 col-lg-4"><Link to="/doctor/appointments">
                                 <div class="table-box">
                                     <p><Isvg src={appointment} /></p>
-                                    <p>Novi pregled</p>
+                                    <p>Započni novi pregled</p>
                                 </div>
-                            </a></div>
+                            </Link></div>
 
                             :
                             null

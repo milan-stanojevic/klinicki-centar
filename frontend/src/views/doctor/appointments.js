@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 
 import editIcon from '../../assets/svg/edit.svg';
@@ -23,8 +22,7 @@ class Appointments extends Component {
     constructor(props) {
         super(props);
         this.get = this.get.bind(this);
-        // this.delete = this.delete.bind(this);
-        // this.search = this.search.bind(this);
+
 
         this.state = {
             items: []
@@ -36,15 +34,15 @@ class Appointments extends Component {
     }
 
     get() {
-        if (!localStorage.clinicAdminToken) {
+        if (!localStorage.clinicUserToken) {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/clinic/appointments', {
+        fetch('http://127.0.0.1:4000/doctor/appointments', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
             },
         }).then((res) => res.json()).then((result) => {
             this.setState({
@@ -54,72 +52,76 @@ class Appointments extends Component {
 
     }
 
+
     render() {
 
         return (
             <div className="page-wrap">
                 {
-                    !localStorage.clinicAdminToken ? <Redirect to='/login' /> : null
+                    !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
                 }
 
                 <Container fluid className="table">
 
                     <Row className="page-title">
                         <Col lg="12">
-                            <h3>Lista slobodnih termina</h3> 
+                            <h3>Lista zakazanih termina</h3>
                         </Col>
                     </Row>
-                    {/* <Row>
-                        <Col lg="12">
-                            <SearchForm onSubmit={this.search}/>
-                        </Col>
-                    </Row> */}
+
                     <Row className="table-head">
                         <Col lg="2">
                             <span className="name">Datum</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Trajanje</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Tip</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Sala</span>
                         </Col>
                         <Col lg="2">
-                            <span className="name">Doktor</span>
+                            <span className="name">Pacijent</span>
+                        </Col>
+                        <Col lg="3">
+                            <span className="name">Cijena</span>
                         </Col>
                         <Col lg="2">
-                            <span className="name">Cijena</span>
+                            <span className="name">Započni pregled</span>
                         </Col>
 
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            if(!item.verified && item.predef)
+                            if(!item.examinationDone)
                             return (
                                 <Row className="table-row" key={idx}>
                                     <Col lg="2">
                                         <span className="value">{item.date}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.duration}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.typeTag}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.ordinationTag}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.docName}</span>
+                                        <span className="value">{item.patientName}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.price}</span>
                                     </Col>
+                                    <Col lg='2'></Col>
+                                    <Col lg="2">
+                                        <button className="button" onClick={() => {
+                                            this.props[0].history.push(`/doctor/examination/${item.appReq}`)}}> >> </button>
+                                    </Col>
 
-                                   
                                 </Row>
                             )
                         })
@@ -127,16 +129,6 @@ class Appointments extends Component {
 
                 </Container>
 
-                <Container fluid className="bottom-wrap">
-                    <Row>
-                        <Col lg="12">
-                            <Link to={`/clinic/appointments/new`}>
-                                <button>Novi termin</button>
-                            </Link>
-                        </Col>
-                    </Row>
-
-                </Container>
 
             </div>
         )

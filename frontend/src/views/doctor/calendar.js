@@ -57,16 +57,16 @@ class CalendarPage extends Component {
                 this.props[0].history.push(`/doctor/examination/${event._id}`)
             }}>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
-                    <strong>{event.appointment.type}</strong>
+                    <strong>{event.typeTag}</strong>
                 </p>
                 <p>
                     Pacijent: {event.patient.firstName} {event.patient.lastName}
                 </p>
                 <p>
-                    Doktor: {event.appointment.doctor}
+                    Doktor: {event.docName}
                 </p>
                 <p>
-                    Sala: {event.appointment.ordination}
+                    Sala: {event.ordinationTag}
                 </p>
 
             </div>

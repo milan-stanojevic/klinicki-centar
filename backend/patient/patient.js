@@ -181,6 +181,13 @@ class Patient {
         }
 
         res[0].illnessHistory = illnessHistory;
+        if(res[0].pol)
+        {
+            if(res[0].pol == '1')
+                res[0].pol = 'Muski';
+            else if(res[0].pol == '2')
+                res[0].pol = 'Zenski';
+        }
 
         /*res[0].illnessHistory = [
             {
@@ -299,6 +306,19 @@ class Patient {
         let query = { clinic: id }
 
         let res = await db.collection('appointments').find(query).toArray();
+
+        for (let i = 0; i < res.length; i++) {
+
+            let doc = await db.collection('clinicUsers').find({ _id: ObjectID(res[i].doctor) }).toArray();
+            res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+            
+            let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
+            res[i].ordinationTag = ord[0].tag;
+
+            let type = await db.collection('types').find({ _id: ObjectID(res[i].type) }).toArray();
+            res[i].typeTag = type[0].tag;
+
+        }
 
         return res;
     }
