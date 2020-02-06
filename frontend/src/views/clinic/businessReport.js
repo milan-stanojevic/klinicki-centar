@@ -116,6 +116,7 @@ class BusinessReport extends Component {
                                     {/* {
                                         this.state.items1.map((item, idx) => {
                                             return (
+                                                item.res
                                             )
                                         })
                                     } */}
