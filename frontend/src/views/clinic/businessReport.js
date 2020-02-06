@@ -74,7 +74,7 @@ class BusinessReport extends Component {
                     <Row className="table-row">
                         <div class="col-6 col-lg-6">
                             <div class="table-box">
-                                <p>Prosječna ocijena klinike (
+                                <p>Prosječna ocjena klinike (
                                 {
                                         this.state.items.map((item, idx) => {
                                             return (
@@ -88,7 +88,7 @@ class BusinessReport extends Component {
                                     {
                                         this.state.items.map((item, idx) => {
                                             return (
-                                                item.rating / item.numberOfRating
+                                                parseFloat(Number(item.rating / item.numberOfRating)).toFixed(2)
                                             )
                                         })
                                     }
@@ -99,7 +99,7 @@ class BusinessReport extends Component {
 
                         <div class="col-6 col-lg-6"><Link to='/clinic/businessReport/doctors'>
                             <div class="table-box">
-                                <p>Prosječne ocijene doktora</p>
+                                <p>Prosječne ocjene doktora</p>
                             </div>
                         </Link></div>
 
@@ -116,6 +116,7 @@ class BusinessReport extends Component {
                                     {/* {
                                         this.state.items1.map((item, idx) => {
                                             return (
+                                                item.res
                                             )
                                         })
                                     } */}

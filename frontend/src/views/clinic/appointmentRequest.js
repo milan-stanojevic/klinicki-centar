@@ -195,7 +195,7 @@ class AppointmentRequest extends Component {
                         <Col lg="2">
                             <span className="name">DATUM</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">PACIJENT</span>
                         </Col>
 
@@ -203,7 +203,7 @@ class AppointmentRequest extends Component {
                         <Col lg="2">
                             <span className="name">DOKTOR</span>
                         </Col>
-                        <Col lg="5" className="actions">
+                        <Col lg="4" className="actions">
                             <span className="name">OPCIJE</span>
                         </Col>
 
@@ -221,15 +221,15 @@ class AppointmentRequest extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.appointment.date}</span>
                                     </Col>
-                                    <Col lg="1">
-                                        <span className="value">{item.patient && item.patient.firstName + " " + item.patient && item.patient.lastName}</span>
+                                    <Col lg="2">
+                                        <span className="value">{item.patient.firstName + " " + item.patient.lastName}</span>
                                     </Col>
 
                                     <Col lg="2">
-                                        <span className="value">{item.appointment.doctor}</span>
+                                        <span className="value">{item.docName}</span>
                                     </Col>
 
-                                    <Col lg="5" className="actions">
+                                    <Col lg="4" className="actions">
                                         {/* {item.appointment.actionCreated ?
                                             item.verified ?
                                                 <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>

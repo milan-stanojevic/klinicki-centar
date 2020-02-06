@@ -123,13 +123,13 @@ class ClinicAppointments extends Component {
                                         <span className="value">{item.duration}</span>
                                     </Col>
                                     <Col lg="1">
-                                        <span className="value">{item.type}</span>
+                                        <span className="value">{item.typeTag}</span>
                                     </Col>
                                     <Col lg="1">
-                                        <span className="value">{item.ordination}</span>
+                                        <span className="value">{item.ordinationTag}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.doctor}</span>
+                                        <span className="value">{item.docName}</span>
                                     </Col>
                                     <Col lg="2">
                                         <span className="value">{item.price}</span>

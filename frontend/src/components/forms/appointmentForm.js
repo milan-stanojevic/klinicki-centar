@@ -154,7 +154,7 @@ class form extends React.Component {
                                         <option value="tip2">tip2</option> */}
                                         {this.props.types && this.props.types.map((item, idx) => {
                                             return (
-                                                <option value={item.tag}>{item.tag}</option>
+                                                <option value={item._id}>{item.tag}</option>
                                             )
                                         })}
 
@@ -172,7 +172,7 @@ class form extends React.Component {
                                     >
                                         {this.props.ordinations && this.props.ordinations.map((item, idx) => {
                                             return (
-                                                <option value={item.tag}>{item.tag}</option>
+                                                <option value={item._id}>{item.tag}</option>
                                             )
                                         })}
 
@@ -191,7 +191,7 @@ class form extends React.Component {
                                         {/* <option value="Ivan Ivanic">Ivan Ivanic</option> */}
                                         {this.props.doctors && this.props.doctors.map((item, idx) => {
                                             return (
-                                                <option value={item.firstName + " " + item.lastName}>{item.firstName} {item.lastName}</option>
+                                                <option value={item._id}>{item.firstName} {item.lastName}</option>
                                             )
                                         })}
 

@@ -31,7 +31,7 @@ class EditProfile extends Component {
         let date = moment.unix(ts).format('DD.MM.YYYY')
         let obj = {
             username: data.username,
-            // date: date,
+            date: date,
             password: data.password,
             firstName: data.firstName,
             lastName: data.lastName,

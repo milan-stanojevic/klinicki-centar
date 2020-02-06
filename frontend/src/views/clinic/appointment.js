@@ -110,7 +110,7 @@ class Appointment extends Component {
 
                     <Row className="page-title">
                         <Col lg="12">
-                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni tip</h3> : <h3>Dodaj tip</h3>}
+                            {this.props[0].match.params.id !== 'new' ? <h3>Izmjeni tip</h3> : <h3>Dodaj termin</h3>}
                         </Col>
                     </Row>
                     {this.state.initialValues ? 

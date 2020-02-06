@@ -396,14 +396,16 @@ app.post('/clinic/users', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.clinicUsers(uid, req.body));
 });
 app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.clinicDoctors());
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicDoctors(uid));
 });
 app.get('/clinic/doctorss', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicDoctorss(uid));
 });
 app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.clinicType());
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicType(uid));
 });
 app.get('/clinic/typee', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -508,6 +510,12 @@ app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
     console.log('fetch')
     res.send(await clinicModule.diagnoses());
 });
+app.get('/doctor/appointments', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await clinicModule.scheduledAppointments(uid));
+});
+
 
 
 

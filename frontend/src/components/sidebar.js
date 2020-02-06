@@ -9,6 +9,9 @@ import rocket from '../assets/svg/rocket.svg';
 import mail from '../assets/svg/mail.svg';
 import settings from '../assets/svg/settings.svg';
 import exit from '../assets/svg/exit.svg';
+import home from '../assets/svg/home.svg';
+
+
 
 
 class Sidebar extends Component {
@@ -209,6 +212,36 @@ class Sidebar extends Component {
                             :
                             null
 
+                    }
+                    {
+                        localStorage.patientToken ?
+                            <>
+                                <ul>
+                                    <li>
+                                        <Link to='/patient' className={this.props[0].location.pathname == '/patient' ? 'active' : null}>
+                                            <Isvg src={home} />
+                                            Početna stranica
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </>
+                            :
+                            null
+                    }
+                    {
+                        localStorage.clinicUserToken ?
+                            <>
+                                <ul>
+                                    <li>
+                                        <Link to='/doctor' className={this.props[0].location.pathname == '/doctor' ? 'active' : null}>
+                                            <Isvg src={home} />
+                                            Početna stranica
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </>
+                            :
+                            null
                     }
 
                     <ul className="logout">
