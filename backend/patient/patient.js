@@ -378,6 +378,10 @@ class Patient {
         for (let i = 0; i < admin.length; i++) {
             this.sendMail(admin[i].email, "Zakazivanje pregleda", "Pacijent zeli da zakaze pregled");
         }
+
+        return {
+            id: _id
+        }
     }
     sendMail(to, subject, message) {
         var transporter = nodemailer.createTransport({
