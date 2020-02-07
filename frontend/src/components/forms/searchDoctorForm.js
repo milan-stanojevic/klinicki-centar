@@ -93,7 +93,7 @@ class form extends React.Component {
                                     <Field
                                         name="doctorRating"
                                         component={renderTextField}
-                                        placeholder='Unesite minimalnu ocjenu'
+                                        placeholder='Unesite ocjenu'
                                     ></Field>
                                 </Col>
                                 <Col lg="4" className="input-wrap">

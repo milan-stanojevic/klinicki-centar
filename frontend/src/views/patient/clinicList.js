@@ -119,7 +119,7 @@ class ClinicList extends Component {
                                             <span className="value">{item.adress}</span>
                                         </Col>
                                         <Col lg="4">
-                                            <span className="value">{Math.round(item.rating/item.numberOfRating *100)/100}</span>
+                                            <span className="value">{item.avgRating}</span>
                                         </Col>
                                     </Row>
                                 </Link>

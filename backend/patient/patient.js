@@ -349,6 +349,9 @@ class Patient {
         if (obj.doctorLastName) {
             query.lastName = new RegExp(obj.doctorLastName, 'i');
         }
+        if (obj.doctorRating) {
+            query.avgRating = new RegExp(obj.doctorRating, 'i');
+        }
 
 
 

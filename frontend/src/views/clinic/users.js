@@ -148,7 +148,7 @@ class Users extends Component {
                                     </Col>
                                     <Col lg="2">
                                         <span className="value">
-                                            {parseFloat(Number(item.rating / item.numberOfRating)).toFixed(2)}
+                                            {item.avgRating}
                                         </span>
                                     </Col>
 
