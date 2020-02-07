@@ -115,11 +115,75 @@ class Patient {
 
     }
 
+
     async clinicGrading(uid) {
-        return await db.collection('clinics').find().toArray();
+        let appointmentRequests = await db.collection('appointmentRequests').find({ patient: ObjectID(uid) }).toArray();
+        let appointments = [];
+        for (let i = 0; i < appointmentRequests.length; i++) {
+            let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
+            appointments.push(req[0]);
+        }
+        let res = [];
+        for (let i = 0; i < appointments.length; i++) {
+            let app = await db.collection('clinics').find({ _id: ObjectID(appointments[i].clinic) }).toArray();
+            res.push(app[0]);
+        }
+        console.log(res);
+        console.log("====================================================");
+
+        let result = [];
+        result.push(res[0]);
+        console.log(result);
+        console.log("====================================================");
+        for (let i = 1; i < res.length; i++) {
+            for (let j = 0; j < result.length; j++) {
+                if (JSON.stringify(result[j]) === JSON.stringify(res[i])) {
+                    console.log("BREAK");
+                    console.log("====================================================");
+
+                    break;
+                }
+                result.push(res[i]);
+                console.log(result);
+                console.log("====================================================");
+            }
+        }
+
+        //console.log(result);
+        return result;
     }
     async doctorGrading(uid) {
-        return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
+        let appointmentRequests = await db.collection('appointmentRequests').find({ patient: ObjectID(uid) }).toArray();
+        let appointments = [];
+        for (let i = 0; i < appointmentRequests.length; i++) {
+            let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
+            appointments.push(req[0]);
+        }
+
+        let res = [];
+        for (let i = 0; i < appointments.length; i++) {
+            let app = await db.collection('clinicUsers').find({ _id: ObjectID(appointments[i].doctor) }).toArray();
+            res.push(app[0]);
+        }
+
+        // let result = [];
+        // result.push(res[0]);
+
+        // for (let i = 1; i < res.length; i++) {
+           
+        //     for (let j = 0; j < result.length; j++) {
+        //         if (JSON.stringify(result[j]) === JSON.stringify(res[i])) {
+                    
+
+        //             break;
+        //         }
+        //         result.push(res[i]);
+               
+        //     }
+        // }
+
+        // console.log(res);
+        return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();;
     }
 
     async clinicRating(obj) {
@@ -127,14 +191,18 @@ class Patient {
         if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
+            cl[0].avgRating = '0';
         }
         let inc_rating = Number(cl[0].rating) + Number(obj.ratingClinic);
         let inc_num = Number(cl[0].numberOfRating) + 1;
+        let avg = parseFloat(Number(inc_rating / inc_num)).toFixed(2);
+
+
         await db.collection('clinics').updateOne({ _id: ObjectID(obj.clinic) }, {
             $set: {
                 rating: String(inc_rating),
-                numberOfRating: String(inc_num)
-
+                numberOfRating: String(inc_num),
+                avgRating: String(avg),
             }
         });
 
@@ -146,13 +214,16 @@ class Patient {
         if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
+            cl[0].avgRating = '0';
         }
         let inc_rating = Number(cl[0].rating) + Number(obj.ratingDoctor);
         let inc_num = Number(cl[0].numberOfRating) + 1;
+        let avg = parseFloat(Number(inc_rating / inc_num)).toFixed(2);
         await db.collection('clinicUsers').updateOne({ _id: ObjectID(obj.doctor) }, {
             $set: {
                 rating: String(inc_rating),
-                numberOfRating: String(inc_num)
+                numberOfRating: String(inc_num),
+                avgRating: String(avg),
 
             }
         });
@@ -181,11 +252,10 @@ class Patient {
         }
 
         res[0].illnessHistory = illnessHistory;
-        if(res[0].pol)
-        {
-            if(res[0].pol == '1')
+        if (res[0].pol) {
+            if (res[0].pol == '1')
                 res[0].pol = 'Muski';
-            else if(res[0].pol == '2')
+            else if (res[0].pol == '2')
                 res[0].pol = 'Zenski';
         }
 
@@ -273,28 +343,15 @@ class Patient {
 
         let query = { clinic: id }
 
-        // if (obj.search) {
-        //     // if (query.type == 'doctor') {
-
-        //     query = { $or: [] }
-
-        //     query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
-        //     // }
-        // }
-        // if (obj.search) {
-        //     // if (query.type == 'doctor') {
-        //     query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
-        //     // }
-        // }
         if (obj.doctorName) {
             query.firstName = new RegExp(obj.doctorName, 'i');
         }
         if (obj.doctorLastName) {
             query.lastName = new RegExp(obj.doctorLastName, 'i');
         }
-        if (obj.doctorRating) {
-            query.rating = new RegExp(obj.doctorRating, 'i');
-        }
+
+
+
 
 
         let res = await db.collection('clinicUsers').find(query).toArray();
@@ -311,7 +368,7 @@ class Patient {
 
             let doc = await db.collection('clinicUsers').find({ _id: ObjectID(res[i].doctor) }).toArray();
             res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
-            
+
             let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
             res[i].ordinationTag = ord[0].tag;
 

@@ -113,13 +113,9 @@ class BusinessReport extends Component {
                             <div class="table-box">
                                 <p>Prihodi klinike</p>
                                 <p>(
-                                    {/* {
-                                        this.state.items1.map((item, idx) => {
-                                            return (
-                                                item.res
-                                            )
-                                        })
-                                    } */}
+                                    {
+                                        this.state.items1
+                                    }
                                     )</p>
                             </div>
                         </div>

@@ -1082,8 +1082,11 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
         if (obj.search) {
-            query.username = new RegExp(obj.search, 'i');
+            query.firstName = new RegExp(obj.search, 'i');
         }
+        // if (obj.doctorLastName) {
+        //     query.lastName = new RegExp(obj.doctorLastName, 'i');
+        // }
 
         return await db.collection('clinicUsers').find(query).toArray();
     }
