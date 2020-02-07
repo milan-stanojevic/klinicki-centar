@@ -195,7 +195,7 @@ app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {
 app.post('/patient/login', async (req, res) => {
     console.log(req.body);
     let result = await patientModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status);
+    res.status(result.status).send(result.response);
 });
 
 app.post('/patient/register', async (req, res) => {
@@ -256,7 +256,7 @@ app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
 app.post('/clinic/admin/login', async (req, res) => {
     console.log(req.body);
     let result = await clinicModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status);
+    res.status(result.status).send(result.response);
 });
 
 
@@ -547,75 +547,6 @@ app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) 
 });
 
 
-app.get('/test', async (req, res) => {
-
-    
-    let driver = await new Builder().forBrowser('chrome').build();
-    try {
-        await driver.manage().setTimeouts({implicit: 20000})
-
-        await driver.get('http://127.0.0.1:3000/login');
-
-        await driver.findElement(By.xpath("//*[@id='type']")).click();
-        await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Admin klinike']")).click();
-        await driver.findElement(By.id('username')).sendKeys('clinic_admin');
-        await driver.findElement(By.id('password')).sendKeys('clinic_admin');
-        await driver.findElement(By.id('login-button')).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointments'))),3000);
-
-        await driver.executeScript("document.getElementById('clinic-appointments').click();")
-        //await driver.findElement(By.id("clinic-appointments")).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('create-appointment'))),3000);
-        await driver.executeScript("document.getElementById('create-appointment').click();")
-
-        //await driver.executeScript("document.getElementById('create-appointment').click();")
-
-        await driver.findElement(By.id('date')).sendKeys('02/10/2020, 12:00 AM', Key.ENTER);
-        await driver.findElement(By.id('duration')).sendKeys('60');
-        await driver.findElement(By.id('price')).sendKeys('25');
-        await driver.findElement(By.xpath("//*[@id='type']")).click();
-        await driver.findElement(By.xpath("//*[@id='type']/div/button[1]")).click();
-
-        await driver.findElement(By.xpath("//*[@id='ordination']")).click();
-        await driver.findElement(By.xpath("//*[@id='ordination']/div/button[1]")).click();
-
-        await driver.findElement(By.xpath("//*[@id='doctor']")).click();
-        await driver.findElement(By.xpath("//*[@id='doctor']/div/button[1]")).click();
-
-
-        //await driver.findElement(By.xpath("//*[@id='create-appointment-button']")).click();
-        await driver.executeScript("document.getElementById('create-appointment-button').click();")
-
-        await sleep(2000);
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('logout'))),3000);
-
-        await driver.executeScript("document.getElementById('logout').click();window.location.href='/login';")
-
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('type'))),3000);
-
-        await driver.findElement(By.xpath("//*[@id='type']")).click();
-        await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Pacijent']")).click();
-        await driver.findElement(By.id('username')).sendKeys('pacijent');
-        await driver.findElement(By.id('password')).sendKeys('pacijent');
-        await driver.findElement(By.id('login-button')).click();
-
-        await driver.wait(until.elementIsVisible(driver.findElement(By.id('patient-clinics'))),3000);
-        await driver.executeScript("document.getElementById('patient-clinics').click();")
-        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='table-row row']/div[.='Clinic']"))),3000).click();
-        await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[.='Lista unaprijed kreiranih pregleda']"))),3000).click();
-
-        await driver.wait(until.elementIsVisible(await driver.findElement(By.xpath("//div[.='10.02.2020, 00:00']/../div[@class='actions col-lg-2']/button[.='ZAKAZI']"))),3000).click();
-
-    
-    } catch(e){
-        console.log('error')
-    } finally {
-        await driver.quit();
-    }
-
-
-    res.send({ error: false })
-});
 
 let lastCheckedTime = 0;
 
@@ -646,7 +577,57 @@ setInterval(async () => {
 }, 30000);
 
 
+async function dbPrepareTest(){
+
+    await adminModule.dbTrunc();
+
+    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Dom zdravlja', adress: 'Bijeljinska 25'});
+    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Smedico', adress: '27 Marta 35' });
 
 
+    let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'domzdravlja_admin',
+        password: 'test'
+    });
+
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'domzdravlja2020'
+    });
+
+
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'examination-001',
+        name: 'Redovni pregled'
+    })
+
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-1',
+        name: 'Ordinacija #1'
+    });
+
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'dokotor1-domzdravnja',
+        password: 'dokotor2020',
+        type: 'doctor'
+    })
+
+    let patient = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Pero',
+        lastName: 'Petrovic',
+        username: 'pacijent',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient.response.id.toString());
+}
+
+
+var isInTest = typeof global.it === 'function';
+
+
+if (isInTest){
+    dbPrepareTest();
+}
 
 export default app;

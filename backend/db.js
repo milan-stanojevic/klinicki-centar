@@ -2,6 +2,8 @@ const MongoClient = require('mongodb').MongoClient;
 const dbAuth = require('./constants').dbAuth;
 let connection;
 
+
+
 module.exports = function() {
     return new Promise((resolve, reject) => {
        if (connection)

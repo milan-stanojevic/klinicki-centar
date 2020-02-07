@@ -96,6 +96,7 @@ class Patient {
             }
         }
 
+        obj._id = ObjectID();
 
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
@@ -108,7 +109,7 @@ class Patient {
 
         return {
             response: {
-
+                id: obj._id
             },
             status: 200
         }
