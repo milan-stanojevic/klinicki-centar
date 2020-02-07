@@ -153,7 +153,15 @@ class Users extends Component {
                                     </Col>
 
                                     <Col lg="2" className="actions">
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                        {!item.reserved ?
+                                            <>
+                                                <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                            </>
+                                            :
+                                            <>
+                                                <button className='button1'>Rezervisano</button>
+                                            </>
+                                        }
                                     </Col>
                                 </Row>
                             )
