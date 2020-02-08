@@ -209,9 +209,12 @@ app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.updatePatient(uid, req.body));
 });
-app.post('/patient/clinic', isPatientAuthenticated, async (req, res) => {
-    res.send(await patientModule.clinicList(req.body));
+app.post('/patient/clinic/:sort', isPatientAuthenticated, async (req, res) => {
+    res.send(await patientModule.clinicList(req.body,req.params.sort));
 });
+// app.get('/clinic/patients/:sort', isClinicAdminAuthenticated, async (req, res) => {
+//     res.send(await clinicModule.patients(req.params.sort));
+// });
 app.post('/patient/clinic/doctors/:id', isPatientAuthenticated, async (req, res) => {
     // console.log(req.params.id);
     res.send(await patientModule.doctorsList(req.body,req.params.id));
@@ -224,10 +227,10 @@ app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req,
     let uid = res.locals.uid;
     res.send(await patientModule.sendRequest(req.params.id,uid,req.body));
 });
-app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
+app.get('/patient/clinic/history/:sort', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     console.log(uid);
-    res.send(await patientModule.illnessHistory(uid));
+    res.send(await patientModule.illnessHistory(uid,req.params.sort));
 });
 app.get('/patient/clinic/history/rateAllowed', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;

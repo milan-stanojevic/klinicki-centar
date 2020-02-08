@@ -176,7 +176,7 @@ class Patient {
         }
 
 
-        console.log(result);
+        //console.log(result);
         // return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
         return result;
     }
@@ -314,7 +314,7 @@ class Patient {
             id: uid
         };
     }
-    async illnessHistory(uid) {
+    async illnessHistory(uid,sort) {
         let res = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray();
 
         for (let j = 0; j < res.length; j++) {
@@ -329,6 +329,7 @@ class Patient {
                 res[j].medications[i] = med[0].name;
             }
         }
+    
         return res;
     }
     async rateAllowed(uid){
@@ -390,7 +391,7 @@ class Patient {
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
-    async clinicList(obj) {
+    async clinicList(obj,sort) {
         let query = {}
         if (obj.search) {
             query.name = new RegExp(obj.search, 'i');
@@ -399,9 +400,17 @@ class Patient {
             query.adress = new RegExp(obj.adress, 'i');
         }
 
-        let res = await db.collection('clinics').find(query).toArray();
 
-        return res;
+        if (sort == 0)
+            return await db.collection('clinics').find(query).sort({ name: 1 }).toArray();
+        else if (sort == 1)
+            return await db.collection('clinics').find(query).sort({ adress : 1 }).toArray();
+        else if (sort == 2)
+            return await db.collection('clinics').find(query).sort({ avgRating : -1 }).toArray();
+
+        // let res = await db.collection('clinics').find(query).toArray();
+
+        // return res;
     }
 
 
