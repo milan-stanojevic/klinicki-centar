@@ -20,5 +20,5 @@ var isInTest = typeof global.it === 'function';
 
 
 module.exports = {
-    dbAuth: isInTest ? dbAuthTest : dbAuth
+    dbAuth: isInTest ? dbAuthTest : dbAuthTest
 }

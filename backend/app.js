@@ -587,7 +587,9 @@ async function dbPrepareTest(){
 
     let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
         username: 'domzdravlja_admin',
-        password: 'test'
+        password: 'test',
+        email: 'admin@test.com'
+
     });
 
     await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
@@ -608,7 +610,10 @@ async function dbPrepareTest(){
     await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
         username: 'dokotor1-domzdravnja',
         password: 'dokotor2020',
-        type: 'doctor'
+        type: 'doctor',
+        firstName: 'Janko',
+        lastName: 'Jankovic',
+        email: 'doktor@test.com'
     })
 
     let patient = await patientModule.register({

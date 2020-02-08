@@ -9,7 +9,7 @@ function sleep(ms) {
 
 describe('SeleniumTest', () => {
 
-    it('1_6_clinic_filter', async () => {
+    it('Pacijent moze pretrazivati klinike', async () => {
         await sleep(1000);
         let driver = new Builder().forBrowser('chrome').build();
 
@@ -58,7 +58,7 @@ describe('SeleniumTest', () => {
 
     });
 
-    it('1_5_creating_free_period_and_sending_request_for_free_period_as_patient', async () => {
+    it('Pacijent moze zakazati pregled u slobodnom terminu', async () => {
         await sleep(1000);
 
         let driver = new Builder().forBrowser('chrome').build();
@@ -122,6 +122,41 @@ describe('SeleniumTest', () => {
             await driver.wait(until.elementIsVisible(await driver.findElement(By.xpath("//div[.='10.02.2020, 00:00']/../div[@class='actions col-lg-2']/button[.='ZAKAZI']"))),3000).click();
             await sleep(2000);
 
+        
+        } catch(e){
+            console.log(e);
+            result = false;
+        }finally{
+            await driver.quit();
+
+        }
+
+        expect(result).to.equal(true);
+    });
+
+    
+    it('Admin klinike moze rezervisati salu za pregled', async () => {
+        await sleep(1000);
+
+        let driver = new Builder().forBrowser('chrome').build();
+
+        let result = true;
+        try {
+
+            await driver.manage().setTimeouts({implicit: 20000})
+    
+            await driver.get('http://127.0.0.1:3000/login');
+    
+            await driver.findElement(By.xpath("//*[@id='type']")).click();
+            await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Admin klinike']")).click();
+            await driver.findElement(By.id('username')).sendKeys('domzdravlja_admin');
+            await driver.findElement(By.id('password')).sendKeys('domzdravlja2020');
+            await driver.findElement(By.id('login-button')).click();
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointments'))),20000);
+            await driver.wait(until.elementIsVisible(driver.findElement(By.xpath("//div[@class='col-lg-2'][.='10.02.2020, 00:00']/../div/div/button[.='ODOBRI']"))),20000).click();
+
+
+            
         
         } catch(e){
             console.log(e);
