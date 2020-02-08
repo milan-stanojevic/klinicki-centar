@@ -14,7 +14,30 @@ import {
 
 
 class PatientPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
 
+        };
+    }
+
+
+    componentDidMount() {
+        fetch('http://127.0.0.1:4000/doctor/patient/' + this.props[0].match.params.id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                initialValues: result
+            })
+            console.log(result);
+        })
+
+    }
     render() {
         return (
             <div className="page-wrap">
@@ -48,7 +71,7 @@ class PatientPage extends Component {
                         </div>
 
                     </Row>
-
+                    
 
 
                 </Container>

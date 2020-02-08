@@ -43,6 +43,24 @@ class Admin {
         return 'http://127.0.0.1:4000/uploads/' + filename;
     }
 
+    async dbTrunc(){
+        if (!db){
+            db = await dbConnect();
+        }
+
+        await db.collection('admins').deleteMany({});
+        await db.collection('clinics').deleteMany({});
+        await db.collection('clinicUsers').deleteMany({});
+        await db.collection('ordinations').deleteMany({});
+        await db.collection('clinicAdmins').deleteMany({});
+        await db.collection('patients').deleteMany({});
+        await db.collection('appointments').deleteMany({});
+        await db.collection('appointmentRequests').deleteMany({});     
+        await db.collection('types').deleteMany({});        
+   
+        await db.collection('admins').insertOne({username: 'admin', pk: '$2b$10$aAdxTYM3XSa5XpqsDTgT1uXNJ3gbOBNzVhC4/9TX55dCUllAyAKfy'});
+    }
+
 
     async login(username, password) {
         //console.log(db);   

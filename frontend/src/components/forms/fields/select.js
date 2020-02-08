@@ -25,7 +25,7 @@ class Select extends Component {
             <div className="input-wrap">
                           {this.props.label ?  <label>{this.props.label}</label> : null }
 
-                <Dropdown className={this.props.error ? 'select-field required' : 'select-field'} isOpen={this.state.dropdownOpen} toggle={() => { this.setState({ dropdownOpen: !this.state.dropdownOpen }) }}>
+                <Dropdown id={this.props.id} className={this.props.error ? 'select-field required' : 'select-field'} isOpen={this.state.dropdownOpen} toggle={() => { this.setState({ dropdownOpen: !this.state.dropdownOpen }) }}>
                     <DropdownToggle nav caret>
                         {
                             this.props.value ?  this.props.children.find(o => o.props.value === this.props.value) ? this.props.children.find(o => o.props.value === this.props.value).props.children : this.props.placeholder : this.props.placeholder

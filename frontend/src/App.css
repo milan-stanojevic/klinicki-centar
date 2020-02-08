@@ -413,7 +413,9 @@
   font-size: 14px; }
 
 .choose-room .select-field {
-  min-width: 150px !important; }
+  min-width: 200px !important; }
+  .choose-room .select-field .selected {
+    background-color: #828DB1 !important; }
 
 .choose-room a {
   margin: 0 !important;
@@ -890,3 +892,20 @@ button {
 
 .table-box a:hover, a:visited, a:link, a:active {
   text-decoration: none; }
+
+.map {
+  height: 500px; }
+
+.google-map-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -16px;
+  margin-top: -16px; }
+  .google-map-marker img {
+    width: 32px;
+    height: 32px; }
+
+.map-wrap {
+  position: relative;
+  height: 500px; }

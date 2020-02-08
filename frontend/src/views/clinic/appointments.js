@@ -53,40 +53,6 @@ class Appointments extends Component {
         })
 
     }
-    // search(data) {
-    //     if (!localStorage.clinicAdminToken) {
-    //         return;
-    //     }
-
-    //     fetch('http://127.0.0.1:4000/clinic/types', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
-    //         },
-    //         body: JSON.stringify(data),
-    //     }).then((res) => res.json()).then((result) => {
-    //         this.setState({
-    //             items: result
-    //         })
-    //     })
-
-    // }
-
-    // delete(id) {
-    //     if (!localStorage.clinicAdminToken) {
-    //         return;
-    //     }
-
-    //     fetch('http://127.0.0.1:4000/clinic/types/' + id, {
-    //         method: 'DELETE',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('clinicAdminToken')}`
-
-    //         },
-    //     }).then((res) => this.get())
-    // }
 
     render() {
 
@@ -141,13 +107,13 @@ class Appointments extends Component {
                                         <span className="value">{item.duration}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.type}</span>
+                                        <span className="value">{item.typeTag}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.ordination}</span>
+                                        <span className="value">{item.ordinationTag}</span>
                                     </Col>
                                     <Col lg="2">
-                                        <span className="value">{item.doctor}</span>
+                                        <span className="value">{item.docName}</span>
                                     </Col>
                                     <Col lg="2">
                                         <span className="value">{item.price}</span>
@@ -164,7 +130,7 @@ class Appointments extends Component {
                 <Container fluid className="bottom-wrap">
                     <Row>
                         <Col lg="12">
-                            <Link to={`/clinic/appointments/new`}>
+                            <Link id ="create-appointment"to={`/clinic/appointments/new`}>
                                 <button>Novi termin</button>
                             </Link>
                         </Col>

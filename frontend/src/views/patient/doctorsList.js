@@ -107,7 +107,7 @@ class DoctorsList extends Component {
                             <span className="name">Prezime</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">Ocijena</span>
+                            <span className="name">Ocjena</span>
                         </Col>
 
 
@@ -126,7 +126,7 @@ class DoctorsList extends Component {
                                                 <span className="value">{item.lastName}</span>
                                             </Col>
                                             <Col lg="4">
-                                                <span className="value">{item.rating/item.numberOfRating}</span>
+                                                <span className="value">{item.avgRating}</span>
                                             </Col>
                                         </Row>
                                     // </Link>

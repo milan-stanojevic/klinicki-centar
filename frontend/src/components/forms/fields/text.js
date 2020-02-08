@@ -23,7 +23,7 @@ class Text extends Component {
         return (
             <>
                 {this.props.label ? <label>{this.props.label}</label> : null}
-                <input className={this.props.error ? 'form-field field-error' : 'form-field'} type={this.props.type ? this.props.type : 'text'} onChange={(e) => {
+                <input id={this.props.id} className={this.props.error ? 'form-field field-error' : 'form-field'} type={this.props.type ? this.props.type : 'text'} onChange={(e) => {
                     if (this.props.multilang) {
                         let value = this.props.value;
                         if (!value) {

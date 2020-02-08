@@ -124,14 +124,20 @@ class Examination extends Component {
                 </Container>
                 <Container fluid className="bottom-wrap">
                     <Row>
-                        <Col lg="12">
+                        <Col lg="3">
                             <a  target="_blank" href={`/doctor/makingAppointment/`+this.state.appointmentRequest.patient}>
                                 <button>Zakazi novi pregled</button>
                             </a>
                         </Col>
+                    
+                        <Col lg="9">
+                            <a  target="_blank" href={`/doctor/examination/fillMedicalRecord/`+this.state.appointmentRequest.patient}>
+                                <button>Izmjeni karton</button>
+                            </a>
+                        </Col>
                     </Row>
-
                 </Container>
+               
 
 
 

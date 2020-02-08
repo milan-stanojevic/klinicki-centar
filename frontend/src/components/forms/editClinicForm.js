@@ -9,6 +9,7 @@ import Image from './fields/image';
 import TextArea from './fields/textarea';
 import Select from './fields/select';
 import MultiSelect from './fields/multiSelect';
+import Map from './fields/map';
 
 import {
     Container,
@@ -91,6 +92,21 @@ const renderMultiSelect = ({
     )
 
 
+const renderMapField = ({
+    input,
+    placeholder,
+    label,
+    meta: { touched, error },
+    
+}) => (
+
+        <Map
+            label={label}
+            {...input}
+        />
+    )
+
+
 class form extends React.Component {
     constructor(props) {
         super(props);
@@ -148,7 +164,7 @@ class form extends React.Component {
                                     ></Field>
                                 </Col>
                             </Row>
-                            <Row>
+                            {/* <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
                                         name="doctors-list"
@@ -196,6 +212,15 @@ class form extends React.Component {
                                         component={renderTextArea}
                                         label={"Cenovnik"}
                                         placeholder="Unesite cenovnik"
+                                    ></Field>
+                                </Col>
+                            </Row> */}
+
+                            <Row>
+                                <Col lg="6" className="input-wrap">
+                                    <Field
+                                        name="coords"
+                                        component={renderMapField}
                                     ></Field>
                                 </Col>
                             </Row>

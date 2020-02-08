@@ -32,6 +32,7 @@ class DateTime extends Component {
                     selected={this.props.value}
                     showTimeSelect
                     dateFormat= "Pp"
+                    id={this.props.id}
                 />
 
             </>

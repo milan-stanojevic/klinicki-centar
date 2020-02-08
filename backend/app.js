@@ -16,6 +16,7 @@ const isPatientAuthenticated = require('./patient/auth');
 
 const clinicModule = new (require('./clinic/clinic'))();
 const isClinicAdminAuthenticated = require('./clinic/auth');
+const { Builder, By, Key, until } = require('selenium-webdriver');
 
 
 const app = express();
@@ -23,6 +24,11 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use('/uploads', express.static('uploads'))
 const server = http.createServer(app);
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
@@ -189,13 +195,13 @@ app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {
 app.post('/patient/login', async (req, res) => {
     console.log(req.body);
     let result = await patientModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.status(result.status).send(result.response);
 });
 
 app.post('/patient/register', async (req, res) => {
     console.log(req.body);
     let result = await patientModule.register(req.body);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 app.post('/patient/verify', isPatientAuthenticated, (req, res) => {
@@ -209,12 +215,15 @@ app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.updatePatient(uid, req.body));
 });
-app.post('/patient/clinic', isPatientAuthenticated, async (req, res) => {
-    res.send(await patientModule.clinicList(req.body));
+app.post('/patient/clinic/:sort', isPatientAuthenticated, async (req, res) => {
+    res.send(await patientModule.clinicList(req.body,req.params.sort));
 });
+// app.get('/clinic/patients/:sort', isClinicAdminAuthenticated, async (req, res) => {
+//     res.send(await clinicModule.patients(req.params.sort));
+// });
 app.post('/patient/clinic/doctors/:id', isPatientAuthenticated, async (req, res) => {
     // console.log(req.params.id);
-    res.send(await patientModule.doctorsList(req.body,req.params.id));
+    res.send(await patientModule.doctorsList(req.body, req.params.id));
 });
 app.post('/patient/clinic/appointements/:id', isPatientAuthenticated, async (req, res) => {
     console.log(req.params.id);
@@ -222,12 +231,17 @@ app.post('/patient/clinic/appointements/:id', isPatientAuthenticated, async (req
 });
 app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await patientModule.sendRequest(req.params.id,uid,req.body));
+    res.send(await patientModule.sendRequest(req.params.id, uid, req.body));
 });
-app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
+app.get('/patient/clinic/history/:sort', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     console.log(uid);
-    res.send(await patientModule.illnessHistory(uid));
+    res.send(await patientModule.illnessHistory(uid,req.params.sort));
+});
+app.get('/patient/clinic/history/rateAllowed', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await patientModule.rateAllowed(uid));
 });
 
 
@@ -250,14 +264,14 @@ app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
 app.post('/clinic/admin/login', async (req, res) => {
     console.log(req.body);
     let result = await clinicModule.login(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.status(result.status).send(result.response);
 });
 
 
 app.post('/clinic/user/login', async (req, res) => {
     console.log(req.body);
     let result = await clinicModule.userLogin(req.body.username, req.body.password);
-    res.send(result.response).status(result.status); 
+    res.send(result.response).status(result.status);
 });
 
 
@@ -327,9 +341,8 @@ app.post('/clinic/appointments/:uid', isClinicAdminAuthenticated, async (req, re
     res.send(await clinicModule.updateClinicAppointments(uid, req.params.uid, req.body));
 });
 app.post('/doctor/makingAppointment/:uid', isClinicAdminAuthenticated, async (req, res) => {
-    //let id = "5df65193d3cb84034cfcf9a6"; //potrebno je proslijediti id pacijente nad kojim se trenutno vrsi pregled
     let uid = res.locals.uid;
-    res.send(await clinicModule.makeNewAppointments(uid,req.params.uid, req.body));
+    res.send(await clinicModule.makeNewAppointments(uid, req.params.uid, req.body));
 });
 
 
@@ -341,7 +354,7 @@ app.get('/clinic/appointmentRequests/:id', isClinicAdminAuthenticated, async (re
 
 app.get('/clinic/appointments', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicAppointments(uid,req.body));
+    res.send(await clinicModule.clinicAppointments(uid, req.body));
 });
 
 app.post('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
@@ -350,7 +363,7 @@ app.post('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
 });
 app.post('/clinic/types', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicTypes(uid,req.body));
+    res.send(await clinicModule.clinicTypes(uid, req.body));
 });
 app.delete('/clinic/types/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -362,7 +375,7 @@ app.post('/clinic/ordination/:uid', isClinicAdminAuthenticated, async (req, res)
 });
 app.post('/clinic/ordinations', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicOrdinations(uid,req.body));
+    res.send(await clinicModule.clinicOrdinations(uid, req.body));
 });
 app.delete('/clinic/ordinations/:uid', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -387,17 +400,19 @@ app.get('/clinic/users/:uid', isClinicAdminAuthenticated, async (req, res) => {
 
 app.post('/clinic/users', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    res.send(await clinicModule.clinicUsers(uid,req.body));
+    res.send(await clinicModule.clinicUsers(uid, req.body));
 });
 app.get('/clinic/doctors', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.clinicDoctors());
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicDoctors(uid));
 });
 app.get('/clinic/doctorss', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicDoctorss(uid));
 });
 app.get('/clinic/type', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.clinicType());
+    let uid = res.locals.uid;
+    res.send(await clinicModule.clinicType(uid));
 });
 app.get('/clinic/typee', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -475,21 +490,25 @@ app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => 
     let uid = res.locals.uid;
     res.send(await clinicModule.clinicAdmin(uid));
 });
-app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/patient/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.patient(req.params.id));
 });
 
 app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
-    res.send(await clinicModule.medicalRecord(req.params.id));
+    let uid = res.locals.uid;
+    res.send(await clinicModule.medicalRecord(req.params.id, uid));
 });
 
-app.get('/doctor/medicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/medicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.medicalRecordItem(req.params.id));
 });
 app.post('/doctor/updateMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     console.log(uid);
     res.send(await clinicModule.updateMedicalRecord(uid, req.params.id, req.body));
+});
+app.post('/doctor/examination/fillMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.fillMedicalRecord(req.params.id, req.body));
 });
 
 
@@ -502,10 +521,16 @@ app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
     console.log('fetch')
     res.send(await clinicModule.diagnoses());
 });
+app.get('/doctor/appointments', isClinicAdminAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await clinicModule.scheduledAppointments(uid));
+});
 
 
 
-app.post('/doctor/insertMedicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
+
+app.post('/doctor/insertMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
 
     res.send(await clinicModule.insertMedicalRecord(uid, req.params.id, req.body));
@@ -525,7 +550,9 @@ app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req,
 
 
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.events());
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.events(uid));
 });
 app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
@@ -540,16 +567,17 @@ setInterval(async () => {
     let date = new Date();
     let timestamp = date.getTime() / 1000;
 
-    if (date.getHours() == 0 && date.getMinutes() == 0 && timestamp - lastCheckedTime > 12 * 60 * 60){
+    if (date.getHours() == 0 && date.getMinutes() == 0 && timestamp - lastCheckedTime > 12 * 60 * 60) {
         lastCheckedTime = timestamp;
 
-        
+
         let clinics = await clinicModule.allAppointmentRequests();
 
-        for(let i=0;i<clinics.length;i++){
-            for(let j=0;j<clinics[i].requests.length;j++){
-                if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length){
+        for (let i = 0; i < clinics.length; i++) {
+            for (let j = 0; j < clinics[i].requests.length; j++) {
+                if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length) {
                     console.log('reserving room')
+                    clinics[i].requests[j].freeOrdinations[0].ordination._id = clinics[i].requests[j].freeOrdinations[0].ordination._id.toString();
                     await clinicModule.reserveRoom(clinics[i].requests[j].appointment._id, clinics[i].requests[j].freeOrdinations[0]);
                 }
             }
@@ -557,10 +585,271 @@ setInterval(async () => {
         }
 
 
-    }else{
+    } else {
         return;
     }
-}, 30000 );
+}, 30000);
 
+
+async function dbPrepareTest(){
+
+    await adminModule.dbTrunc();
+
+    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Dom zdravlja', adress: 'Bijeljinska 25'});
+    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Smedico', adress: '27 Marta 35' });
+
+
+    let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'domzdravlja_admin',
+        password: 'test',
+        email: 'admin@test.com'
+
+    });
+
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'domzdravlja2020'
+    });
+
+
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'examination-001',
+        name: 'Redovni pregled'
+    })
+
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-1',
+        name: 'Ordinacija #1'
+    });
+
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'dokotor1-domzdravnja',
+        password: 'dokotor2020',
+        type: 'doctor',
+        firstName: 'Janko',
+        lastName: 'Jankovic',
+        email: 'doktor@test.com'
+    })
+
+    let patient = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Pero',
+        lastName: 'Petrovic',
+        username: 'pacijent',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient.response.id.toString());
+}
+
+async function dbPrepare(){
+
+    await adminModule.dbTrunc();
+
+    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Klinika1', adress: 'Bulevar Oslobodjenja 33'});
+    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Klinika2', adress: 'Bulevar Cara Dusana 117' });
+    let clinic3 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Narodnog Fronta 7' });
+    let clinic4 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Safarikova 31' });
+
+
+    let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'admin1',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic2Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'admin2',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic3Admin = await adminModule.clinicAdminUpdate(clinic3.id.toString(), 'new', {
+        username: 'admin3',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic3Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic4Admin = await adminModule.clinicAdminUpdate(clinic2.id.toString(), 'new', {
+        username: 'admin4',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic2Admin.id.toString(), {
+        password: 'lozinka'
+    });
+
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'redovni_pregled',
+        name: 'Redovni pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'operacija_palca',
+        name: 'Operacija palca'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'sistematski_pregled',
+        name: 'Sistamatski pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'operacija_oka',
+        name: 'Operacija oka'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'redovni_pregled',
+        name: 'Redovni pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'operacija_krajnika',
+        name: 'Operacija krajnika'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'oftamoloski_pregled',
+        name: 'Oftamoloski pregled'
+    })
+
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-1',
+        name: 'Ordinacija #1'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-2',
+        name: 'Ordinacija #2'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-3',
+        name: 'Ordinacija #3'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-4',
+        name: 'Ordinacija #4'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-5',
+        name: 'Ordinacija #5'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-101',
+        name: 'Ordinacija #101'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-102',
+        name: 'Ordinacija #102'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-103',
+        name: 'Ordinacija #103'
+    });
+
+
+
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'doktor1',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Janko',
+        lastName: 'Jankovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'dokotor2',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Petar',
+        lastName: 'Petrovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic2Admin.id.toString(), 'new', {
+        username: 'dokotor3',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Milan',
+        lastName: 'Milanovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic3Admin.id.toString(), 'new', {
+        username: 'dokotor4',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Sinan',
+        lastName: 'Sakic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic2Admin.id.toString(), 'new', {
+        username: 'sestra1',
+        password: 'lozinka',
+        type: 'nurse',
+        firstName: 'Gordana',
+        lastName: 'Gordic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic3Admin.id.toString(), 'new', {
+        username: 'sestra2',
+        password: 'lozinka',
+        type: 'nurse',
+        firstName: 'Dragana',
+        lastName: 'Draganovic',
+        email: 'doktor@test.com'
+    })
+
+    let patient1 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Pero',
+        lastName: 'Petrovic',
+        username: 'pacijent1',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient1.response.id.toString());
+
+    let patient2 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Milos',
+        lastName: 'Milosevic',
+        username: 'pacijent2',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient2.response.id.toString());
+
+    let patient3 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Spasoje',
+        lastName: 'Spasic',
+        username: 'pacijent3',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient3.response.id.toString());
+
+    let patient4 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Bogoljub',
+        lastName: 'Spasic',
+        username: 'pacijent4',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient4.response.id.toString());
+}
+
+
+var isInTest = typeof global.it === 'function';
+
+
+// if (isInTest){
+//     dbPrepareTest();
+// }
+// else
+//     dbPrepare();
 
 export default app;

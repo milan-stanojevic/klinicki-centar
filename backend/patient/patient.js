@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
 var nodemailer = require('nodemailer');
+const moment = require('moment');
 let db;
 const dbConnect = require('../db');
 dbConnect()
@@ -96,6 +97,7 @@ class Patient {
             }
         }
 
+        obj._id = ObjectID();
 
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(obj.password, salt);
@@ -108,18 +110,75 @@ class Patient {
 
         return {
             response: {
-
+                id: obj._id
             },
             status: 200
         }
 
     }
 
+
     async clinicGrading(uid) {
-        return await db.collection('clinics').find().toArray();
+        let query = { $and: [{ patient: ObjectID(uid) }, { verified: true }] };
+        let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
+        let appointments = [];
+        for (let i = 0; i < appointmentRequests.length; i++) {
+            let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
+            appointments.push(req[0]);
+        }
+        let res = [];
+        for (let i = 0; i < appointments.length; i++) {
+            let app = await db.collection('clinics').find({ _id: ObjectID(appointments[i].clinic) }).toArray();
+            res.push(app[0]);
+        }
+        // console.log(res);
+        let result = [];
+        let clinics = await db.collection('clinics').find().toArray();
+        for (let i = 0; i < clinics.length; i++) {
+            for (let j = 0; j < res.length; j++) {
+                if (JSON.stringify(clinics[i]) === JSON.stringify(res[j])) {
+                    result.push(clinics[i]);
+                    break;
+                }
+            }
+        }
+
+
+        console.log(result);
+        return result;
+        // return await db.collection('clinics').find({}).toArray();
     }
     async doctorGrading(uid) {
-        return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
+        let query = { $and: [{ patient: ObjectID(uid) }, { verified: true }] }
+        let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
+        let appointments = [];
+        for (let i = 0; i < appointmentRequests.length; i++) {
+            let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
+            appointments.push(req[0]);
+        }
+
+        let res = [];
+        for (let i = 0; i < appointments.length; i++) {
+            let app = await db.collection('clinicUsers').find({ _id: ObjectID(appointments[i].doctor) }).toArray();
+            res.push(app[0]);
+        }
+
+
+        let result = [];
+        let doctor = await db.collection('clinicUsers').find().toArray();
+        for (let i = 0; i < doctor.length; i++) {
+            for (let j = 0; j < res.length; j++) {
+                if (JSON.stringify(doctor[i]) === JSON.stringify(res[j])) {
+                    result.push(doctor[i]);
+                    break;
+                }
+            }
+        }
+
+
+        //console.log(result);
+        // return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
+        return result;
     }
 
     async clinicRating(obj) {
@@ -127,14 +186,18 @@ class Patient {
         if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
+            cl[0].avgRating = '0';
         }
         let inc_rating = Number(cl[0].rating) + Number(obj.ratingClinic);
         let inc_num = Number(cl[0].numberOfRating) + 1;
+        let avg = parseFloat(Number(inc_rating / inc_num)).toFixed(2);
+
+
         await db.collection('clinics').updateOne({ _id: ObjectID(obj.clinic) }, {
             $set: {
                 rating: String(inc_rating),
-                numberOfRating: String(inc_num)
-
+                numberOfRating: String(inc_num),
+                avgRating: String(avg),
             }
         });
 
@@ -146,13 +209,16 @@ class Patient {
         if (cl[0].rating == null) {
             cl[0].rating = '0';
             cl[0].numberOfRating = '0';
+            cl[0].avgRating = '0';
         }
         let inc_rating = Number(cl[0].rating) + Number(obj.ratingDoctor);
         let inc_num = Number(cl[0].numberOfRating) + 1;
+        let avg = parseFloat(Number(inc_rating / inc_num)).toFixed(2);
         await db.collection('clinicUsers').updateOne({ _id: ObjectID(obj.doctor) }, {
             $set: {
                 rating: String(inc_rating),
-                numberOfRating: String(inc_num)
+                numberOfRating: String(inc_num),
+                avgRating: String(avg),
 
             }
         });
@@ -181,6 +247,12 @@ class Patient {
         }
 
         res[0].illnessHistory = illnessHistory;
+        if (res[0].pol) {
+            if (res[0].pol == '1')
+                res[0].pol = 'Muski';
+            else if (res[0].pol == '2')
+                res[0].pol = 'Zenski';
+        }
 
         /*res[0].illnessHistory = [
             {
@@ -242,7 +314,7 @@ class Patient {
             id: uid
         };
     }
-    async illnessHistory(uid) {
+    async illnessHistory(uid, sort) {
         let res = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray();
 
         for (let j = 0; j < res.length; j++) {
@@ -258,7 +330,52 @@ class Patient {
             }
         }
 
+
+        if (sort == 1) {
+            res = res.sort((a, b) => {
+                var textA = a.doctor.toUpperCase();
+                var textB = b.doctor.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+        else if (sort == 2) {
+            res = res.sort((a, b) => {
+                var textA = a.diagnose.toUpperCase();
+                var textB = b.diagnose.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+        else if (sort == 3) {
+            res = res.sort((a, b) => {
+                var textA = a.date;
+                let dateTimeParts = textA.split(',');
+                let timeParts = dateTimeParts[1].split(':');
+                let dateParts = dateTimeParts[0].split('.');
+                let date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1]);
+                textA = date.getTime();
+
+                var textB = b.date;
+                let dateTimeParts1 = textB.split(',');
+                let timeParts1 = dateTimeParts1[1].split(':');
+                let dateParts1 = dateTimeParts1[0].split('.');
+                let date1 = new Date(dateParts1[2], parseInt(dateParts1[1], 10) - 1, dateParts1[0], timeParts1[0], timeParts1[1]);
+                textB = date1.getTime();
+
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+
         return res;
+    }
+    async rateAllowed(uid) {
+        let app = await db.collection('appointmentRequests').find({ $and: [{ patient: ObjectID(uid) }, { verified: true }] }).toArray();
+        let empty = [];
+        if (JSON.stringify(app) === JSON.stringify(empty)) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 
@@ -266,19 +383,6 @@ class Patient {
 
         let query = { clinic: id }
 
-        // if (obj.search) {
-        //     // if (query.type == 'doctor') {
-
-        //     query = { $or: [] }
-
-        //     query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
-        //     // }
-        // }
-        // if (obj.search) {
-        //     // if (query.type == 'doctor') {
-        //     query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
-        //     // }
-        // }
         if (obj.doctorName) {
             query.firstName = new RegExp(obj.doctorName, 'i');
         }
@@ -286,8 +390,11 @@ class Patient {
             query.lastName = new RegExp(obj.doctorLastName, 'i');
         }
         if (obj.doctorRating) {
-            query.rating = new RegExp(obj.doctorRating, 'i');
+            query.avgRating = new RegExp(obj.doctorRating, 'i');
         }
+
+
+
 
 
         let res = await db.collection('clinicUsers').find(query).toArray();
@@ -300,13 +407,26 @@ class Patient {
 
         let res = await db.collection('appointments').find(query).toArray();
 
+        for (let i = 0; i < res.length; i++) {
+
+            let doc = await db.collection('clinicUsers').find({ _id: ObjectID(res[i].doctor) }).toArray();
+            res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+
+            let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
+            res[i].ordinationTag = ord[0].tag;
+
+            let type = await db.collection('types').find({ _id: ObjectID(res[i].type) }).toArray();
+            res[i].typeTag = type[0].tag;
+
+        }
+
         return res;
     }
 
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
-    async clinicList(obj) {
+    async clinicList(obj, sort) {
         let query = {}
         if (obj.search) {
             query.name = new RegExp(obj.search, 'i');
@@ -315,9 +435,17 @@ class Patient {
             query.adress = new RegExp(obj.adress, 'i');
         }
 
-        let res = await db.collection('clinics').find(query).toArray();
 
-        return res;
+        if (sort == 0)
+            return await db.collection('clinics').find(query).sort({ name: 1 }).toArray();
+        else if (sort == 1)
+            return await db.collection('clinics').find(query).sort({ adress: 1 }).toArray();
+        else if (sort == 2)
+            return await db.collection('clinics').find(query).sort({ avgRating: -1 }).toArray();
+
+        // let res = await db.collection('clinics').find(query).toArray();
+
+        // return res;
     }
 
 
@@ -356,6 +484,10 @@ class Patient {
 
         for (let i = 0; i < admin.length; i++) {
             this.sendMail(admin[i].email, "Zakazivanje pregleda", "Pacijent zeli da zakaze pregled");
+        }
+
+        return {
+            id: _id
         }
     }
     sendMail(to, subject, message) {

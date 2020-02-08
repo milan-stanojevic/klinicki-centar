@@ -3,6 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 import PatientSearchClinicForm from '../../components/forms/patientSearchClinicForm';
+import Select from '../../components/forms/fields/select'
+
 
 //import editIcon from '../../assets/svg/edit.svg';
 //import deleteIcon from '../../assets/svg/delete.svg';
@@ -26,7 +28,8 @@ class ClinicList extends Component {
         this.search = this.search.bind(this);
 
         this.state = {
-            items: []
+            items: [],
+            sort: 0
         };
     }
 
@@ -39,7 +42,7 @@ class ClinicList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic', {
+        fetch('http://127.0.0.1:4000/patient/clinic/' + this.state.sort, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +60,7 @@ class ClinicList extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic', {
+        fetch('http://127.0.0.1:4000/patient/clinic/' + this.state.sort, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,8 +88,15 @@ class ClinicList extends Component {
                 <Container fluid className="table">
 
                     <Row className="page-title">
-                        <Col lg="12">
+                        <Col lg="8">
                             <h3>Lista klinika</h3>
+                        </Col>
+                        <Col lg="4">
+                            <Select placeholder="Sortiraj po" onChange={(val) => this.setState({ sort: val }, this.get)} value={this.state.sort}>
+                                <option value={0}>Po nazivu</option>
+                                <option value={1}>Po adresi</option>
+                                <option value={2}>Po ocjeni</option>
+                            </Select>
                         </Col>
                     </Row>
                     <Row>
@@ -102,7 +112,7 @@ class ClinicList extends Component {
                             <span className="name">ADRESA</span>
                         </Col>
                         <Col lg="4">
-                            <span className="name">OPIS</span>
+                            <span className="name">OCJENA</span>
                         </Col>
 
 
@@ -119,7 +129,7 @@ class ClinicList extends Component {
                                             <span className="value">{item.adress}</span>
                                         </Col>
                                         <Col lg="4">
-                                            <span className="value">{item.description}</span>
+                                            <span className="value">{item.avgRating}</span>
                                         </Col>
                                     </Row>
                                 </Link>

@@ -30,7 +30,7 @@ class AppointmentRequest extends Component {
 
         this.state = {
             items: [],
-            doctors: []
+            //doctors: []
         };
     }
 
@@ -55,7 +55,7 @@ class AppointmentRequest extends Component {
             })
         })
 
-
+        /*
         fetch('http://127.0.0.1:4000/clinic/doctors', {
             method: 'GET',
             headers: {
@@ -66,7 +66,7 @@ class AppointmentRequest extends Component {
             this.setState({
                 doctors: result
             })
-        })
+        })*/
 
     }
 
@@ -195,7 +195,7 @@ class AppointmentRequest extends Component {
                         <Col lg="2">
                             <span className="name">DATUM</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">PACIJENT</span>
                         </Col>
 
@@ -203,7 +203,7 @@ class AppointmentRequest extends Component {
                         <Col lg="2">
                             <span className="name">DOKTOR</span>
                         </Col>
-                        <Col lg="5" className="actions">
+                        <Col lg="4" className="actions">
                             <span className="name">OPCIJE</span>
                         </Col>
 
@@ -221,15 +221,15 @@ class AppointmentRequest extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.appointment.date}</span>
                                     </Col>
-                                    <Col lg="1">
-                                        <span className="value">{item.patient && item.patient.firstName + " " + item.patient && item.patient.lastName}</span>
+                                    <Col lg="2">
+                                        <span className="value">{item.patient.firstName + " " + item.patient.lastName}</span>
                                     </Col>
 
                                     <Col lg="2">
-                                        <span className="value">{item.appointment.doctor}</span>
+                                        <span className="value">{item.docName}</span>
                                     </Col>
 
-                                    <Col lg="5" className="actions">
+                                    <Col lg="4" className="actions">
                                         {/* {item.appointment.actionCreated ?
                                             item.verified ?
                                                 <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>
@@ -240,8 +240,15 @@ class AppointmentRequest extends Component {
 
                                         } */}
                                         <Row>
-                                            <button className="button" onClick={() => { this.allow(item._id, item.patient._id) }}>ODOBRI</button>
-                                            <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>
+                                            {
+                                                (!item.verified || (item.appointment.actionCreated)) ?
+                                                    <>
+                                                        <button className="button" onClick={() => { this.allow(item._id, item.patient._id) }}>ODOBRI</button>
+                                                        <button className="button1" onClick={() => { this.disallow(item._id, item.patient._id) }}>ODBIJ</button>
+                                                    </>
+                                                    :
+                                                    null
+                                            }
                                             {
                                                 item.verified && !item.appointment.ordination ?
 
@@ -251,6 +258,7 @@ class AppointmentRequest extends Component {
                                                             {
                                                                 item.freeOrdinations.map((ordination, oidx) => {
                                                                     return (
+                                                                        // treba _id ordinacije proslediti
                                                                         <option value={ordination}>{ordination.ordination.tag} | {ordination.start}</option>
                                                                     )
                                                                 })
@@ -263,13 +271,13 @@ class AppointmentRequest extends Component {
                                             }
 
                                             {
-                                                item.verified && item.appointment.ordination ?
+                                                item.verified && item.typeTag && item.typeTag.toLowerCase().indexOf('operacija') !== -1 && item.appointment.ordination ?
 
                                                     <div className="choose-room">
 
                                                         <Multiselect placeholder="Izaberi lekare" value={item.appointment.doctors ? item.appointment.doctors : []} onChange={(val) => this.setDoctors(item.appointment._id, val)}>
                                                             {
-                                                                this.state.doctors.map((doctor, oidx) => {
+                                                                item.availDoctors && item.availDoctors.map((doctor, oidx) => {
                                                                     return (
                                                                         <option value={doctor._id}>{doctor.firstName}  {doctor.lastName}</option>
                                                                     )

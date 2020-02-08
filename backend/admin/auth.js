@@ -6,7 +6,7 @@ module.exports = function(req, res, next) {
         let token = req.headers.authorization.split(" ")[1];
 
         jwt.verify(token, constants.jwtSecretKey, { algorithm: "HS256" }, (err, user) => {
-            console.log(user);
+            //console.log(user);
             res.locals.uid = user.id;  
 
             if (err) {

@@ -104,7 +104,7 @@ class Types extends Component {
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm onSubmit={this.search}/>
+                            <SearchForm onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
@@ -133,8 +133,16 @@ class Types extends Component {
                                     </Col>
 
                                     <Col lg="4" className="actions">
-                                        <Link to={`/clinic/types/${item._id}`}><Isvg src={editIcon} /></Link>
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                        {!item.reserved ?
+                                            <>
+                                                <Link to={`/clinic/types/${item._id}`}><Isvg src={editIcon} /></Link>
+                                                <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                            </>
+                                            :
+                                            <>
+                                                <button className='button1'>Rezervisano</button>
+                                            </>
+                                        }
                                     </Col>
                                 </Row>
                             )

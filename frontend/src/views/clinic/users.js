@@ -104,14 +104,14 @@ class Users extends Component {
                     </Row>
                     <Row>
                         <Col lg="12">
-                            <SearchForm onSubmit={this.search}/>
+                            <SearchForm onSubmit={this.search} />
                         </Col>
                     </Row>
                     <Row className="table-head">
-                        <Col lg="3">
+                        <Col lg="2">
                             <span className="name">KORISNICKO IME</span>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="2">
                             <span className="name">TIP</span>
                         </Col>
                         <Col lg="2">
@@ -119,6 +119,9 @@ class Users extends Component {
                         </Col>
                         <Col lg="2">
                             <span className="name">PREZIME</span>
+                        </Col>
+                        <Col lg="2">
+                            <span className="name">OCJENA</span>
                         </Col>
 
                         <Col lg="2" className="actions">
@@ -131,10 +134,10 @@ class Users extends Component {
                         this.state.items.map((item, idx) => {
                             return (
                                 <Row className="table-row" key={idx}>
-                                    <Col lg="3">
+                                    <Col lg="2">
                                         <span className="value">{item.username}</span>
                                     </Col>
-                                    <Col lg="3">
+                                    <Col lg="2">
                                         <span className="value">{item.type}</span>
                                     </Col>
                                     <Col lg="2">
@@ -143,9 +146,22 @@ class Users extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.lastName}</span>
                                     </Col>
+                                    <Col lg="2">
+                                        <span className="value">
+                                            {item.avgRating}
+                                        </span>
+                                    </Col>
 
                                     <Col lg="2" className="actions">
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                        {!item.reserved ?
+                                            <>
+                                                <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                            </>
+                                            :
+                                            <>
+                                                <button className='button1'>Rezervisano</button>
+                                            </>
+                                        }
                                     </Col>
                                 </Row>
                             )
