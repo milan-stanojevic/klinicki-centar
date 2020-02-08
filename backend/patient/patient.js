@@ -117,7 +117,8 @@ class Patient {
 
 
     async clinicGrading(uid) {
-        let appointmentRequests = await db.collection('appointmentRequests').find({ patient: ObjectID(uid) }).toArray();
+        let query = {$and : [{ patient : ObjectID(uid) }, { verified : true }]};
+        let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
         let appointments = [];
         for (let i = 0; i < appointmentRequests.length; i++) {
             let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
@@ -128,32 +129,27 @@ class Patient {
             let app = await db.collection('clinics').find({ _id: ObjectID(appointments[i].clinic) }).toArray();
             res.push(app[0]);
         }
-        console.log(res);
-        console.log("====================================================");
-
+        // console.log(res);
         let result = [];
-        result.push(res[0]);
-        console.log(result);
-        console.log("====================================================");
-        for (let i = 1; i < res.length; i++) {
-            for (let j = 0; j < result.length; j++) {
-                if (JSON.stringify(result[j]) === JSON.stringify(res[i])) {
-                    console.log("BREAK");
-                    console.log("====================================================");
-
+        let clinics = await db.collection('clinics').find().toArray();
+        for(let i = 0; i < clinics.length; i++){
+            for(let j = 0; j < res.length; j++)
+            {
+                if(JSON.stringify(clinics[i]) === JSON.stringify(res[j])){
+                    result.push(clinics[i]);
                     break;
                 }
-                result.push(res[i]);
-                console.log(result);
-                console.log("====================================================");
             }
         }
+        
 
-        //console.log(result);
+        console.log(result);
         return result;
+        // return await db.collection('clinics').find({}).toArray();
     }
     async doctorGrading(uid) {
-        let appointmentRequests = await db.collection('appointmentRequests').find({ patient: ObjectID(uid) }).toArray();
+        let query = {$and : [{ patient : ObjectID(uid) }, { verified : true }]}
+        let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
         let appointments = [];
         for (let i = 0; i < appointmentRequests.length; i++) {
             let req = await db.collection('appointments').find({ _id: appointmentRequests[i].appointment }).toArray();
@@ -166,24 +162,23 @@ class Patient {
             res.push(app[0]);
         }
 
-        // let result = [];
-        // result.push(res[0]);
+    
+        let result = [];
+        let doctor = await db.collection('clinicUsers').find().toArray();
+        for(let i = 0; i < doctor.length; i++){
+            for(let j = 0; j < res.length; j++)
+            {
+                if(JSON.stringify(doctor[i]) === JSON.stringify(res[j])){
+                    result.push(doctor[i]);
+                    break;
+                }
+            }
+        }
 
-        // for (let i = 1; i < res.length; i++) {
-           
-        //     for (let j = 0; j < result.length; j++) {
-        //         if (JSON.stringify(result[j]) === JSON.stringify(res[i])) {
-                    
 
-        //             break;
-        //         }
-        //         result.push(res[i]);
-               
-        //     }
-        // }
-
-        // console.log(res);
-        return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();;
+        console.log(result);
+        // return await db.collection('clinicUsers').find({ type: 'doctor' }).toArray();
+        return result;
     }
 
     async clinicRating(obj) {
@@ -334,8 +329,17 @@ class Patient {
                 res[j].medications[i] = med[0].name;
             }
         }
-
         return res;
+    }
+    async rateAllowed(uid){
+        let app = await db.collection('appointmentRequests').find({$and : [{ patient : ObjectID(uid) }, { verified : true }]}).toArray();
+        let empty = [];
+        if(JSON.stringify(app) === JSON.stringify(empty)){
+            return false;
+        }
+        else{
+            return true; 
+        }
     }
 
 

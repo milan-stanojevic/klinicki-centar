@@ -47,6 +47,19 @@ class IllnessHistory extends Component {
             console.log(result);
         })
 
+        fetch('http://127.0.0.1:4000/patient/clinic/history/rateAllowed', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items1: result
+            })
+            console.log(result);
+        })
+
 
     }
 
@@ -121,19 +134,31 @@ class IllnessHistory extends Component {
                 <Container fluid className="bottom-wrap">
                     <Row>
                         <Col lg="3">
-                            <Link to={`/patient/clinic/history/grading`}>
-                                <button>Oceni kliniku</button>
-                            </Link>
+                            {
+                                this.state.items1 ?
+                                    <>
+                                        <Link to={`/patient/clinic/history/grading`}>
+                                            <button>Oceni kliniku</button>
+                                        </Link>
+                                    </>
+                                    : null
+                            }
                         </Col>
                         <Col lg="9">
-                            <Link to={`/patient/clinic/history/gradingDoctor`}>
-                                <button>Oceni doktora</button>
-                            </Link>
+                            {
+                                this.state.items1 ?
+                                    <>
+                                        <Link to={`/patient/clinic/history/gradingDoctor`}>
+                                            <button>Oceni doktora</button>
+                                        </Link>
+                                    </>
+                                    : null
+                            }
                         </Col>
                     </Row>
 
                 </Container>
-                
+
             </div>
         );
     }

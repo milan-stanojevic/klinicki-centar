@@ -425,6 +425,7 @@ class Clinic {
             requests[i].patient = patient[0];
             requests[i].appointment = appointment[0];
         }
+        
         for (let i = 0; i < requests.length; i++) {
             if (requests[i].appointment.doctor) {
                 let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
@@ -437,7 +438,6 @@ class Clinic {
 
             let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
             requests[i].typeTag = type[0].tag;
-
 
         }
 

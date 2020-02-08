@@ -229,6 +229,11 @@ app.get('/patient/clinic/history', isPatientAuthenticated, async (req, res) => {
     console.log(uid);
     res.send(await patientModule.illnessHistory(uid));
 });
+app.get('/patient/clinic/history/rateAllowed', isPatientAuthenticated, async (req, res) => {
+    let uid = res.locals.uid;
+    console.log(uid);
+    res.send(await patientModule.rateAllowed(uid));
+});
 
 
 
