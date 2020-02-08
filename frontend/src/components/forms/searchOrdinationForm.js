@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import Date from './fields/date';
+import Date from './fields/date_time';
 
 
 import Text from './fields/text';

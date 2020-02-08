@@ -62,7 +62,7 @@ class Ordinations extends Component {
         let date;
         try {
             let ts = Math.floor(data.date.getTime() / 1000)
-            date = moment.unix(ts).format('DD.MM.YYYY')
+            date = moment.unix(ts).format('DD.MM.YYYY HH:mm')
         }
         catch (e) { }
 
