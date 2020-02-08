@@ -550,7 +550,9 @@ app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req,
 
 
 app.get('/clinic/events', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.events());
+    let uid = res.locals.uid;
+
+    res.send(await clinicModule.events(uid));
 });
 app.get('/clinic/completedEvents', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
