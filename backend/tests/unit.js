@@ -167,7 +167,7 @@ describe("UnitTests", async () => {
         });
         it("moze dobiti listu svih klinika", (done) => {
             chai.request(app)
-                .post('/patient/clinic')
+                .post('/patient/clinic/0')
                 .set("content-type", "application/json")
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ })
@@ -181,7 +181,7 @@ describe("UnitTests", async () => {
 
         it("moze pretrazivati klinike", (done) => {
             chai.request(app)
-                .post('/patient/clinic')
+                .post('/patient/clinic/0')
                 .set("content-type", "application/json")
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ search: 'Dom zdravlja' })
@@ -196,7 +196,7 @@ describe("UnitTests", async () => {
 
         it("moze pretrazivati klinike", (done) => {
             chai.request(app)
-                .post('/patient/clinic')
+                .post('/patient/clinic/0')
                 .set("content-type", "application/json")
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ search: 'Dom zdravlja' })
