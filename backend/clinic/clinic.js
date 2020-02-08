@@ -21,6 +21,13 @@ const SMTPPort = 465;
 const SMTPUsername = 'admin@hugemedia.online';
 const SMTPPassword = 'tSwFq%8e;LC%'
 
+function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
+    if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
+    if (a_start <= b_end   && b_end   <= a_end) return true; // b ends in a
+    if (b_start <  a_start && a_end   <  b_end) return true; // a in b
+    return false;
+}
+
 class Clinic {
     constructor(props) {
 
@@ -427,7 +434,7 @@ class Clinic {
                 let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
                 requests[i].patient = patient[0];
                 requests[i].appointment = appointment[0];
-                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor' }).toArray();
+                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor', _id : { $ne : ObjectID(appointment[0].doctor) } }).toArray();
                 newReq.push(requests[i]);
             }
 
@@ -478,6 +485,10 @@ class Clinic {
                                 ordinationBusy = true;
                                 break;
                             }
+                            if ((start <= s && start >= s + d) || (start + duration <= s && start + duration >= s + d)) {
+                                ordinationBusy = true;
+                                break;
+                            }
 
                         }
 
@@ -492,7 +503,10 @@ class Clinic {
                     } else {
                         ordinationBusy = false;
                         while (1) {
-                            start += 6000;
+                            ordinationBusy = false;
+
+                            start += 60;
+                            let check = false;
                             for (let k = 0; k < requests.length; k++) {
                                 if (i == k) {
                                     continue;
@@ -501,15 +515,25 @@ class Clinic {
                                 if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                     let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                     let d = requests[k].appointment.duration * 60;
-
-                                    if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                    // console.log(start,duration,s,d);
+                                    // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
+                                    if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
                                         ordinationBusy = true;
                                         break;
                                     }
+                                    // else if(start > s && start > (s+d)){
+                                    //     ordinationBusy = false;
+                                    //     check = true;
+                                    //     break;
+                                    // }
+                                    
 
                                 }
 
                                 if (ordinationBusy == true) {
+                                    break;
+                                }
+                                if(check == true){
                                     break;
                                 }
 
@@ -520,7 +544,9 @@ class Clinic {
                                 ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                 console.log("start");
                                 break;
+                                
                             }
+
 
                         }
                     }
@@ -598,36 +624,51 @@ class Clinic {
                         } else {
                             ordinationBusy = false;
                             while (1) {
-                                start += 6000;
+                                ordinationBusy = false;
+    
+                                start += 60;
+                                let check = false;
                                 for (let k = 0; k < requests.length; k++) {
                                     if (i == k) {
                                         continue;
                                     }
-
-                                    if (requests[k].appointment.ordination == ordinations[j].tag) {
+    
+                                    if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                         let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                         let d = requests[k].appointment.duration * 60;
-
-                                        if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                        // console.log(start,duration,s,d);
+                                        // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
+                                        if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
                                             ordinationBusy = true;
                                             break;
                                         }
-
+                                        // else if(start > s && start > (s+d)){
+                                        //     ordinationBusy = false;
+                                        //     check = true;
+                                        //     break;
+                                        // }
+                                        
+    
                                     }
-
+    
                                     if (ordinationBusy == true) {
                                         break;
                                     }
-
-
+                                    if(check == true){
+                                        break;
+                                    }
+    
+    
                                 }
-
+    
                                 if (ordinationBusy == false) {
                                     ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                     console.log("start");
                                     break;
+                                    
                                 }
-
+    
+    
                             }
                         }
                     }
@@ -1174,22 +1215,34 @@ class Clinic {
                 } else {
                     ordinationBusy = false;
                     while (1) {
-                        start += 6000;
+                        ordinationBusy = false;
+
+                        start += 60;
+                        let check = false;
                         for (let k = 0; k < requests.length; k++) {
                           
-
                             if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                 let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                 let d = requests[k].appointment.duration * 60;
-
-                                if ((start >= s && start <= s + d) || (start + duration >= s && start + duration <= s + d)) {
+                                // console.log(start,duration,s,d);
+                                // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
+                                if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
                                     ordinationBusy = true;
                                     break;
                                 }
+                                // else if(start > s && start > (s+d)){
+                                //     ordinationBusy = false;
+                                //     check = true;
+                                //     break;
+                                // }
+                                
 
                             }
 
                             if (ordinationBusy == true) {
+                                break;
+                            }
+                            if(check == true){
                                 break;
                             }
 
@@ -1200,7 +1253,9 @@ class Clinic {
                             ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                             console.log("start");
                             break;
+                            
                         }
+
 
                     }
                 }

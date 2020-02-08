@@ -577,6 +577,7 @@ setInterval(async () => {
             for (let j = 0; j < clinics[i].requests.length; j++) {
                 if (clinics[i].requests[j].verified && !clinics[i].requests[j].appointment.ordination && clinics[i].requests[j].freeOrdinations.length) {
                     console.log('reserving room')
+                    clinics[i].requests[j].freeOrdinations[0].ordination._id = clinics[i].requests[j].freeOrdinations[0].ordination._id.toString();
                     await clinicModule.reserveRoom(clinics[i].requests[j].appointment._id, clinics[i].requests[j].freeOrdinations[0]);
                 }
             }
