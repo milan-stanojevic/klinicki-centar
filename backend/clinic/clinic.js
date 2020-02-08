@@ -374,7 +374,10 @@ class Clinic {
     async reserveRoom(id, obj) {
 
         let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
-
+        let doctor = await db.collection('clinicUsers').find({ _id: ObjectID(appointment[0].doctor) }).toArray();
+        let appReq =  await db.collection('appointmentRequests').find({ appointment: appointment[0]._id }).toArray();
+        let patient = await db.collection('patients').find({ _id: appReq[0].patient }).toArray(); 
+        
 
         await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
             $set: {
@@ -382,10 +385,9 @@ class Clinic {
                 date: obj.start
             }
         });
-
-        if (obj.start != appointment[0].date) {
-            //this.sendMail(user[0].email, obj.subject, obj.message);
-        }
+        
+        this.sendMail(doctor[0].email, "Rezervisana sala za operaciju", "Doktore " + doctor[0].firstName + " " + doctor[0].lastName +  ", rezervisana je sala za operaciju");
+        this.sendMail(patient[0].email, "Rezervisana sala za operaciju", "Postovani " + patient[0].firstName + " " + patient[0].lastName + ", rezervisana je sala za vasu operaciju");
 
         return { error: null }
     }

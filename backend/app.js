@@ -752,7 +752,7 @@ async function dbPrepare(){
 
 
     await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
-        username: 'dokotor1',
+        username: 'doktor1',
         password: 'lozinka',
         type: 'doctor',
         firstName: 'Janko',
