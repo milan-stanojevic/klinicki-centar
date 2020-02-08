@@ -950,7 +950,7 @@ class Clinic {
         _id = ObjectID();
         let ob = {}
         ob._id = _id;
-        ob.patient = id;
+        ob.patient = ObjectID(id);
         ob.appointment = appointment_id;
 
         await db.collection('appointmentRequests').insertOne(ob);
@@ -1256,7 +1256,7 @@ class Clinic {
 
 
 
-    async medicalRecord(uid) {
+    async medicalRecord(uid, id) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
         let illnessHistory = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray()
         for (let i = 0; i < illnessHistory.length; i++) {
@@ -1271,6 +1271,13 @@ class Clinic {
             illnessHistory[i].diagnose = diagnose[0];
 
             illnessHistory[i].medications = medications;
+            
+            if(illnessHistory[i].doctor == id){
+                illnessHistory[i].editRaport = true;
+            }
+            else{
+                illnessHistory[i].editRaport = false;
+            }
         }
 
         res[0].illnessHistory = illnessHistory;
@@ -1382,7 +1389,20 @@ class Clinic {
 
         return illnessHistory[0]
     }
-
+    
+    async fillMedicalRecord(id, obj) {
+        let patient = await db.collection('patients').find({ _id: ObjectID(id)}).toArray();
+        // console.log(obj);
+        await db.collection('patients').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                medicalRecord : obj
+            }
+        });
+        console.log(patient[0]);
+        return await db.collection('patients').find({ _id: ObjectID(id)}).toArray();
+        
+    }
+    
 
     async updateMedicalRecord(uid, id, obj) {
         let check = await db.collection('illnessHistory').find({ _id: ObjectID(id), doctor: uid }).count();

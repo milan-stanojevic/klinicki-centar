@@ -37,6 +37,7 @@ import PatientsList from './views/doctor/patientsList'
 import MakingAppointment from './views/doctor/makingAppointment'
 import EditProfile from './views/doctor/editProfile'
 import PatientPage from './views/doctor/patientPage'
+import FillMedicalRecord from './views/doctor/fillMedicalRecord'
 import StartAppointments from './views/doctor/appointments'
 import PatientHomePage from './views/patient/patientHomePage'
 import DoctorView from './views/patient/doctorView'
@@ -490,6 +491,14 @@ class Routes extends Component {
                             exact
                             render={(...renderProps) => (
                                 <Examination {...renderProps} {...this.props} />
+                            )}
+                        />
+                        
+                        <Route
+                            path="/doctor/examination/fillMedicalRecord/:id"
+                            exact
+                            render={(...renderProps) => (
+                                <FillMedicalRecord {...renderProps} {...this.props} />
                             )}
                         />
 

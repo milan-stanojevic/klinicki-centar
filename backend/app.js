@@ -335,7 +335,6 @@ app.post('/clinic/appointments/:uid', isClinicAdminAuthenticated, async (req, re
     res.send(await clinicModule.updateClinicAppointments(uid, req.params.uid, req.body));
 });
 app.post('/doctor/makingAppointment/:uid', isClinicAdminAuthenticated, async (req, res) => {
-    //let id = "5df65193d3cb84034cfcf9a6"; //potrebno je proslijediti id pacijente nad kojim se trenutno vrsi pregled
     let uid = res.locals.uid;
     res.send(await clinicModule.makeNewAppointments(uid,req.params.uid, req.body));
 });
@@ -490,7 +489,8 @@ app.get('/doctor/patient/:id',isClinicAdminAuthenticated , async (req, res) => {
 });
 
 app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
-    res.send(await clinicModule.medicalRecord(req.params.id));
+    let uid = res.locals.uid;
+    res.send(await clinicModule.medicalRecord(req.params.id, uid));
 });
 
 app.get('/doctor/medicalRecord/:id',isClinicAdminAuthenticated , async (req, res) => {
@@ -500,6 +500,9 @@ app.post('/doctor/updateMedicalRecord/:id', isClinicAdminAuthenticated, async (r
     let uid = res.locals.uid;
     console.log(uid);
     res.send(await clinicModule.updateMedicalRecord(uid, req.params.id, req.body));
+});
+app.post('/doctor/examination/fillMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
+    res.send(await clinicModule.fillMedicalRecord(req.params.id, req.body));
 });
 
 

@@ -251,6 +251,7 @@ class AppointmentRequest extends Component {
                                                             {
                                                                 item.freeOrdinations.map((ordination, oidx) => {
                                                                     return (
+                                                                       // treba _id ordinacije proslediti
                                                                         <option value={ordination}>{ordination.ordination.tag} | {ordination.start}</option>
                                                                     )
                                                                 })
