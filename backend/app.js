@@ -638,12 +638,215 @@ async function dbPrepareTest(){
     await adminModule.allowPatient(patient.response.id.toString());
 }
 
+async function dbPrepare(){
+
+    await adminModule.dbTrunc();
+
+    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Klinika1', adress: 'Bulevar Oslobodjenja 33'});
+    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Klinika2', adress: 'Bulevar Cara Dusana 117' });
+    let clinic3 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Narodnog Fronta 7' });
+    let clinic4 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Safarikova 31' });
+
+
+    let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'admin1',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic2Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
+        username: 'admin2',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic1Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic3Admin = await adminModule.clinicAdminUpdate(clinic3.id.toString(), 'new', {
+        username: 'admin3',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic3Admin.id.toString(), {
+        password: 'lozinka'
+    });
+    let clinic4Admin = await adminModule.clinicAdminUpdate(clinic2.id.toString(), 'new', {
+        username: 'admin4',
+        password: 'lozinka',
+        email: 'admin@test.com'
+
+    });
+    await clinicModule.clinicAdminChangePassword(clinic2Admin.id.toString(), {
+        password: 'lozinka'
+    });
+
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'redovni_pregled',
+        name: 'Redovni pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'operacija_palca',
+        name: 'Operacija palca'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'sistematski_pregled',
+        name: 'Sistamatski pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic1Admin.id.toString(), 'new', {
+        tag: 'operacija_oka',
+        name: 'Operacija oka'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'redovni_pregled',
+        name: 'Redovni pregled'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'operacija_krajnika',
+        name: 'Operacija krajnika'
+    })
+    await clinicModule.updateClinicTypes(clinic3Admin.id.toString(), 'new', {
+        tag: 'oftamoloski_pregled',
+        name: 'Oftamoloski pregled'
+    })
+
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-1',
+        name: 'Ordinacija #1'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-2',
+        name: 'Ordinacija #2'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-3',
+        name: 'Ordinacija #3'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-4',
+        name: 'Ordinacija #4'
+    });
+    await clinicModule.updateClinicOrdinations(clinic1Admin.id.toString(), 'new', {
+        tag: 'room-5',
+        name: 'Ordinacija #5'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-101',
+        name: 'Ordinacija #101'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-102',
+        name: 'Ordinacija #102'
+    });
+    await clinicModule.updateClinicOrdinations(clinic3Admin.id.toString(), 'new', {
+        tag: 'room-103',
+        name: 'Ordinacija #103'
+    });
+
+
+
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'dokotor1',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Janko',
+        lastName: 'Jankovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'dokotor2',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Petar',
+        lastName: 'Petrovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic2Admin.id.toString(), 'new', {
+        username: 'dokotor3',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Milan',
+        lastName: 'Milanovic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic3Admin.id.toString(), 'new', {
+        username: 'dokotor4',
+        password: 'lozinka',
+        type: 'doctor',
+        firstName: 'Sinan',
+        lastName: 'Sakic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic2Admin.id.toString(), 'new', {
+        username: 'sestra1',
+        password: 'lozinka',
+        type: 'nurse',
+        firstName: 'Gordana',
+        lastName: 'Gordic',
+        email: 'doktor@test.com'
+    })
+    await clinicModule.updateClinicUser(clinic3Admin.id.toString(), 'new', {
+        username: 'sestra2',
+        password: 'lozinka',
+        type: 'nurse',
+        firstName: 'Dragana',
+        lastName: 'Draganovic',
+        email: 'doktor@test.com'
+    })
+
+    let patient1 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Pero',
+        lastName: 'Petrovic',
+        username: 'pacijent1',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient1.response.id.toString());
+
+    let patient2 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Milos',
+        lastName: 'Milosevic',
+        username: 'pacijent2',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient2.response.id.toString());
+
+    let patient3 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Spasoje',
+        lastName: 'Spasic',
+        username: 'pacijent3',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient3.response.id.toString());
+
+    let patient4 = await patientModule.register({
+        email: 'test@test.com',
+        firstName: 'Bogoljub',
+        lastName: 'Spasic',
+        username: 'pacijent4',
+        password: 'pacijent'
+    })
+
+    await adminModule.allowPatient(patient4.response.id.toString());
+}
+
 
 var isInTest = typeof global.it === 'function';
 
 
-if (isInTest){
-    dbPrepareTest();
-}
+// if (isInTest){
+//     dbPrepareTest();
+// }
+// else
+//     dbPrepare();
 
 export default app;

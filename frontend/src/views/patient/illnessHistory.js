@@ -81,9 +81,9 @@ class IllnessHistory extends Component {
                         </Col>
                         <Col lg="4">
                             <Select placeholder="Sortiraj po" onChange={(val) => this.setState({ sort: val }, this.get)} value={this.state.sort}>
-                                <option value={0}>Po doktoru</option>
-                                <option value={1}>Po dijagnozi</option>
-                                <option value={2}>Po datumu</option>
+                                <option value={1}>Po doktoru</option>
+                                <option value={2}>Po dijagnozi</option>
+                                <option value={3}>Po datumu</option>
                             </Select>
                         </Col>
                     </Row>

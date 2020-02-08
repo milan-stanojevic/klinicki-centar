@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const uuidv4 = require('uuid/v4');
 var nodemailer = require('nodemailer');
+const moment = require('moment');
 let db;
 const dbConnect = require('../db');
 dbConnect()
@@ -118,7 +119,7 @@ class Patient {
 
 
     async clinicGrading(uid) {
-        let query = {$and : [{ patient : ObjectID(uid) }, { verified : true }]};
+        let query = { $and: [{ patient: ObjectID(uid) }, { verified: true }] };
         let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
         let appointments = [];
         for (let i = 0; i < appointmentRequests.length; i++) {
@@ -133,23 +134,22 @@ class Patient {
         // console.log(res);
         let result = [];
         let clinics = await db.collection('clinics').find().toArray();
-        for(let i = 0; i < clinics.length; i++){
-            for(let j = 0; j < res.length; j++)
-            {
-                if(JSON.stringify(clinics[i]) === JSON.stringify(res[j])){
+        for (let i = 0; i < clinics.length; i++) {
+            for (let j = 0; j < res.length; j++) {
+                if (JSON.stringify(clinics[i]) === JSON.stringify(res[j])) {
                     result.push(clinics[i]);
                     break;
                 }
             }
         }
-        
+
 
         console.log(result);
         return result;
         // return await db.collection('clinics').find({}).toArray();
     }
     async doctorGrading(uid) {
-        let query = {$and : [{ patient : ObjectID(uid) }, { verified : true }]}
+        let query = { $and: [{ patient: ObjectID(uid) }, { verified: true }] }
         let appointmentRequests = await db.collection('appointmentRequests').find(query).toArray();
         let appointments = [];
         for (let i = 0; i < appointmentRequests.length; i++) {
@@ -163,13 +163,12 @@ class Patient {
             res.push(app[0]);
         }
 
-    
+
         let result = [];
         let doctor = await db.collection('clinicUsers').find().toArray();
-        for(let i = 0; i < doctor.length; i++){
-            for(let j = 0; j < res.length; j++)
-            {
-                if(JSON.stringify(doctor[i]) === JSON.stringify(res[j])){
+        for (let i = 0; i < doctor.length; i++) {
+            for (let j = 0; j < res.length; j++) {
+                if (JSON.stringify(doctor[i]) === JSON.stringify(res[j])) {
                     result.push(doctor[i]);
                     break;
                 }
@@ -315,7 +314,7 @@ class Patient {
             id: uid
         };
     }
-    async illnessHistory(uid,sort) {
+    async illnessHistory(uid, sort) {
         let res = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray();
 
         for (let j = 0; j < res.length; j++) {
@@ -330,17 +329,52 @@ class Patient {
                 res[j].medications[i] = med[0].name;
             }
         }
-    
+
+
+        if (sort == 1) {
+            res = res.sort((a, b) => {
+                var textA = a.doctor.toUpperCase();
+                var textB = b.doctor.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+        else if (sort == 2) {
+            res = res.sort((a, b) => {
+                var textA = a.diagnose.toUpperCase();
+                var textB = b.diagnose.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+        else if (sort == 3) {
+            res = res.sort((a, b) => {
+                var textA = a.date;
+                let dateTimeParts = textA.split(',');
+                let timeParts = dateTimeParts[1].split(':');
+                let dateParts = dateTimeParts[0].split('.');
+                let date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1]);
+                textA = date.getTime();
+
+                var textB = b.date;
+                let dateTimeParts1 = textB.split(',');
+                let timeParts1 = dateTimeParts1[1].split(':');
+                let dateParts1 = dateTimeParts1[0].split('.');
+                let date1 = new Date(dateParts1[2], parseInt(dateParts1[1], 10) - 1, dateParts1[0], timeParts1[0], timeParts1[1]);
+                textB = date1.getTime();
+
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            })
+        }
+
         return res;
     }
-    async rateAllowed(uid){
-        let app = await db.collection('appointmentRequests').find({$and : [{ patient : ObjectID(uid) }, { verified : true }]}).toArray();
+    async rateAllowed(uid) {
+        let app = await db.collection('appointmentRequests').find({ $and: [{ patient: ObjectID(uid) }, { verified: true }] }).toArray();
         let empty = [];
-        if(JSON.stringify(app) === JSON.stringify(empty)){
+        if (JSON.stringify(app) === JSON.stringify(empty)) {
             return false;
         }
-        else{
-            return true; 
+        else {
+            return true;
         }
     }
 
@@ -392,7 +426,7 @@ class Patient {
     async clinicType() {
         return await db.collection('types').find({}).toArray();
     }
-    async clinicList(obj,sort) {
+    async clinicList(obj, sort) {
         let query = {}
         if (obj.search) {
             query.name = new RegExp(obj.search, 'i');
@@ -405,9 +439,9 @@ class Patient {
         if (sort == 0)
             return await db.collection('clinics').find(query).sort({ name: 1 }).toArray();
         else if (sort == 1)
-            return await db.collection('clinics').find(query).sort({ adress : 1 }).toArray();
+            return await db.collection('clinics').find(query).sort({ adress: 1 }).toArray();
         else if (sort == 2)
-            return await db.collection('clinics').find(query).sort({ avgRating : -1 }).toArray();
+            return await db.collection('clinics').find(query).sort({ avgRating: -1 }).toArray();
 
         // let res = await db.collection('clinics').find(query).toArray();
 
