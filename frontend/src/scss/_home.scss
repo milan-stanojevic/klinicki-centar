@@ -577,7 +577,12 @@ color: $red;
 
     .choose-room{
         .select-field{
-            min-width: 150px !important;
+            min-width: 200px !important;
+
+            .selected{
+                background-color: $blueGray !important;
+            }
+            //width: 100%;
         }
         a{
             margin: 0 !important;
