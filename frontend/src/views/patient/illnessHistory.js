@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Page from '../../containers/admin/page';
 import { Link, Redirect } from 'react-router-dom';
 import SearchForm from '../../components/forms/searchDoctorForm';
+import Select from '../../components/forms/fields/select'
+
 
 import {
     Container,
@@ -19,7 +21,8 @@ class IllnessHistory extends Component {
         this.get = this.get.bind(this);
 
         this.state = {
-            items: []
+            items: [],
+            sort: 0
         };
     }
 
@@ -34,7 +37,7 @@ class IllnessHistory extends Component {
             return;
         }
 
-        fetch('http://127.0.0.1:4000/patient/clinic/history', {
+        fetch('http://127.0.0.1:4000/patient/clinic/history/' + this.state.sort, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,6 +46,19 @@ class IllnessHistory extends Component {
         }).then((res) => res.json()).then((result) => {
             this.setState({
                 items: result
+            })
+            console.log(result);
+        })
+
+        fetch('http://127.0.0.1:4000/patient/clinic/history/rateAllowed', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('patientToken')}`
+            },
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                items1: result
             })
             console.log(result);
         })
@@ -60,8 +76,15 @@ class IllnessHistory extends Component {
                 <Container fluid className="table">
 
                     <Row className="page-title">
-                        <Col lg="12">
+                        <Col lg="8">
                             <h3>Lista svih pregleda</h3>
+                        </Col>
+                        <Col lg="4">
+                            <Select placeholder="Sortiraj po" onChange={(val) => this.setState({ sort: val }, this.get)} value={this.state.sort}>
+                                <option value={0}>Po doktoru</option>
+                                <option value={1}>Po dijagnozi</option>
+                                <option value={2}>Po datumu</option>
+                            </Select>
                         </Col>
                     </Row>
                     {/* <Row>
@@ -121,19 +144,31 @@ class IllnessHistory extends Component {
                 <Container fluid className="bottom-wrap">
                     <Row>
                         <Col lg="3">
-                            <Link to={`/patient/clinic/history/grading`}>
-                                <button>Oceni kliniku</button>
-                            </Link>
+                            {
+                                this.state.items1 ?
+                                    <>
+                                        <Link to={`/patient/clinic/history/grading`}>
+                                            <button>Oceni kliniku</button>
+                                        </Link>
+                                    </>
+                                    : null
+                            }
                         </Col>
                         <Col lg="9">
-                            <Link to={`/patient/clinic/history/gradingDoctor`}>
-                                <button>Oceni doktora</button>
-                            </Link>
+                            {
+                                this.state.items1 ?
+                                    <>
+                                        <Link to={`/patient/clinic/history/gradingDoctor`}>
+                                            <button>Oceni doktora</button>
+                                        </Link>
+                                    </>
+                                    : null
+                            }
                         </Col>
                     </Row>
 
                 </Container>
-                
+
             </div>
         );
     }

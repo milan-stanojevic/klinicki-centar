@@ -164,7 +164,7 @@ class form extends React.Component {
                                     ></Field>
                                 </Col>
                             </Row>
-                            <Row>
+                            {/* <Row>
                                 <Col lg="6" className="input-wrap">
                                     <Field
                                         name="doctors-list"
@@ -214,7 +214,7 @@ class form extends React.Component {
                                         placeholder="Unesite cenovnik"
                                     ></Field>
                                 </Col>
-                            </Row>
+                            </Row> */}
 
                             <Row>
                                 <Col lg="6" className="input-wrap">

@@ -3,6 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 import MedicalRecordForm from '../../components/forms/medicalRecordForm';
+import AdditionallyMedicalRecordForm from '../../components/forms/additionallyMedicalRecord';
+
 
 
 import {
@@ -46,18 +48,18 @@ class MedicalRecord extends Component {
             <div className="page-wrap">
                 {
                     !localStorage.patientToken & !localStorage.clinicUserToken ? <Redirect to='/login' /> : null
-                
+
                 }
 
                 <Container fluid>
 
                     <Row className="page-title">
                         <Col lg="12">
-                             <h3>Moj profil</h3>
+                            <h3>Moj profil</h3>
                         </Col>
                     </Row>
                     {this.state.initialValues ?
-                        <MedicalRecordForm initialValues={this.state.initialValues} onSubmit={this.add} /> 
+                        <MedicalRecordForm initialValues={this.state.initialValues} onSubmit={this.add} />
                         :
                         <MedicalRecordForm onSubmit={this.add} />
                     }
@@ -69,59 +71,77 @@ class MedicalRecord extends Component {
                             null
                     }
                 </Container>
+                <Container fluid>
 
 
-                                <Container fluid className="table">
+                    {this.state.initialValues ?
+                        <AdditionallyMedicalRecordForm initialValues={this.state.initialValues.medicalRecord} />
+                        :
+                        <AdditionallyMedicalRecordForm />
+                    }
+                    {
+                        this.state.error ?
 
-<Row className="page-title">
-    <Col lg="12">
-        <h3>Istorija bolesti</h3>
-    </Col>
-</Row>
-<Row className="table-head">
-    <Col lg="3">
-        <span className="name">DIJAGNOZA</span>
-    </Col>
-    <Col lg="3">
-        <span className="name">LEKOVI</span>
-    </Col>
-    <Col lg="3">
-        <span className="name">IZVJESTAJ</span>
-    </Col>
-    <Col lg="3">
-        <span className="name">DATUM</span>
-    </Col>
+                            <p>{this.state.error}</p>
+                            :
+                            null
+                    }
 
-    
 
-</Row>
-{
-    this.state.initialValues && this.state.initialValues.illnessHistory && this.state.initialValues.illnessHistory.map((item, idx) => {
-        return (
-            <Row className="table-row" key={idx}>
-                <Col lg="3">
-                    <span className="value">{item.diagnose && item.diagnose.name}</span>
-                </Col>
-                <Col lg="3">
-                    <span className="value">{
-                        item.medications && item.medications.map((medication) => {
-                            return <span>{medication.name} {medication.package} | {medication.manufacturer}</span>
+                </Container>
+
+
+                <Container fluid className="table">
+
+                    <Row className="page-title">
+                        <Col lg="12">
+                            <h3>Istorija bolesti</h3>
+                        </Col>
+                    </Row>
+                    <Row className="table-head">
+                        <Col lg="3">
+                            <span className="name">DIJAGNOZA</span>
+                        </Col>
+                        <Col lg="3">
+                            <span className="name">LEKOVI</span>
+                        </Col>
+                        <Col lg="3">
+                            <span className="name">IZVJESTAJ</span>
+                        </Col>
+                        <Col lg="3">
+                            <span className="name">DATUM</span>
+                        </Col>
+
+
+
+                    </Row>
+                    {
+                        this.state.initialValues && this.state.initialValues.illnessHistory && this.state.initialValues.illnessHistory.map((item, idx) => {
+                            return (
+                                <Row className="table-row" key={idx}>
+                                    <Col lg="3">
+                                        <span className="value">{item.diagnose && item.diagnose.name}</span>
+                                    </Col>
+                                    <Col lg="3">
+                                        <span className="value">{
+                                            item.medications && item.medications.map((medication) => {
+                                                return <span>{medication.name} {medication.package} | {medication.manufacturer}</span>
+                                            })
+                                        }</span>
+                                    </Col>
+                                    <Col lg="3">
+                                        <span className="value">{item.report}</span>
+                                    </Col>
+
+                                    <Col lg="3">
+                                        <span className="value">{item.date}</span>
+                                    </Col>
+                                </Row>
+                            )
                         })
-                    }</span>
-                </Col>
-                <Col lg="3">
-                    <span className="value">{item.report}</span>
-                </Col>
+                    }
 
-                <Col lg="3">
-                    <span className="value">{item.date}</span>
-                </Col>
-            </Row>
-        )
-    })
-}
-
-</Container>
+                </Container>
 
 
 

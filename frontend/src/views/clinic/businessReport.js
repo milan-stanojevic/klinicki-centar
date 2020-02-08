@@ -88,7 +88,7 @@ class BusinessReport extends Component {
                                     {
                                         this.state.items.map((item, idx) => {
                                             return (
-                                                parseFloat(Number(item.rating / item.numberOfRating)).toFixed(2)
+                                                item.avgRating
                                             )
                                         })
                                     }
@@ -113,13 +113,9 @@ class BusinessReport extends Component {
                             <div class="table-box">
                                 <p>Prihodi klinike</p>
                                 <p>(
-                                    {/* {
-                                        this.state.items1.map((item, idx) => {
-                                            return (
-                                                item.res
-                                            )
-                                        })
-                                    } */}
+                                    {
+                                        this.state.items1
+                                    }
                                     )</p>
                             </div>
                         </div>

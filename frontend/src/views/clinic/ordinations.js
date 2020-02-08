@@ -64,8 +64,8 @@ class Ordinations extends Component {
             let ts = Math.floor(data.date.getTime() / 1000)
             date = moment.unix(ts).format('DD.MM.YYYY')
         }
-        catch (e) {}
-        
+        catch (e) { }
+
         let obj = {
             tag: data.tag,
             name: data.name,
@@ -148,8 +148,16 @@ class Ordinations extends Component {
 
 
                                     <Col lg="3" className="actions">
-                                        <Link to={`/clinic/ordination/${item._id}`}><Isvg src={editIcon} /></Link>
-                                        <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                        {!item.reserved ?
+                                            <>
+                                                <Link to={`/clinic/ordination/${item._id}`}><Isvg src={editIcon} /></Link>
+                                                <button onClick={() => this.delete(item._id)}><Isvg src={deleteIcon} /></button>
+                                            </>
+                                            :
+                                            <>
+                                                <button className='button1'>Rezervisano</button>
+                                            </>
+                                        }
                                     </Col>
                                 </Row>
                             )

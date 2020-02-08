@@ -233,7 +233,7 @@ class Clinic {
     }
 
     async clinicDoctors(uid) {
-        let doc =  await db.collection('clinicUsers').find({_id : ObjectID(uid)}).toArray();
+        let doc = await db.collection('clinicUsers').find({ _id: ObjectID(uid) }).toArray();
         let query = { $and: [{ clinic: doc[0].clinic }, { type: "doctor" }] };
         return await db.collection('clinicUsers').find(query).toArray();
     }
@@ -425,6 +425,7 @@ class Clinic {
             requests[i].patient = patient[0];
             requests[i].appointment = appointment[0];
         }
+        
         for (let i = 0; i < requests.length; i++) {
             if (requests[i].appointment.doctor) {
                 let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
@@ -437,7 +438,6 @@ class Clinic {
 
             let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
             requests[i].typeTag = type[0].tag;
-
 
         }
 
@@ -637,6 +637,7 @@ class Clinic {
     async allowReqAppointment(id) {
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
         let appointment = request[0].appointment;
+        let app = await db.collection('appointments').find({ _id: appointment }).toArray();
 
 
         await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
@@ -651,11 +652,31 @@ class Clinic {
 
             }
         });
+        await db.collection('ordinations').updateOne({ _id: ObjectID(app[0].ordination) }, {
+            $set: {
+                reserved : true
+
+            }
+        });
+        await db.collection('types').updateOne({ _id: ObjectID(app[0].type) }, {
+            $set: {
+                reserved : true
+
+            }
+        });
+        await db.collection('clinicUsers').updateOne({ _id: ObjectID(app[0].doctor) }, {
+            $set: {
+                reserved : true
+
+            }
+        });
     }
 
     async disallowReqAppointment(id) {
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
         let appointment = request[0].appointment;
+        let app = await db.collection('appointments').find({ _id: appointment }).toArray();
+
         await db.collection('appointmentRequests').updateOne({ _id: ObjectID(id) }, {
             $set: {
                 verified: false
@@ -665,6 +686,24 @@ class Clinic {
             $set: {
                 verified: false,
                 actionCreated: false
+            }
+        });
+        await db.collection('ordinations').updateOne({ _id: ObjectID(app[0].ordination) }, {
+            $set: {
+                reserved : false
+
+            }
+        });
+        await db.collection('types').updateOne({ _id: ObjectID(app[0].type) }, {
+            $set: {
+                reserved : false
+
+            }
+        });
+        await db.collection('clinicUsers').updateOne({ _id: ObjectID(app[0].doctor) }, {
+            $set: {
+                reserved : false
+
             }
         });
     }
@@ -911,7 +950,7 @@ class Clinic {
         _id = ObjectID();
         let ob = {}
         ob._id = _id;
-        ob.patient = id;
+        ob.patient = ObjectID(id);
         ob.appointment = appointment_id;
 
         await db.collection('appointmentRequests').insertOne(ob);
@@ -1082,8 +1121,11 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
         if (obj.search) {
-            query.username = new RegExp(obj.search, 'i');
+            query.firstName = new RegExp(obj.search, 'i');
         }
+        // if (obj.doctorLastName) {
+        //     query.lastName = new RegExp(obj.doctorLastName, 'i');
+        // }
 
         return await db.collection('clinicUsers').find(query).toArray();
     }
@@ -1168,9 +1210,25 @@ class Clinic {
                 examinationDone: true
             }
         });
+      
 
         let request = await db.collection('appointmentRequests').find({ _id: ObjectID(id) }).toArray();
         let appointment = await db.collection('appointments').find({ _id: ObjectID(request[0].appointment) }).toArray();
+        await db.collection('ordinations').updateOne({ _id: ObjectID(appointment[0].ordination)}, {
+            $set: {
+                reserved : false
+            }
+        })
+        await db.collection('types').updateOne({ _id: ObjectID(appointment[0].type)}, {
+            $set: {
+                reserved : false
+            }
+        })
+        await db.collection('clinicUsers').updateOne({ _id: ObjectID(appointment[0].doctor)}, {
+            $set: {
+                reserved : false
+            }
+        })
 
         await db.collection('illnessHistory').insertOne({
             doctor: uid,
@@ -1198,7 +1256,7 @@ class Clinic {
 
 
 
-    async medicalRecord(uid) {
+    async medicalRecord(uid, id) {
         let res = await db.collection('patients').find({ _id: ObjectID(uid) }).toArray();
         let illnessHistory = await db.collection('illnessHistory').find({ patient: ObjectID(uid) }).toArray()
         for (let i = 0; i < illnessHistory.length; i++) {
@@ -1213,6 +1271,13 @@ class Clinic {
             illnessHistory[i].diagnose = diagnose[0];
 
             illnessHistory[i].medications = medications;
+            
+            if(illnessHistory[i].doctor == id){
+                illnessHistory[i].editRaport = true;
+            }
+            else{
+                illnessHistory[i].editRaport = false;
+            }
         }
 
         res[0].illnessHistory = illnessHistory;
@@ -1324,7 +1389,20 @@ class Clinic {
 
         return illnessHistory[0]
     }
-
+    
+    async fillMedicalRecord(id, obj) {
+        let patient = await db.collection('patients').find({ _id: ObjectID(id)}).toArray();
+        // console.log(obj);
+        await db.collection('patients').updateOne({ _id: ObjectID(id) }, {
+            $set: {
+                medicalRecord : obj
+            }
+        });
+        console.log(patient[0]);
+        return await db.collection('patients').find({ _id: ObjectID(id)}).toArray();
+        
+    }
+    
 
     async updateMedicalRecord(uid, id, obj) {
         let check = await db.collection('illnessHistory').find({ _id: ObjectID(id), doctor: uid }).count();

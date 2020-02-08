@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Isvg from 'react-inlinesvg';
 import Page from '../../containers/admin/page';
 import MedicalRecordForm from '../../components/forms/medicalRecordForm';
+import AdditionallyMedicalRecordForm from '../../components/forms/additionallyMedicalRecord';
 import editIcon from '../../assets/svg/edit.svg';
 
 
@@ -39,6 +40,8 @@ class MedicalRecord extends Component {
             })
             console.log(result);
         })
+       
+
 
     }
 
@@ -68,6 +71,24 @@ class MedicalRecord extends Component {
                             :
                             null
                     }
+                </Container>
+                <Container fluid>
+
+                    
+                    {this.state.initialValues ?
+                        <AdditionallyMedicalRecordForm initialValues={this.state.initialValues.medicalRecord} />
+                        :
+                        <AdditionallyMedicalRecordForm />
+                    }
+                    {
+                        this.state.error ?
+
+                            <p>{this.state.error}</p>
+                            :
+                            null
+                    }
+
+
                 </Container>
 
 
@@ -120,8 +141,11 @@ class MedicalRecord extends Component {
                                         <span className="value">{item.date}</span>
                                     </Col>
                                     <Col lg="1" className="actions">
-                                        <Link to={`/doctor/medicalRecord/${this.props[0].match.params.id}/${item._id}`}><Isvg src={editIcon} /></Link>
-
+                                        {
+                                            item.editRaport ?
+                                                <Link to={`/doctor/medicalRecord/${this.props[0].match.params.id}/${item._id}`}><Isvg src={editIcon} /></Link>
+                                                : null
+                                        }
                                     </Col>
                                 </Row>
                             )
