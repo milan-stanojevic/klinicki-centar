@@ -25,7 +25,8 @@ class CalendarPage extends Component {
         this.renderEvent = this.renderEvent.bind(this);
 
         this.state = {
-            events: []
+            events: [],
+            userData: {}
         };
     }
 
@@ -49,11 +50,27 @@ class CalendarPage extends Component {
             console.log(result);
         })
 
+        fetch('http://127.0.0.1:4000/clinic/user', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                userData: result
+            })
+            console.log(result);
+        })
+
+
     }
 
     renderEvent({ event }) {
         return (
-            <div onClick={() => {
+            <div onClick={() => { 
+                if(event.appointment.doctor == this.state.userData._id)
                 this.props[0].history.push(`/doctor/examination/${event._id}`)
             }}>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
