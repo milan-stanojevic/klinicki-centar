@@ -69,7 +69,7 @@ export class Map extends Component {
             this.initMap();
         }
 
-        if (prevProps.value != this.props.value) {
+        if (this.state._googleMapsLoaded && prevProps.value != this.props.value) {
             var latLng = new window.google.maps.LatLng(this.props.value.split(',')[0], this.props.value.split(',')[1]);
             this.state.googleMap.setCenter(latLng);
         }
