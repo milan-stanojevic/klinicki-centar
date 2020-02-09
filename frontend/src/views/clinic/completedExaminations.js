@@ -33,7 +33,7 @@ class CompletedExaminations extends Component {
 
         this.state = {
             events: [],
-            initialValues: [[],[]]
+            initialValues: [[],[],[],[],[],[]]
         };
     }
 
@@ -93,18 +93,16 @@ class CompletedExaminations extends Component {
             data: [
                 {
                     // Change type to "doughnut", "line", "splineArea", etc.
-                    type: "column",
+                    type: "splineArea",
                     dataPoints: [
-                        
-
                     ]
                 }
             ]
 
         }
-        for(let i = 0; i<this.state.initialValues[0].length; i++)
+        for(let i = 0; i<this.state.initialValues[2].length; i++)
         {
-            options.data[0].dataPoints.push({label: this.state.initialValues[0][i], y : parseInt(this.state.initialValues[1][i])})
+            options.data[0].dataPoints.push({label: this.state.initialValues[2][i], y : parseInt(this.state.initialValues[3][i])})
         }
         const options1 = {
             title: {
@@ -121,9 +119,9 @@ class CompletedExaminations extends Component {
                 }
             ]
         }
-        for(let i = 0; i<this.state.initialValues[0].length; i++)
+        for(let i = 0; i<this.state.initialValues[4].length; i++)
         {
-            options1.data[0].dataPoints.push({label: this.state.initialValues[0][i], y : parseInt(this.state.initialValues[1][i])})
+            options1.data[0].dataPoints.push({label: this.state.initialValues[5][i], y : parseInt(this.state.initialValues[4][i])})
         }
         const options2 = {
             title: {

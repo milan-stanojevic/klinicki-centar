@@ -214,15 +214,24 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         console.log(admin[0]);
         let clinic = admin[0].clinic;
+        let app = await db.collection('appointments').find({ clinic: clinic }).toArray();
+
         //danasnji datum
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         // today = dd + '.' + mm + '.' + yyyy;
-        //dan prije 30 dana
-        var someDate = new Date(Date.now() - 2592e6);
-        
+        //dan prije 7 dana
+        var someDate = new Date(Date.now() - 6048e5);
+        // var oneWeek = new Date(Date.now() - 5184e5);
+        // var twoWeek = new Date(oneWeek - 5184e5);
+        // var threeWeek = new Date(twoWeek - 5184e5);
+        // var fourWeek = new Date(threeWeek - 5184e5);
+        console.log(today.getDay());
+
+
+
         var dateArray = [];
         var currentDate = moment(someDate);
         var stopDate = moment(today);
@@ -230,6 +239,376 @@ class Clinic {
             dateArray.push(moment(currentDate).format('DD.MM.YYYY'))
             currentDate = moment(currentDate).add(1, 'days');
         }
+        //console.log(dateArray);
+        let prvi = 0, drugi = 0, treci = 0, cetvrti = 0, peti = 0, sesti = 0, sedmi = 0, osmi = 0;
+        let dat;
+        for (let i = 0; i < app.length; i++) {
+            dat = app[i].date.split(',');
+            for (let j = 0; j < dateArray.length; j++) {
+
+                if (dat[0] == dateArray[j]) {
+                    if (j == 0) {
+                        prvi++;
+                    }
+                    else if (j == 1) {
+                        drugi++;
+                    }
+                    else if (j == 2) {
+                        treci++;
+                    }
+                    else if (j == 3) {
+                        cetvrti++;
+                    }
+                    else if (j == 4) {
+                        peti++;
+                    }
+                    else if (j == 5) {
+                        sesti++;
+                    }
+                    else if (j == 6) {
+                        sedmi++;
+                    }
+                    else if (j == 8) {
+                        osmi++;
+                    }
+                }
+            }
+        }
+        let dayApps = [];
+        dayApps.push(String(prvi));
+        dayApps.push(String(drugi));
+        dayApps.push(String(treci));
+        dayApps.push(String(cetvrti));
+        dayApps.push(String(peti));
+        dayApps.push(String(sesti));
+        dayApps.push(String(sedmi));
+        dayApps.push(String(osmi));
+        // console.log(dayApps);
+
+        ////// NA SEDMICNOM NIVOU
+        if (today.getDay() == 0) {
+            var oneWeek = new Date(Date.now() - 5184e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+            // console.log(dateArray4);
+            // console.log(dateArray3);
+            // console.log(dateArray2);
+            // console.log(dateArray1);
+        }
+        else if (today.getDay() == 1) {
+            var oneWeek = new Date(Date.now());
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+            // console.log(dateArray4);
+            // console.log(dateArray3);
+            // console.log(dateArray2);
+            // console.log(dateArray1);
+        }
+        else if (today.getDay() == 2) {
+            var oneWeek = new Date(Date.now() - 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+
+        }
+        else if (today.getDay() == 3) {
+            var oneWeek = new Date(Date.now() - 2 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+        }
+        else if (today.getDay() == 4) {
+            var oneWeek = new Date(Date.now() - 3 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+
+        }
+        else if (today.getDay() == 5) {
+            var oneWeek = new Date(Date.now() - 4 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+
+        }
+        else if (today.getDay() == 6) {
+            var oneWeek = new Date(Date.now() - 5 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+
+        }
+        // console.log(dateArray4);
+        // console.log(dateArray3);
+        // console.log(dateArray2);
+        // console.log(dateArray1);
+        prvi = 0; drugi = 0; treci = 0; cetvrti = 0;
+        let datum;
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray1.length; j++) {
+                if (datum[0] == dateArray1[j]) {
+                    prvi++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray2.length; j++) {
+                if (datum[0] == dateArray2[j]) {
+                    drugi++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray3.length; j++) {
+                if (datum[0] == dateArray3[j]) {
+                    treci++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray4.length; j++) {
+                if (datum[0] == dateArray4[j]) {
+                    prvi++;
+                }
+            }
+        }
+        let weekApps = [];
+        let weekArray = [];
+        weekApps.push(String(prvi));
+        weekApps.push(String(drugi));
+        weekApps.push(String(treci));
+        weekApps.push(String(cetvrti));
+        console.log(weekApps);
+        let x = dateArray1[0] + " - " + dateArray1[dateArray1.length - 1];
+        let y = dateArray2[0] + " - " + dateArray2[dateArray2.length - 1];
+        let z = dateArray3[0] + " - " + dateArray3[dateArray3.length - 1];
+        let w = dateArray4[0] + " - " + dateArray4[dateArray4.length - 1];
+        weekArray.push(x);
+        weekArray.push(y);
+        weekArray.push(z);
+        weekArray.push(w);
+        // weekArray.push()
+
+        // weekApps.push(String(drugi));
+        // weekApps.push(String(treci));
+        // weekApps.push(String(cetvrti));
+
+
+
+
+
+
+        ///////
+
 
 
         //Na mjesecnom nivou
@@ -245,14 +624,16 @@ class Clinic {
                 month--;
             }
         }
-        
+
         let monthApps = [];
-        let app = await db.collection('appointments').find({ clinic: clinic }).toArray();
-        let prvi = 0, drugi = 0, treci = 0, cetvrti = 0, peti = 0, sesti = 0;
+
+        prvi = 0; drugi = 0; treci = 0; cetvrti = 0; peti = 0; sesti = 0;
         let monthNum;
+        // console.log(app);
         for (let i = 0; i < app.length; i++) {
-            monthNum = app[0].date.split('.');
+            monthNum = app[i].date.split('.');
             for (let j = 0; j < monthsArray.length; j++) {
+
                 if (Number(monthNum[1]) == Number(monthsArray[j])) {
                     if (j == 0) {
                         prvi++;
@@ -281,51 +662,68 @@ class Clinic {
         monthApps.push(String(cetvrti));
         monthApps.push(String(peti));
         monthApps.push(String(sesti));
-        
-        for(let i = 0; i < monthsArray.length; i++){
-            if(monthsArray[i] == '1'){
+        // console.log(monthApps);
+
+        for (let i = 0; i < monthsArray.length; i++) {
+            if (monthsArray[i] == '1') {
                 monthsArray[i] = 'Januar'
             }
-            else if(monthsArray[i] == '2'){
+            else if (monthsArray[i] == '2') {
                 monthsArray[i] = 'Februar'
             }
-            else if(monthsArray[i] == '3'){
+            else if (monthsArray[i] == '3') {
                 monthsArray[i] = 'Mart'
             }
-            else if(monthsArray[i] == '4'){
+            else if (monthsArray[i] == '4') {
                 monthsArray[i] = 'April'
             }
-            else if(monthsArray[i] == '5'){
+            else if (monthsArray[i] == '5') {
                 monthsArray[i] = 'Maj'
             }
-            else if(monthsArray[i] == '6'){
+            else if (monthsArray[i] == '6') {
                 monthsArray[i] = 'Jun'
             }
-            else if(monthsArray[i] == '7'){
+            else if (monthsArray[i] == '7') {
                 monthsArray[i] = 'Jul'
             }
-            else if(monthsArray[i] == '8'){
+            else if (monthsArray[i] == '8') {
                 monthsArray[i] = 'Avgust'
             }
-            else if(monthsArray[i] == '9'){
+            else if (monthsArray[i] == '9') {
                 monthsArray[i] = 'Septembar'
             }
-            else if(monthsArray[i] == '10'){
+            else if (monthsArray[i] == '10') {
                 monthsArray[i] = 'Oktobar'
             }
-            else if(monthsArray[i] == '11'){
+            else if (monthsArray[i] == '11') {
                 monthsArray[i] = 'Novembar'
             }
-            else if(monthsArray[i] == '12'){
+            else if (monthsArray[i] == '12') {
                 monthsArray[i] = 'Decembar'
             }
-            
         }
+        let cut;
+        for (let i = 0; i < dateArray.length; i++) {
+            cut = dateArray[i].split('.');
+            dateArray[i] = cut[0] + '.' + cut[1];
+        }
+        dateArray.reverse();
+        dayApps.reverse();
+
+
+
+
+
+
 
         let result = [];
         result.push(monthsArray);
         result.push(monthApps);
-       
+        result.push(dateArray);
+        result.push(dayApps);
+        result.push(weekApps);
+        result.push(weekArray);
+
 
 
 
