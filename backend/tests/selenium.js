@@ -127,6 +127,28 @@ describe('SeleniumTest', () => {
             await sleep(1500);
             await driver.wait(until.elementIsVisible(await driver.findElement(By.xpath("//div[.='10.02.2020, 00:00']/../div[@class='actions col-lg-2']/button[.='ZAKAZI']"))), 3000).click();
             await sleep(2000);
+            await sleep(2000);
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('logout'))), 20000);
+
+            await driver.executeScript("document.getElementById('logout').click();window.location.href='/login';")
+
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('type'))), 20000);
+            await driver.findElement(By.xpath("//*[@id='type']")).click();
+            await driver.findElement(By.xpath("//*[@id='type']/div/button[.='Admin klinike']")).click();
+            await driver.findElement(By.id('username')).sendKeys('domzdravlja_admin');
+            await driver.findElement(By.id('password')).sendKeys('domzdravlja2020');
+            await driver.findElement(By.id('login-button')).click();
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('clinic-appointment-requests'))), 20000);
+
+            await driver.executeScript("document.getElementById('clinic-appointment-requests').click();")
+
+            await sleep(2000);
+
+
+            await driver.findElement(By.xpath('//div[.="10.02.2020, 00:00"]/../div/div/button[.="ODOBRI"]')).click();
+            await sleep(2000);
+
+
 
 
         } catch (e) {
@@ -201,6 +223,9 @@ describe('SeleniumTest', () => {
 
             await driver.findElement(By.xpath("//a[.='Izaberi salu']")).click();
             await driver.findElement(By.xpath("//a[.='Izaberi salu']/../div/button")).click();
+
+            await sleep(3000);
+
 
         } catch (e) {
             console.log(e);

@@ -135,6 +135,21 @@ describe("UnitTests", async () => {
                 });
         });
 
+        it("moze kreirati slobodan termin", (done) => {
+            chai.request(app)
+                .post('/clinic/appointments/new')
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${clinicAdminToken}`)
+                .send({ date: '10.04.2020, 00:00', duration: 30, doctor: doctorId, ordination: ordinationId, type: typeId, price: 50 })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.include.keys('id')
+                    done();
+                });
+        });
+
 
     });
 
@@ -175,8 +190,10 @@ describe("UnitTests", async () => {
                 .send({ })
                 .end((err, res) => {
                     
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
+                    clinicId = res.body[0]._id;
                     done();
                 });
         });
@@ -203,7 +220,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ })
                 .end((err, res) => {
-                    
+                    console.log(res.body);
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     for(let i=0;i<res.body.length;i++){
