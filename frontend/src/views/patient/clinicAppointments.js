@@ -89,19 +89,19 @@ class ClinicAppointments extends Component {
                         <Col lg="2">
                             <span className="name">Datum</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Trajanje</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">Tip</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">Sala</span>
                         </Col>
                         <Col lg="2">
                             <span className="name">Doktor</span>
                         </Col>
-                        <Col lg="2">
+                        <Col lg="1">
                             <span className="name">Cijena</span>
                         </Col>
                         <Col lg="2" className="actions">
@@ -119,19 +119,19 @@ class ClinicAppointments extends Component {
                                     <Col lg="2">
                                         <span className="value">{item.date}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.duration}</span>
                                     </Col>
-                                    <Col lg="1">
+                                    <Col lg="2">
                                         <span className="value">{item.typeTag}</span>
                                     </Col>
-                                    <Col lg="1">
+                                    <Col lg="2">
                                         <span className="value">{item.ordinationTag}</span>
                                     </Col>
                                     <Col lg="2">
                                         <span className="value">{item.docName}</span>
                                     </Col>
-                                    <Col lg="2">
+                                    <Col lg="1">
                                         <span className="value">{item.price}</span>
                                     </Col>
                                     <Col lg="2" className="actions">

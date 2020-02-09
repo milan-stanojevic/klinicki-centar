@@ -1,0 +1,21 @@
+{
+  "name": "klinicki-centar",
+  "version": "1.0.0",
+  "description": "Projekat PSW/ISA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "start npm run dev --prefix backend && start npm run start --prefix frontend",
+    "deploy": "npm run build --prefix frontend && npm run dev --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milan-stanojevic/klinicki-centar.git"
+  },
+  "author": "Milan Stanojevic, Aleksandar Dabic, Ivan Lecic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milan-stanojevic/klinicki-centar/issues"
+  },
+  "homepage": "https://github.com/milan-stanojevic/klinicki-centar#readme"
+}

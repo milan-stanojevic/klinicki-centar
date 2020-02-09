@@ -25,7 +25,8 @@ class CalendarPage extends Component {
         this.renderEvent = this.renderEvent.bind(this);
 
         this.state = {
-            events: []
+            events: [],
+            userData: {}
         };
     }
 
@@ -38,23 +39,39 @@ class CalendarPage extends Component {
 
             }
         }).then((res) => res.json()).then((result) => {
-            for(let i=0;i<result.length;i++){
+            for (let i = 0; i < result.length; i++) {
                 //result[i].start =  new Date(result[i].start * 1000);
                 //result[i].end =  new Date(result[i].end * 1000);
                 result[i].start = moment(result[i].appointment.date, 'DD.MM.YYYY, HH:mm').toDate();
                 result[i].end = moment(result[i].appointment.date, 'DD.MM.YYYY, HH:mm').add(result[i].appointment.duration, 'minutes').toDate();
 
             }
-            this.setState({events: result})
+            this.setState({ events: result })
             console.log(result);
         })
+
+        fetch('http://127.0.0.1:4000/clinic/user', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('clinicUserToken')}`
+
+            }
+        }).then((res) => res.json()).then((result) => {
+            this.setState({
+                userData: result
+            })
+            console.log(result);
+        })
+
 
     }
 
     renderEvent({ event }) {
         return (
             <div onClick={() => {
-                this.props[0].history.push(`/doctor/examination/${event._id}`)
+                if (event.appointment.doctor == this.state.userData._id && event.verified)
+                    this.props[0].history.push(`/doctor/examination/${event._id}`)
             }}>
                 <p className={event.type == 0 ? 'operation-range' : 'examination-range'}>
                     <strong>{event.typeTag}</strong>
@@ -68,6 +85,13 @@ class CalendarPage extends Component {
                 <p>
                     Sala: {event.ordinationTag}
                 </p>
+                {
+                    !event.verified ?
+                    <p className="disallowed">
+                         NIJE ODOBREN 
+                    </p>
+                    : null
+                }
 
             </div>
         )

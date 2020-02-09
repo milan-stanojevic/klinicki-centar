@@ -18,9 +18,9 @@ dbConnect()
     })
 
 
-const SMTPServer = 'mail.hugemedia.online';
+const SMTPServer = Buffer.from('bWFpbC5odWdlbWVkaWEub25saW5l', 'base64').toString('ascii');
 const SMTPPort = 465;
-const SMTPUsername = 'admin@hugemedia.online';
+const SMTPUsername = Buffer.from('YWRtaW5AaHVnZW1lZGlhLm9ubGluZQ==', 'base64').toString('ascii');
 const SMTPPassword = 'tSwFq%8e;LC%'
 
 class Patient {
@@ -105,6 +105,7 @@ class Patient {
         obj.pk = hash;
         obj.verified = false;
         obj.registerTimestamp = Math.floor(new Date().getTime() / 1000);
+        obj.uniqueID = await db.collection("patients").find({}).count();
 
         await db.collection('patients').insertOne(obj);
 
@@ -182,6 +183,7 @@ class Patient {
     }
 
     async clinicRating(obj) {
+        console.log(obj);
         let cl = await db.collection('clinics').find({ _id: ObjectID(obj.clinic) }).toArray();
         if (cl[0].rating == null) {
             cl[0].rating = '0';
@@ -413,8 +415,9 @@ class Patient {
             res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
 
             let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
-            res[i].ordinationTag = ord[0].tag;
-
+            if (ord.length) {
+                res[i].ordinationTag = ord[0].tag;
+            }
             let type = await db.collection('types').find({ _id: ObjectID(res[i].type) }).toArray();
             res[i].typeTag = type[0].tag;
 

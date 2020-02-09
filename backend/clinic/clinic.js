@@ -16,15 +16,15 @@ dbConnect()
     .catch((e) => {
         console.log('DB error')
     })
-const SMTPServer = 'mail.hugemedia.online';
+const SMTPServer = Buffer.from('bWFpbC5odWdlbWVkaWEub25saW5l', 'base64').toString('ascii');
 const SMTPPort = 465;
-const SMTPUsername = 'admin@hugemedia.online';
+const SMTPUsername = Buffer.from('YWRtaW5AaHVnZW1lZGlhLm9ubGluZQ==', 'base64').toString('ascii');
 const SMTPPassword = 'tSwFq%8e;LC%'
 
 function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
     if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
-    if (a_start <= b_end   && b_end   <= a_end) return true; // b ends in a
-    if (b_start <  a_start && a_end   <  b_end) return true; // a in b
+    if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+    if (b_start < a_start && a_end < b_end) return true; // a in b
     return false;
 }
 
@@ -134,7 +134,7 @@ class Clinic {
         if (sort == 0)
             return await db.collection('patients').find({}).sort({ username: 1 }).toArray();
         else if (sort == 1)
-            return await db.collection('patients').find({}).sort({ _id: 1 }).toArray();
+            return await db.collection('patients').find({}).sort({ uniqueID: 1 }).toArray();
 
 
     }
@@ -211,32 +211,556 @@ class Clinic {
         return String(income);
     }
     async completedEvents(uid) {
-
-        let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
-
-        for (let i = 0; i < requests.length; i++) {
-            let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
-            let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
-            requests[i].patient = patient[0] ? patient[0] : {};
-            requests[i].appointment = appointment[0];
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        console.log(admin[0]);
+        let clinic = admin[0].clinic;
+        let requests = await db.collection('appointmentRequests').find({$and : [{verified : true},{examinationDone : true}]}).toArray();
+        // let appointments = await db.collection('appointments').find({ clinic: clinic }).toArray();
+        let app = [];
+        for(let i=0; i<requests.length; i++){
+            let appointment = await db.collection('appointments').find({ $and :[{ _id: requests[i].appointment }, { clinic: clinic }]}).toArray();
+            app.push(appointment[0]);
         }
-        for (let i = 0; i < requests.length; i++) {
+        console.log(app);
 
-            if (requests[i].appointment.doctor) {
-                let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
-                requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+        //danasnji datum
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        // today = dd + '.' + mm + '.' + yyyy;
+        //dan prije 7 dana
+        var someDate = new Date(Date.now() - 6048e5);
+        // var oneWeek = new Date(Date.now() - 5184e5);
+        // var twoWeek = new Date(oneWeek - 5184e5);
+        // var threeWeek = new Date(twoWeek - 5184e5);
+        // var fourWeek = new Date(threeWeek - 5184e5);
+        console.log(today.getDay());
+
+
+
+        var dateArray = [];
+        var currentDate = moment(someDate);
+        var stopDate = moment(today);
+        while (currentDate <= stopDate) {
+            dateArray.push(moment(currentDate).format('DD.MM.YYYY'))
+            currentDate = moment(currentDate).add(1, 'days');
+        }
+        //console.log(dateArray);
+        let prvi = 0, drugi = 0, treci = 0, cetvrti = 0, peti = 0, sesti = 0, sedmi = 0, osmi = 0;
+        let dat;
+        for (let i = 0; i < app.length; i++) {
+            dat = app[i].date.split(',');
+            for (let j = 0; j < dateArray.length; j++) {
+
+                if (dat[0] == dateArray[j]) {
+                    if (j == 0) {
+                        prvi++;
+                    }
+                    else if (j == 1) {
+                        drugi++;
+                    }
+                    else if (j == 2) {
+                        treci++;
+                    }
+                    else if (j == 3) {
+                        cetvrti++;
+                    }
+                    else if (j == 4) {
+                        peti++;
+                    }
+                    else if (j == 5) {
+                        sesti++;
+                    }
+                    else if (j == 6) {
+                        sedmi++;
+                    }
+                    else if (j == 8) {
+                        osmi++;
+                    }
+                }
+            }
+        }
+        let dayApps = [];
+        dayApps.push(String(prvi));
+        dayApps.push(String(drugi));
+        dayApps.push(String(treci));
+        dayApps.push(String(cetvrti));
+        dayApps.push(String(peti));
+        dayApps.push(String(sesti));
+        dayApps.push(String(sedmi));
+        dayApps.push(String(osmi));
+        // console.log(dayApps);
+
+        ////// NA SEDMICNOM NIVOU
+        if (today.getDay() == 0) {
+            var oneWeek = new Date(Date.now() - 5184e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+            // console.log(dateArray4);
+            // console.log(dateArray3);
+            // console.log(dateArray2);
+            // console.log(dateArray1);
+        }
+        else if (today.getDay() == 1) {
+            var oneWeek = new Date(Date.now());
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+            // console.log(dateArray4);
+            // console.log(dateArray3);
+            // console.log(dateArray2);
+            // console.log(dateArray1);
+        }
+        else if (today.getDay() == 2) {
+            var oneWeek = new Date(Date.now() - 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
             }
 
-            if (requests[i].appointment.ordination) {
-                let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
-                requests[i].ordinationTag = ord[0].tag;
+        }
+        else if (today.getDay() == 3) {
+            var oneWeek = new Date(Date.now() - 2 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+        }
+        else if (today.getDay() == 4) {
+            var oneWeek = new Date(Date.now() - 3 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
             }
 
-            let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
-            requests[i].typeTag = type[0].tag;
+        }
+        else if (today.getDay() == 5) {
+            var oneWeek = new Date(Date.now() - 4 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
 
         }
-        return requests;
+        else if (today.getDay() == 6) {
+            var oneWeek = new Date(Date.now() - 5 * 864e5);
+            var twoWeek = new Date(oneWeek - 6048e5);
+            var threeWeek = new Date(twoWeek - 6048e5);
+            var fourWeek = new Date(threeWeek - 6048e5);
+            // console.log(today.getDay(),oneWeek.getDay(),twoWeek.getDay(),threeWeek.getDay(),fourWeek.getDay())
+            var dateArray1 = [];
+            var currentDate1 = moment(oneWeek);
+            var stopDate1 = moment(today);
+            while (currentDate1 <= stopDate1 + 24 * 60 * 60000) {
+                dateArray1.push(moment(currentDate1).format('DD.MM.YYYY'))
+                currentDate1 = moment(currentDate1).add(1, 'days');
+            }
+            var dateArray2 = [];
+            var currentDate2 = moment(twoWeek);
+            var stopDate2 = moment(oneWeek);
+            while (currentDate2 < stopDate2) {
+                dateArray2.push(moment(currentDate2).format('DD.MM.YYYY'))
+                currentDate2 = moment(currentDate2).add(1, 'days');
+            }
+            var dateArray3 = [];
+            var currentDate3 = moment(threeWeek);
+            var stopDate3 = moment(twoWeek);
+            while (currentDate3 < stopDate3) {
+                dateArray3.push(moment(currentDate3).format('DD.MM.YYYY'))
+                currentDate3 = moment(currentDate3).add(1, 'days');
+            }
+            var dateArray4 = [];
+            var currentDate4 = moment(fourWeek);
+            var stopDate4 = moment(threeWeek);
+            while (currentDate4 < stopDate4) {
+                dateArray4.push(moment(currentDate4).format('DD.MM.YYYY'))
+                currentDate4 = moment(currentDate4).add(1, 'days');
+            }
+
+        }
+        // console.log(dateArray4);
+        // console.log(dateArray3);
+        // console.log(dateArray2);
+        // console.log(dateArray1);
+        prvi = 0; drugi = 0; treci = 0; cetvrti = 0;
+        let datum;
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray1.length; j++) {
+                if (datum[0] == dateArray1[j]) {
+                    prvi++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray2.length; j++) {
+                if (datum[0] == dateArray2[j]) {
+                    drugi++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray3.length; j++) {
+                if (datum[0] == dateArray3[j]) {
+                    treci++;
+                }
+            }
+        }
+        for (let i = 0; i < app.length; i++) {
+            datum = app[i].date.split(',');
+            for (let j = 0; j < dateArray4.length; j++) {
+                if (datum[0] == dateArray4[j]) {
+                    prvi++;
+                }
+            }
+        }
+        let weekApps = [];
+        let weekArray = [];
+        weekApps.push(String(prvi));
+        weekApps.push(String(drugi));
+        weekApps.push(String(treci));
+        weekApps.push(String(cetvrti));
+        console.log(weekApps);
+        let x = dateArray1[0] + " - " + dateArray1[dateArray1.length - 1];
+        let y = dateArray2[0] + " - " + dateArray2[dateArray2.length - 1];
+        let z = dateArray3[0] + " - " + dateArray3[dateArray3.length - 1];
+        let w = dateArray4[0] + " - " + dateArray4[dateArray4.length - 1];
+        weekArray.push(x);
+        weekArray.push(y);
+        weekArray.push(z);
+        weekArray.push(w);
+        // weekArray.push()
+
+        // weekApps.push(String(drugi));
+        // weekApps.push(String(treci));
+        // weekApps.push(String(cetvrti));
+
+
+
+
+
+
+        ///////
+
+
+
+        //Na mjesecnom nivou
+        let monthsArray = [];
+        let month = Number(mm);
+        for (let i = 0; i < 6; i++) {
+            if (month > 0) {
+                monthsArray[i] = String(month);
+                month--;
+            } else {
+                month = 12;
+                monthsArray[i] = String(month);
+                month--;
+            }
+        }
+
+        let monthApps = [];
+
+        prvi = 0; drugi = 0; treci = 0; cetvrti = 0; peti = 0; sesti = 0;
+        let monthNum;
+        // console.log(app);
+        for (let i = 0; i < app.length; i++) {
+            monthNum = app[i].date.split('.');
+            for (let j = 0; j < monthsArray.length; j++) {
+
+                if (Number(monthNum[1]) == Number(monthsArray[j])) {
+                    if (j == 0) {
+                        prvi++;
+                    }
+                    else if (j == 1) {
+                        drugi++;
+                    }
+                    else if (j == 2) {
+                        treci++;
+                    }
+                    else if (j == 3) {
+                        cetvrti++;
+                    }
+                    else if (j == 4) {
+                        peti++;
+                    }
+                    else if (j == 5) {
+                        sesti++;
+                    }
+                }
+            }
+        }
+        monthApps.push(String(prvi));
+        monthApps.push(String(drugi));
+        monthApps.push(String(treci));
+        monthApps.push(String(cetvrti));
+        monthApps.push(String(peti));
+        monthApps.push(String(sesti));
+        // console.log(monthApps);
+
+        for (let i = 0; i < monthsArray.length; i++) {
+            if (monthsArray[i] == '1') {
+                monthsArray[i] = 'Januar'
+            }
+            else if (monthsArray[i] == '2') {
+                monthsArray[i] = 'Februar'
+            }
+            else if (monthsArray[i] == '3') {
+                monthsArray[i] = 'Mart'
+            }
+            else if (monthsArray[i] == '4') {
+                monthsArray[i] = 'April'
+            }
+            else if (monthsArray[i] == '5') {
+                monthsArray[i] = 'Maj'
+            }
+            else if (monthsArray[i] == '6') {
+                monthsArray[i] = 'Jun'
+            }
+            else if (monthsArray[i] == '7') {
+                monthsArray[i] = 'Jul'
+            }
+            else if (monthsArray[i] == '8') {
+                monthsArray[i] = 'Avgust'
+            }
+            else if (monthsArray[i] == '9') {
+                monthsArray[i] = 'Septembar'
+            }
+            else if (monthsArray[i] == '10') {
+                monthsArray[i] = 'Oktobar'
+            }
+            else if (monthsArray[i] == '11') {
+                monthsArray[i] = 'Novembar'
+            }
+            else if (monthsArray[i] == '12') {
+                monthsArray[i] = 'Decembar'
+            }
+        }
+        let cut;
+        for (let i = 0; i < dateArray.length; i++) {
+            cut = dateArray[i].split('.');
+            dateArray[i] = cut[0] + '.' + cut[1];
+        }
+        dateArray.reverse();
+        dayApps.reverse();
+
+
+
+
+
+
+
+        let result = [];
+        result.push(monthsArray);
+        result.push(monthApps);
+        result.push(dateArray);
+        result.push(dayApps);
+        result.push(weekApps);
+        result.push(weekArray);
+
+
+
+
+
+        // let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
+
+        // for (let i = 0; i < requests.length; i++) {
+        //     let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+        //     let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+        //     requests[i].patient = patient[0] ? patient[0] : {};
+        //     requests[i].appointment = appointment[0];
+        // }
+        // for (let i = 0; i < requests.length; i++) {
+
+        //     if (requests[i].appointment.doctor) {
+        //         let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
+        //         requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+        //     }
+
+        //     if (requests[i].appointment.ordination) {
+        //         let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
+        //         requests[i].ordinationTag = ord[0].tag;
+        //     }
+
+        //     let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
+        //     requests[i].typeTag = type[0].tag;
+
+        // }
+        // return requests;
+        return result;
     }
 
     async clinicDoctors(uid) {
@@ -382,9 +906,9 @@ class Clinic {
 
         let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
         let doctor = await db.collection('clinicUsers').find({ _id: ObjectID(appointment[0].doctor) }).toArray();
-        let appReq =  await db.collection('appointmentRequests').find({ appointment: appointment[0]._id }).toArray();
-        let patient = await db.collection('patients').find({ _id: appReq[0].patient }).toArray(); 
-        
+        let appReq = await db.collection('appointmentRequests').find({ appointment: appointment[0]._id }).toArray();
+        let patient = await db.collection('patients').find({ _id: appReq[0].patient }).toArray();
+
 
         await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
             $set: {
@@ -392,8 +916,8 @@ class Clinic {
                 date: obj.start
             }
         });
-        
-        this.sendMail(doctor[0].email, "Rezervisana sala za operaciju", "Doktore " + doctor[0].firstName + " " + doctor[0].lastName +  ", rezervisana je sala za operaciju");
+
+        this.sendMail(doctor[0].email, "Rezervisana sala za operaciju", "Doktore " + doctor[0].firstName + " " + doctor[0].lastName + ", rezervisana je sala za operaciju");
         this.sendMail(patient[0].email, "Rezervisana sala za operaciju", "Postovani " + patient[0].firstName + " " + patient[0].lastName + ", rezervisana je sala za vasu operaciju");
 
         return { error: null }
@@ -434,7 +958,7 @@ class Clinic {
                 let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
                 requests[i].patient = patient[0];
                 requests[i].appointment = appointment[0];
-                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor', _id : { $ne : ObjectID(appointment[0].doctor) } }).toArray();
+                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor', _id: { $ne: ObjectID(appointment[0].doctor) } }).toArray();
                 newReq.push(requests[i]);
             }
 
@@ -517,7 +1041,7 @@ class Clinic {
                                     let d = requests[k].appointment.duration * 60;
                                     // console.log(start,duration,s,d);
                                     // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                    if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                    if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                         ordinationBusy = true;
                                         break;
                                     }
@@ -526,14 +1050,14 @@ class Clinic {
                                     //     check = true;
                                     //     break;
                                     // }
-                                    
+
 
                                 }
 
                                 if (ordinationBusy == true) {
                                     break;
                                 }
-                                if(check == true){
+                                if (check == true) {
                                     break;
                                 }
 
@@ -544,7 +1068,7 @@ class Clinic {
                                 ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                 console.log("start");
                                 break;
-                                
+
                             }
 
 
@@ -625,20 +1149,20 @@ class Clinic {
                             ordinationBusy = false;
                             while (1) {
                                 ordinationBusy = false;
-    
+
                                 start += 60;
                                 let check = false;
                                 for (let k = 0; k < requests.length; k++) {
                                     if (i == k) {
                                         continue;
                                     }
-    
+
                                     if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                         let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                         let d = requests[k].appointment.duration * 60;
                                         // console.log(start,duration,s,d);
                                         // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                        if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                        if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                             ordinationBusy = true;
                                             break;
                                         }
@@ -647,28 +1171,28 @@ class Clinic {
                                         //     check = true;
                                         //     break;
                                         // }
-                                        
-    
+
+
                                     }
-    
+
                                     if (ordinationBusy == true) {
                                         break;
                                     }
-                                    if(check == true){
+                                    if (check == true) {
                                         break;
                                     }
-    
-    
+
+
                                 }
-    
+
                                 if (ordinationBusy == false) {
                                     ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                     console.log("start");
                                     break;
-                                    
+
                                 }
-    
-    
+
+
                             }
                         }
                     }
@@ -885,9 +1409,9 @@ class Clinic {
 
     async updateClinicOrdinations(uid, id, obj) {
         let _id;
-        console.log(id);
+        //console.log(id);
 
-        console.log(obj);
+        //console.log(obj);
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         let cid = admin[0].clinic;
 
@@ -1191,7 +1715,7 @@ class Clinic {
                 let ordinationBusy = false;
 
                 for (let k = 0; k < requests.length; k++) {
-                   
+
                     console.log(requests[k].appointment.ordination);
                     if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                         let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
@@ -1220,13 +1744,13 @@ class Clinic {
                         start += 60;
                         let check = false;
                         for (let k = 0; k < requests.length; k++) {
-                          
+
                             if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                 let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                 let d = requests[k].appointment.duration * 60;
                                 // console.log(start,duration,s,d);
                                 // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                     ordinationBusy = true;
                                     break;
                                 }
@@ -1235,14 +1759,14 @@ class Clinic {
                                 //     check = true;
                                 //     break;
                                 // }
-                                
+
 
                             }
 
                             if (ordinationBusy == true) {
                                 break;
                             }
-                            if(check == true){
+                            if (check == true) {
                                 break;
                             }
 
@@ -1253,7 +1777,7 @@ class Clinic {
                             ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                             console.log("start");
                             break;
-                            
+
                         }
 
 
@@ -1272,14 +1796,14 @@ class Clinic {
             let ords = [];
             for (let i = 0; i < ordinations.length; i++) {
                 let ordBusy = false;
-                    for (let j=0; j< freeOrdinations.length; j++) {
-                        console.log(freeOrdinations[j].start, obj.date)
+                for (let j = 0; j < freeOrdinations.length; j++) {
+                    console.log(freeOrdinations[j].start, obj.date)
 
-                        if (ordinations[i]._id == freeOrdinations[j].ordination._id && freeOrdinations[j].start != obj.date) {
-                            ordBusy = true;
-                        }
+                    if (ordinations[i]._id == freeOrdinations[j].ordination._id && freeOrdinations[j].start != obj.date) {
+                        ordBusy = true;
                     }
-                
+                }
+
 
                 if (!ordBusy) {
                     ords.push(ordinations[i]);
@@ -1322,8 +1846,15 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
         if (obj.search) {
-            query.firstName = new RegExp(obj.search, 'i');
+            query = { $or: [] }
+            query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
         }
+        if (obj.search) {
+            query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
+        }
+        // if (obj.search) {
+        //     query.firstName = new RegExp(obj.search, 'i');
+        // }
         // if (obj.doctorLastName) {
         //     query.lastName = new RegExp(obj.doctorLastName, 'i');
         // }
@@ -1573,11 +2104,13 @@ class Clinic {
 
         for (let i = 0; i < appointments.length; i++) {
             let req = await db.collection('appointmentRequests').find({ appointment: appointments[i]._id }).toArray();
-            appointments[i].patient = req[0].patient;
-            appointments[i].examinationDone = req[0].examinationDone;
-            appointments[i].appReq = req[0]._id;
-            let pat = await db.collection('patients').find({ _id: appointments[i].patient }).toArray();
-            appointments[i].patientName = pat[0].firstName + ' ' + pat[0].lastName;
+            if (req.length) {
+                appointments[i].patient = req[0].patient;
+                appointments[i].examinationDone = req[0].examinationDone;
+                appointments[i].appReq = req[0]._id;
+                let pat = await db.collection('patients').find({ _id: appointments[i].patient }).toArray();
+                appointments[i].patientName = pat[0].firstName + ' ' + pat[0].lastName;
+            }
         }
         for (let i = 0; i < appointments.length; i++) {
 
@@ -1585,7 +2118,9 @@ class Clinic {
             appointments[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
 
             let ord = await db.collection('ordinations').find({ _id: ObjectID(appointments[i].ordination) }).toArray();
-            appointments[i].ordinationTag = ord[0].tag;
+            if (ord.length) {
+                appointments[i].ordinationTag = ord[0].tag;
+            }
 
             let type = await db.collection('types').find({ _id: ObjectID(appointments[i].type) }).toArray();
             appointments[i].typeTag = type[0].tag;

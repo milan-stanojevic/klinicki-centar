@@ -26,6 +26,8 @@ class ClinicList extends Component {
         super(props);
         this.get = this.get.bind(this);
         this.search = this.search.bind(this);
+        this.gmapCallback = this.gmapCallback.bind(this);
+        window.googleMapsCallback = this.gmapCallback;
 
         this.state = {
             items: [],
@@ -33,8 +35,84 @@ class ClinicList extends Component {
         };
     }
 
+    gmapCallback() {
+        this.setState({
+            _googleMapsLoaded: true
+        })
+    }
+
+
+    initMap() {
+        this.setState({
+            _mapInit: true
+        });
+        var latLng = new window.google.maps.LatLng(44.770835, 19.697928
+        );
+
+        var map = new window.google.maps.Map(this.GoogleMap, {
+            zoom: 10,
+            center: latLng,
+            mapTypeId: window.google.maps.MapTypeId.ROADMAP,
+            disableDefaultUI: true,
+            gestureHandling: "gestureHandling",
+
+        });
+
+        let check = false;
+
+        for(let i=0;i<this.state.items.length;i++){
+            if (!this.state.items[i].coords){
+                continue;
+            }
+
+            if (!check){
+                map.setCenter(new window.google.maps.LatLng(this.state.items[i].coords.split(',')[0], this.state.items[i].coords.split(',')[1]))
+                check = true;
+            }
+
+            var marker = new window.google.maps.Marker({
+                position: new window.google.maps.LatLng(this.state.items[i].coords.split(',')[0], this.state.items[i].coords.split(',')[1]),
+                map: map,
+            });
+
+            marker.addListener('click', () => {
+                this.props[0].history.push(`/patient/clinic/${this.state.items[i]._id}`);
+            });
+            
+    
+        }
+
+
+    }
+
+
     componentDidMount() {
         this.get();
+
+
+        var ref = window.document.getElementsByTagName("script")[0];
+        var script = window.document.createElement("script");
+        script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAaSt58UDZVRmMYe52a3cCPfJaoCaHUJqY&callback=googleMapsCallback&language=hr&region=BA";
+        script.async = true;
+        script.defer = true;
+
+        ref.parentNode.insertBefore(script, ref);
+
+
+        if (this.state._googleMapsLoaded && this.state.items.length && !this.state._mapInit) {
+            this.initMap();
+        }
+
+
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (this.state._googleMapsLoaded && this.state.items.length && !this.state._mapInit) {
+            this.initMap();
+        }
+
+
     }
 
     get() {
@@ -136,7 +214,19 @@ class ClinicList extends Component {
                             )
                         })
                     }
+                    <Row>
+                        <Col lg="12">
+                            <div className="map-wrap">{
+                                this.state._googleMapsLoaded ?
+                                    <div className="map" ref={(input) => { this.GoogleMap = input; }}>
 
+                                    </div>
+                                    : null}
+
+                            </div>
+
+                        </Col>
+                    </Row>
                 </Container>
             </div>
         );

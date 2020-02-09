@@ -96,7 +96,7 @@ class form extends React.Component {
                                         placeholder='Unesite ocjenu'
                                     ></Field>
                                 </Col>
-                                <Col lg="4" className="input-wrap">
+                                {/* <Col lg="4" className="input-wrap">
                                     <Field
                                         name="doctorType"
                                         component={renderSelectField}
@@ -104,8 +104,8 @@ class form extends React.Component {
                                         placeholder="Izaberite tip pregleda"
 
                                     >
-                                        {/* <option value="tip1">tip1</option>
-                                        <option value="tip2">tip2</option> */}
+                                        <option value="tip1">tip1</option>
+                                        <option value="tip2">tip2</option>
                                         {this.props.types && this.props.types.map((item, idx) => {
                                             return (
                                                 <option value={item.tag}>{item.tag}</option>
@@ -113,8 +113,8 @@ class form extends React.Component {
                                         })}
 
                                     </Field>
-                                </Col>
-                                <Col lg="4" className="input-wrap">
+                                </Col> */}
+                                {/* <Col lg="4" className="input-wrap">
                                     <Field
                                         name="date"
                                         component={renderDateField}
@@ -122,7 +122,7 @@ class form extends React.Component {
                                         placeholder="Izaberite datum"
                                     >
                                     </Field>
-                                </Col>
+                                </Col> */}
                                 
                                 <Col lg="12">
                                     <button className="button">Trazi</button>
