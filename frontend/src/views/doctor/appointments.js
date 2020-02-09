@@ -76,16 +76,16 @@ class Appointments extends Component {
                         <Col lg="1">
                             <span className="name">Trajanje</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">Tip</span>
                         </Col>
-                        <Col lg="1">
+                        <Col lg="2">
                             <span className="name">Sala</span>
                         </Col>
                         <Col lg="2">
                             <span className="name">Pacijent</span>
                         </Col>
-                        <Col lg="3">
+                        <Col lg="1">
                             <span className="name">Cijena</span>
                         </Col>
                         <Col lg="2">
@@ -95,7 +95,7 @@ class Appointments extends Component {
                     </Row>
                     {
                         this.state.items.map((item, idx) => {
-                            if(!item.examinationDone)
+                            if(!item.examinationDone && item.verified)
                             return (
                                 <Row className="table-row" key={idx}>
                                     <Col lg="2">
@@ -104,10 +104,10 @@ class Appointments extends Component {
                                     <Col lg="1">
                                         <span className="value">{item.duration}</span>
                                     </Col>
-                                    <Col lg="1">
+                                    <Col lg="2">
                                         <span className="value">{item.typeTag}</span>
                                     </Col>
-                                    <Col lg="1">
+                                    <Col lg="2">
                                         <span className="value">{item.ordinationTag}</span>
                                     </Col>
                                     <Col lg="2">
@@ -116,7 +116,7 @@ class Appointments extends Component {
                                     <Col lg="1">
                                         <span className="value">{item.price}</span>
                                     </Col>
-                                    <Col lg='2'></Col>
+                                    
                                     <Col lg="2">
                                         <button className="button" onClick={() => {
                                             this.props[0].history.push(`/doctor/examination/${item.appReq}`)}}> >> </button>

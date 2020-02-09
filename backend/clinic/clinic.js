@@ -23,8 +23,8 @@ const SMTPPassword = 'tSwFq%8e;LC%'
 
 function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
     if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
-    if (a_start <= b_end   && b_end   <= a_end) return true; // b ends in a
-    if (b_start <  a_start && a_end   <  b_end) return true; // a in b
+    if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
+    if (b_start < a_start && a_end < b_end) return true; // a in b
     return false;
 }
 
@@ -211,32 +211,151 @@ class Clinic {
         return String(income);
     }
     async completedEvents(uid) {
-
-        let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
-
-        for (let i = 0; i < requests.length; i++) {
-            let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
-            let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
-            requests[i].patient = patient[0] ? patient[0] : {};
-            requests[i].appointment = appointment[0];
+        let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
+        console.log(admin[0]);
+        let clinic = admin[0].clinic;
+        //danasnji datum
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        // today = dd + '.' + mm + '.' + yyyy;
+        //dan prije 30 dana
+        var someDate = new Date(Date.now() - 2592e6);
+        
+        var dateArray = [];
+        var currentDate = moment(someDate);
+        var stopDate = moment(today);
+        while (currentDate <= stopDate) {
+            dateArray.push(moment(currentDate).format('DD.MM.YYYY'))
+            currentDate = moment(currentDate).add(1, 'days');
         }
-        for (let i = 0; i < requests.length; i++) {
 
-            if (requests[i].appointment.doctor) {
-                let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
-                requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+
+        //Na mjesecnom nivou
+        let monthsArray = [];
+        let month = Number(mm);
+        for (let i = 0; i < 6; i++) {
+            if (month > 0) {
+                monthsArray[i] = String(month);
+                month--;
+            } else {
+                month = 12;
+                monthsArray[i] = String(month);
+                month--;
             }
-
-            if (requests[i].appointment.ordination) {
-                let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
-                requests[i].ordinationTag = ord[0].tag;
-            }
-
-            let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
-            requests[i].typeTag = type[0].tag;
-
         }
-        return requests;
+        
+        let monthApps = [];
+        let app = await db.collection('appointments').find({ clinic: clinic }).toArray();
+        let prvi = 0, drugi = 0, treci = 0, cetvrti = 0, peti = 0, sesti = 0;
+        let monthNum;
+        for (let i = 0; i < app.length; i++) {
+            monthNum = app[0].date.split('.');
+            for (let j = 0; j < monthsArray.length; j++) {
+                if (Number(monthNum[1]) == Number(monthsArray[j])) {
+                    if (j == 0) {
+                        prvi++;
+                    }
+                    else if (j == 1) {
+                        drugi++;
+                    }
+                    else if (j == 2) {
+                        treci++;
+                    }
+                    else if (j == 3) {
+                        cetvrti++;
+                    }
+                    else if (j == 4) {
+                        peti++;
+                    }
+                    else if (j == 5) {
+                        sesti++;
+                    }
+                }
+            }
+        }
+        monthApps.push(String(prvi));
+        monthApps.push(String(drugi));
+        monthApps.push(String(treci));
+        monthApps.push(String(cetvrti));
+        monthApps.push(String(peti));
+        monthApps.push(String(sesti));
+        
+        for(let i = 0; i < monthsArray.length; i++){
+            if(monthsArray[i] == '1'){
+                monthsArray[i] = 'Januar'
+            }
+            else if(monthsArray[i] == '2'){
+                monthsArray[i] = 'Februar'
+            }
+            else if(monthsArray[i] == '3'){
+                monthsArray[i] = 'Mart'
+            }
+            else if(monthsArray[i] == '4'){
+                monthsArray[i] = 'April'
+            }
+            else if(monthsArray[i] == '5'){
+                monthsArray[i] = 'Maj'
+            }
+            else if(monthsArray[i] == '6'){
+                monthsArray[i] = 'Jun'
+            }
+            else if(monthsArray[i] == '7'){
+                monthsArray[i] = 'Jul'
+            }
+            else if(monthsArray[i] == '8'){
+                monthsArray[i] = 'Avgust'
+            }
+            else if(monthsArray[i] == '9'){
+                monthsArray[i] = 'Septembar'
+            }
+            else if(monthsArray[i] == '10'){
+                monthsArray[i] = 'Oktobar'
+            }
+            else if(monthsArray[i] == '11'){
+                monthsArray[i] = 'Novembar'
+            }
+            else if(monthsArray[i] == '12'){
+                monthsArray[i] = 'Decembar'
+            }
+            
+        }
+
+        let result = [];
+        result.push(monthsArray);
+        result.push(monthApps);
+       
+
+
+
+
+        // let requests = await db.collection('appointmentRequests').find({ examinationDone: true }).toArray();
+
+        // for (let i = 0; i < requests.length; i++) {
+        //     let appointment = await db.collection('appointments').find({ _id: ObjectID(requests[i].appointment) }).toArray();
+        //     let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
+        //     requests[i].patient = patient[0] ? patient[0] : {};
+        //     requests[i].appointment = appointment[0];
+        // }
+        // for (let i = 0; i < requests.length; i++) {
+
+        //     if (requests[i].appointment.doctor) {
+        //         let doc = await db.collection('clinicUsers').find({ _id: ObjectID(requests[i].appointment.doctor) }).toArray();
+        //         requests[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
+        //     }
+
+        //     if (requests[i].appointment.ordination) {
+        //         let ord = await db.collection('ordinations').find({ _id: ObjectID(requests[i].appointment.ordination) }).toArray();
+        //         requests[i].ordinationTag = ord[0].tag;
+        //     }
+
+        //     let type = await db.collection('types').find({ _id: ObjectID(requests[i].appointment.type) }).toArray();
+        //     requests[i].typeTag = type[0].tag;
+
+        // }
+        // return requests;
+        return result;
     }
 
     async clinicDoctors(uid) {
@@ -382,9 +501,9 @@ class Clinic {
 
         let appointment = await db.collection('appointments').find({ _id: ObjectID(id) }).toArray();
         let doctor = await db.collection('clinicUsers').find({ _id: ObjectID(appointment[0].doctor) }).toArray();
-        let appReq =  await db.collection('appointmentRequests').find({ appointment: appointment[0]._id }).toArray();
-        let patient = await db.collection('patients').find({ _id: appReq[0].patient }).toArray(); 
-        
+        let appReq = await db.collection('appointmentRequests').find({ appointment: appointment[0]._id }).toArray();
+        let patient = await db.collection('patients').find({ _id: appReq[0].patient }).toArray();
+
 
         await db.collection('appointments').updateOne({ _id: ObjectID(id) }, {
             $set: {
@@ -392,8 +511,8 @@ class Clinic {
                 date: obj.start
             }
         });
-        
-        this.sendMail(doctor[0].email, "Rezervisana sala za operaciju", "Doktore " + doctor[0].firstName + " " + doctor[0].lastName +  ", rezervisana je sala za operaciju");
+
+        this.sendMail(doctor[0].email, "Rezervisana sala za operaciju", "Doktore " + doctor[0].firstName + " " + doctor[0].lastName + ", rezervisana je sala za operaciju");
         this.sendMail(patient[0].email, "Rezervisana sala za operaciju", "Postovani " + patient[0].firstName + " " + patient[0].lastName + ", rezervisana je sala za vasu operaciju");
 
         return { error: null }
@@ -434,7 +553,7 @@ class Clinic {
                 let patient = await db.collection('patients').find({ _id: ObjectID(requests[i].patient) }).toArray();
                 requests[i].patient = patient[0];
                 requests[i].appointment = appointment[0];
-                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor', _id : { $ne : ObjectID(appointment[0].doctor) } }).toArray();
+                requests[i].availDoctors = await db.collection('clinicUsers').find({ clinic: admin[0].clinic, type: 'doctor', _id: { $ne: ObjectID(appointment[0].doctor) } }).toArray();
                 newReq.push(requests[i]);
             }
 
@@ -517,7 +636,7 @@ class Clinic {
                                     let d = requests[k].appointment.duration * 60;
                                     // console.log(start,duration,s,d);
                                     // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                    if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                    if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                         ordinationBusy = true;
                                         break;
                                     }
@@ -526,14 +645,14 @@ class Clinic {
                                     //     check = true;
                                     //     break;
                                     // }
-                                    
+
 
                                 }
 
                                 if (ordinationBusy == true) {
                                     break;
                                 }
-                                if(check == true){
+                                if (check == true) {
                                     break;
                                 }
 
@@ -544,7 +663,7 @@ class Clinic {
                                 ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                 console.log("start");
                                 break;
-                                
+
                             }
 
 
@@ -625,20 +744,20 @@ class Clinic {
                             ordinationBusy = false;
                             while (1) {
                                 ordinationBusy = false;
-    
+
                                 start += 60;
                                 let check = false;
                                 for (let k = 0; k < requests.length; k++) {
                                     if (i == k) {
                                         continue;
                                     }
-    
+
                                     if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                         let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                         let d = requests[k].appointment.duration * 60;
                                         // console.log(start,duration,s,d);
                                         // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                        if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                        if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                             ordinationBusy = true;
                                             break;
                                         }
@@ -647,28 +766,28 @@ class Clinic {
                                         //     check = true;
                                         //     break;
                                         // }
-                                        
-    
+
+
                                     }
-    
+
                                     if (ordinationBusy == true) {
                                         break;
                                     }
-                                    if(check == true){
+                                    if (check == true) {
                                         break;
                                     }
-    
-    
+
+
                                 }
-    
+
                                 if (ordinationBusy == false) {
                                     ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                                     console.log("start");
                                     break;
-                                    
+
                                 }
-    
-    
+
+
                             }
                         }
                     }
@@ -1191,7 +1310,7 @@ class Clinic {
                 let ordinationBusy = false;
 
                 for (let k = 0; k < requests.length; k++) {
-                   
+
                     console.log(requests[k].appointment.ordination);
                     if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                         let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
@@ -1220,13 +1339,13 @@ class Clinic {
                         start += 60;
                         let check = false;
                         for (let k = 0; k < requests.length; k++) {
-                          
+
                             if (requests[k].appointment.ordination == ordinations[j]._id.toString()) {
                                 let s = Math.floor(moment(requests[k].appointment.date, 'DD.MM.YYYY, HH:mm').toDate().getTime() / 1000);
                                 let d = requests[k].appointment.duration * 60;
                                 // console.log(start,duration,s,d);
                                 // if ((start >= s && start < s + d) || (start + duration >= s && start + duration < s + d)) {
-                                if(dateRangeOverlaps(start,start+duration, s, s+d)) {   
+                                if (dateRangeOverlaps(start, start + duration, s, s + d)) {
                                     ordinationBusy = true;
                                     break;
                                 }
@@ -1235,14 +1354,14 @@ class Clinic {
                                 //     check = true;
                                 //     break;
                                 // }
-                                
+
 
                             }
 
                             if (ordinationBusy == true) {
                                 break;
                             }
-                            if(check == true){
+                            if (check == true) {
                                 break;
                             }
 
@@ -1253,7 +1372,7 @@ class Clinic {
                             ordinationsMap[ordinations[j].tag] = { ordination: ordinations[j], start: moment.unix(start).format('DD.MM.YYYY, HH:mm') };
                             console.log("start");
                             break;
-                            
+
                         }
 
 
@@ -1272,14 +1391,14 @@ class Clinic {
             let ords = [];
             for (let i = 0; i < ordinations.length; i++) {
                 let ordBusy = false;
-                    for (let j=0; j< freeOrdinations.length; j++) {
-                        console.log(freeOrdinations[j].start, obj.date)
+                for (let j = 0; j < freeOrdinations.length; j++) {
+                    console.log(freeOrdinations[j].start, obj.date)
 
-                        if (ordinations[i]._id == freeOrdinations[j].ordination._id && freeOrdinations[j].start != obj.date) {
-                            ordBusy = true;
-                        }
+                    if (ordinations[i]._id == freeOrdinations[j].ordination._id && freeOrdinations[j].start != obj.date) {
+                        ordBusy = true;
                     }
-                
+                }
+
 
                 if (!ordBusy) {
                     ords.push(ordinations[i]);
