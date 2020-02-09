@@ -214,7 +214,14 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         console.log(admin[0]);
         let clinic = admin[0].clinic;
-        let app = await db.collection('appointments').find({ clinic: clinic }).toArray();
+        let requests = await db.collection('appointmentRequests').find({$and : [{verified : true},{examinationDone : true}]}).toArray();
+        // let appointments = await db.collection('appointments').find({ clinic: clinic }).toArray();
+        let app = [];
+        for(let i=0; i<requests.length; i++){
+            let appointment = await db.collection('appointments').find({ $and :[{ _id: requests[i].appointment }, { clinic: clinic }]}).toArray();
+            app.push(appointment[0]);
+        }
+        console.log(app);
 
         //danasnji datum
         var today = new Date();

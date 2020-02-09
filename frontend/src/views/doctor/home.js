@@ -103,7 +103,7 @@ class Test extends Component {
                                 <p>Moj profil</p>
                             </div>
                         </Link></div>
-                        {this.state.type != 'nurse' ?
+                        {/* {this.state.type != 'nurse' ?
 
                             <div class="col-6 col-lg-4"><Link to="/doctor/makingAppointment">
                                 <div class="table-box">
@@ -113,7 +113,7 @@ class Test extends Component {
                             </Link></div>
                             :
                             null
-                        }
+                        } */}
 
                         {this.state.type == 'nurse' ?
                             <div class="col-6 col-lg-4"><Link to="/doctor/recipeAuth">

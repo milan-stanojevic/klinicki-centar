@@ -52,7 +52,7 @@ class PatientPage extends Component {
                         </Col>
                     </Row>
                     <Row className="table-row">
-                        <div class="col-6 col-lg-6">
+                        <div class="col-12 col-lg-12">
                             <Link to={"/doctor/patient/" + this.props[0].match.params.id + "/medicalRecord"}>
 
                                 <div class="table-box">
@@ -61,14 +61,14 @@ class PatientPage extends Component {
                                 </div>
                             </Link>
                         </div>
-                        <div class="col-6 col-lg-6">
+                        {/* <div class="col-6 col-lg-6">
                             <Link to="/doctor/patients">
                                 <div class="table-box">
                                     <p><Isvg src={appointment} /></p>
                                     <p>Zapocni pregled</p>
                                 </div>
                             </Link>
-                        </div>
+                        </div> */}
 
                     </Row>
                     

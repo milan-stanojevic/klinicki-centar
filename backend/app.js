@@ -491,7 +491,8 @@ app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => 
     res.send(await clinicModule.clinicAdmin(uid));
 });
 app.get('/doctor/patient/:id', isClinicAdminAuthenticated, async (req, res) => {
-    res.send(await clinicModule.patient(req.params.id));
+    let uid = res.locals.uid;
+    res.send(await clinicModule.patient(req.params.id,uid));
 });
 
 app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
