@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const port = process.env.PORT || 4000;
+
 //const nodemailer = require('nodemailer');
 const cors = require('cors')
 const bodyParser = require("body-parser");
@@ -25,13 +26,16 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use('/uploads', express.static('uploads'))
 const server = http.createServer(app);
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  
-
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
+
+
+const frontendApp = express();
+frontendApp.use(cors());
+frontendApp.use('/', express.static('../frontend/build'))
+const frontendServer = http.createServer(frontendApp);
+
+frontendServer.listen(80, () => console.log(`Listening on port ${80}`));
 
 /*
     ADMIN API ROUTES

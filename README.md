@@ -63,19 +63,22 @@ Instalirajte potrebne pakete za pokretanje frontenda komandom u frontend folderu
 npm install
 ```
 
-Pokretanje backenda vrsi se komandom u backend folderu
+Pokretanje devopment okruzenja vrsi se komandom u root folderu od projekta
 ```
 npm run dev
 ```
 
 
-Pokretanja frontenda vrsi se komandom u frontend folderu
+Pokretanje deployment skripe vrsi se komandom u root folderu od projekta
 ```
-npm start
+npm run deploy
 ```
 
 
 Pokretanje testova vrsi se komandom u backend folderu (fronted mora biti pokrenut prije pokretanja testova)
 ```
+cd frontned
+npm start
+cd ../backend
 npm run test
 ```
