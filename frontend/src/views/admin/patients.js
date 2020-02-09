@@ -155,7 +155,7 @@ class Patients extends Component {
                         </Col>
                         <Col lg="1">
         
-                            <span className="name">JEDINSTVENI ID</span>
+                            <span className="name">ID</span>
                         </Col>
                         <Col lg="2">
                             <span className="name">KORISNIČKO IME</span>
@@ -167,7 +167,7 @@ class Patients extends Component {
                                 <button><Isvg src={upArrow} /><Isvg src={downArrow} /></button>
 
         </div>*/}
-                            <span className="name">IME</span>
+                            <span className="name">IME I PREZIME</span>
                         </Col>
                         <Col lg="3" className="actions">
 

@@ -219,6 +219,10 @@ app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.updatePatient(uid, req.body));
 });
+app.post('/patient/clinic/rating', isPatientAuthenticated, async (req, res) => {
+    console.log(req.body);
+    res.send(await patientModule.clinicRating(req.body));
+});
 app.post('/patient/clinic/:sort', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.clinicList(req.body, req.params.sort));
 });
@@ -427,11 +431,7 @@ app.get('/patient/clinic/grading', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.clinicGrading(uid));
 });
-app.post('/patient/clinic/rating', isPatientAuthenticated, async (req, res) => {
-    console.log("===========");
-    // console.log(req.body);
-    res.send(await patientModule.clinicRating(req.body));
-});
+
 app.get('/patient/clinic/gradingDoctor', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await patientModule.doctorGrading(uid));

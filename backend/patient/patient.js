@@ -145,7 +145,7 @@ class Patient {
         }
 
 
-        console.log(result);
+        // console.log(result);
         return result;
         // return await db.collection('clinics').find({}).toArray();
     }
@@ -183,7 +183,7 @@ class Patient {
     }
 
     async clinicRating(obj) {
-        console.log(obj);
+        // console.log(obj);
         let cl = await db.collection('clinics').find({ _id: ObjectID(obj.clinic) }).toArray();
         if (cl[0].rating == null) {
             cl[0].rating = '0';
