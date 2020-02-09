@@ -105,6 +105,7 @@ class Patient {
         obj.pk = hash;
         obj.verified = false;
         obj.registerTimestamp = Math.floor(new Date().getTime() / 1000);
+        obj.uniqueID = await db.collection("patients").find({}).count();
 
         await db.collection('patients').insertOne(obj);
 
@@ -182,6 +183,7 @@ class Patient {
     }
 
     async clinicRating(obj) {
+        console.log(obj);
         let cl = await db.collection('clinics').find({ _id: ObjectID(obj.clinic) }).toArray();
         if (cl[0].rating == null) {
             cl[0].rating = '0';

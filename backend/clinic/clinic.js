@@ -134,7 +134,7 @@ class Clinic {
         if (sort == 0)
             return await db.collection('patients').find({}).sort({ username: 1 }).toArray();
         else if (sort == 1)
-            return await db.collection('patients').find({}).sort({ _id: 1 }).toArray();
+            return await db.collection('patients').find({}).sort({ uniqueID: 1 }).toArray();
 
 
     }
@@ -1846,8 +1846,15 @@ class Clinic {
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(cid) }).toArray();
         let query = { clinic: admin[0].clinic }
         if (obj.search) {
-            query.firstName = new RegExp(obj.search, 'i');
+            query = { $or: [] }
+            query['$or'].push({ firstName: new RegExp(obj.search, 'i') })
         }
+        if (obj.search) {
+            query['$or'].push({ lastName: new RegExp(obj.search, 'i') })
+        }
+        // if (obj.search) {
+        //     query.firstName = new RegExp(obj.search, 'i');
+        // }
         // if (obj.doctorLastName) {
         //     query.lastName = new RegExp(obj.doctorLastName, 'i');
         // }

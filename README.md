@@ -31,6 +31,7 @@ db.createUser(
 
 
 
+
 Kreirajte predefinisanog admina klinickog centra (username: admin, password: admin):
 ```
 db.admins.insertOne({username: 'admin', pk: '$2b$10$aAdxTYM3XSa5XpqsDTgT1uXNJ3gbOBNzVhC4/9TX55dCUllAyAKfy'});
@@ -74,6 +75,8 @@ Pokretanje deployment skripe vrsi se komandom u root folderu od projekta
 npm run deploy
 ```
 
+Projektu mozete pristupiti na linku http://localhost
+
 
 Pokretanje testova vrsi se komandom u backend folderu (fronted mora biti pokrenut prije pokretanja testova)
 ```
@@ -82,3 +85,4 @@ npm start
 cd ../backend
 npm run test
 ```
+

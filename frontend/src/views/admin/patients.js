@@ -153,16 +153,16 @@ class Patients extends Component {
         </div>*/}
                             <span className="name">DATUM</span>
                         </Col>
+                        <Col lg="1">
+        
+                            <span className="name">JEDINSTVENI ID</span>
+                        </Col>
                         <Col lg="2">
-                            {/*<div className="sort-wrap">
-                                <button><Isvg src={upArrow} /><Isvg src={downArrow} /></button>
-
-        </div>*/}
                             <span className="name">KORISNIČKO IME</span>
                         </Col>
 
 
-                        <Col lg="3">
+                        <Col lg="2">
                             {/*<div className="sort-wrap">
                                 <button><Isvg src={upArrow} /><Isvg src={downArrow} /></button>
 
@@ -192,11 +192,14 @@ class Patients extends Component {
                                     <Col lg="2">
                                         <span className="value">{moment.unix(item.registerTimestamp).format('DD.MM.YYYY | HH:mm')}</span>
                                     </Col>
+                                    <Col lg="1">
+                                        <span className="value">{item.uniqueID}</span>
+                                    </Col>
                                     <Col lg="2">
                                         <span className="value">{item.username}</span>
                                     </Col>
 
-                                    <Col lg="3">
+                                    <Col lg="2">
                                         <span className="value">{item.firstName} {item.lastName}</span>
                                     </Col>
 
