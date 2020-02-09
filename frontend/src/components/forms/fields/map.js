@@ -50,7 +50,7 @@ export class Map extends Component {
 
         var ref = window.document.getElementsByTagName("script")[0];
         var script = window.document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAAqbIo7N0_Rpwtay3-CWzo5gkfpgWZ4to&callback=googleMapsCallback&language=hr&region=BA";
+        script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAaSt58UDZVRmMYe52a3cCPfJaoCaHUJqY&callback=googleMapsCallback&language=hr&region=BA";
         script.async = true;
         script.defer = true;
 
