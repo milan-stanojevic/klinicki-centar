@@ -413,8 +413,9 @@ class Patient {
             res[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
 
             let ord = await db.collection('ordinations').find({ _id: ObjectID(res[i].ordination) }).toArray();
-            res[i].ordinationTag = ord[0].tag;
-
+            if (ord.length) {
+                res[i].ordinationTag = ord[0].tag;
+            }
             let type = await db.collection('types').find({ _id: ObjectID(res[i].type) }).toArray();
             res[i].typeTag = type[0].tag;
 

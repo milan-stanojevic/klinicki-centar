@@ -91,7 +91,7 @@ const form = (props) => {
                     >
                         <option value="admin">Admin kliničkog centra</option>
                         <option value="clinicAdmin">Admin klinike</option>
-                        <option value="clinicUser">Medecinsko osoblje</option>
+                        <option value="clinicUser">Medicinsko osoblje</option>
                         <option value="patient">Pacijent</option>
 
                     </Field>
