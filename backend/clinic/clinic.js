@@ -16,9 +16,9 @@ dbConnect()
     .catch((e) => {
         console.log('DB error')
     })
-const SMTPServer = 'mail.hugemedia.online';
+const SMTPServer = Buffer.from('bWFpbC5odWdlbWVkaWEub25saW5l', 'base64').toString('ascii');
 const SMTPPort = 465;
-const SMTPUsername = 'admin@hugemedia.online';
+const SMTPUsername = Buffer.from('YWRtaW5AaHVnZW1lZGlhLm9ubGluZQ==', 'base64').toString('ascii');
 const SMTPPassword = 'tSwFq%8e;LC%'
 
 function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
