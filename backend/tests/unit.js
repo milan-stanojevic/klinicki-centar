@@ -23,6 +23,11 @@ let typeId = null;
 let ordinationId = null;
 let clinicId = null;
 let appointmentId = null;
+let doctorToken = null;
+let doctorAppointmentId = null;
+let doctorPatientId = null;
+
+let appointmentWithoutOrdination = null;
 
 describe("UnitTests", async () => {
     await sleep(2000)
@@ -38,7 +43,7 @@ describe("UnitTests", async () => {
                 .set("content-type", "application/json")
                 .send({ username: 'domzdravlja_admin', password: 'domzdravlja2020' })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('token')
@@ -52,8 +57,7 @@ describe("UnitTests", async () => {
                 .set("content-type", "application/json")
                 .send({ username: 'domzdravlja_admin', password: 'pogresnasifra' })
                 .end((err, res) => {
-                    console.log(res.body);
-                    console.log(res.status);
+                    
                     res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('error')
@@ -68,7 +72,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${clinicAdminToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     for(let i=0;i<res.body.length;i++){
@@ -88,7 +92,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${clinicAdminToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     if (res.body.length){
@@ -104,7 +108,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${clinicAdminToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     if (res.body.length){
@@ -123,8 +127,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${clinicAdminToken}`)
                 .send({ date: '10.03.2020, 00:00', duration: 30, doctor: doctorId, ordination: ordinationId, type: typeId, price: 50 })
                 .end((err, res) => {
-                    console.log(res.body);
-                    console.log(res.status);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('id')
@@ -143,7 +146,7 @@ describe("UnitTests", async () => {
                 .set("content-type", "application/json")
                 .send({ username: 'pacijent', password: 'pacijent' })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('token')
@@ -157,8 +160,7 @@ describe("UnitTests", async () => {
                 .set("content-type", "application/json")
                 .send({ username: 'pacijent', password: 'pogresnasifra' })
                 .end((err, res) => {
-                    console.log(res.body);
-                    console.log(res.status);
+                    
                     res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('error')
@@ -172,7 +174,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     done();
@@ -186,26 +188,10 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ search: 'Dom zdravlja' })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     expect(res.body).to.be.an('array').that.contains.something.like({name: 'Dom zdravlja'});
-                    done();
-                });
-        });
-
-        it("moze pretrazivati klinike", (done) => {
-            chai.request(app)
-                .post('/patient/clinic/0')
-                .set("content-type", "application/json")
-                .set('authorization', `Bearer ${patientToken}`)
-                .send({ search: 'Dom zdravlja' })
-                .end((err, res) => {
-                    console.log(res.body);
-                    res.should.have.status(200);
-                    res.body.should.be.a('array');
-                    expect(res.body).to.be.an('array').that.contains.something.like({name: 'Dom zdravlja'});
-                    clinicId = res.body[0]._id;
                     done();
                 });
         });
@@ -217,7 +203,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     for(let i=0;i<res.body.length;i++){
@@ -237,7 +223,7 @@ describe("UnitTests", async () => {
                 .set('authorization', `Bearer ${patientToken}`)
                 .send({ })
                 .end((err, res) => {
-                    console.log(res.body);
+                    
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.include.keys('id')
@@ -249,6 +235,138 @@ describe("UnitTests", async () => {
 
     });
 
+
+
+    describe("Doktor", () => {
+        it("se moze ulogovati sa korisnickim podacima", (done) => {
+            chai.request(app)
+                .post('/clinic/user/login')
+                .set("content-type", "application/json")
+                .send({ username: 'doktor1-domzdravlja', password: 'doktor2020' })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.include.keys('token')
+                    doctorToken = res.body.token;
+                    done();
+                });
+        });
+        it("se ne moze ulogovati sa pogresnim podacima", (done) => {
+            chai.request(app)
+                .post('/clinic/user/login')
+                .set("content-type", "application/json")
+                .send({ username: 'doktor1-domzdravlja', password: 'pogresnasifra' })
+                .end((err, res) => {
+                    
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.include.keys('error')
+                    done();
+                });
+        });
+
+        it("moze dobiti listu zakazanih termina", (done) => {
+            chai.request(app)
+                .get('/doctor/appointments')
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${doctorToken}`)
+                .send({ })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    doctorAppointmentId = res.body[0].appReq;
+                    done();
+                });
+        });
+
+        it("moze dobiti detalje o zakazanom terminu", (done) => {
+            chai.request(app)
+                .get('/clinic/appointmentRequests/'+doctorAppointmentId)
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${doctorToken}`)
+                .send({ })
+                .end((err, res) => {
+
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    doctorPatientId = res.body.patient;
+                    done();
+                });
+        });
+
+        it("moze zakazati novi pregled tokom pregleda", (done) => {
+            chai.request(app)
+                .post('/doctor/makingAppointment/'+doctorPatientId)
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${doctorToken}`)
+                .send({date: '10.04.2020, 00:00', duration: 30, doctor: doctorId, type: typeId, price: 150 })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    done();
+                });
+        });
+
+
+    });
+
+
+
+
+    describe("Admin klinike", () => {
+       
+        it("moze dobiti listu zahtjeva za pregled", (done) => {
+            chai.request(app)
+                .get('/clinic/appointmentRequests')
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${clinicAdminToken}`)
+                .send({ })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    for(let i=0;i<res.body.length;i++){
+                        if (!res.body[i].appointment.ordination){
+                            appointmentWithoutOrdination = res.body[i];
+                            break;
+                        }
+                    }
+                    done();
+                });
+        });
+
+        it("moze odobriti novi zahtjev za pregled", (done) => {
+            chai.request(app)
+                .get('/clinic/appointmentRequests/allow/'+appointmentWithoutOrdination._id)
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${clinicAdminToken}`)
+                .send({ })
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+
+        it("moze rezervisati salu za novi zahtjev za pregled", (done) => {
+            chai.request(app)
+                .post('/clinic/appointmentRequests/reserveRoom/'+appointmentWithoutOrdination.appointment._id)
+                .set("content-type", "application/json")
+                .set('authorization', `Bearer ${clinicAdminToken}`)
+                .send(appointmentWithoutOrdination.freeOrdinations[0])
+                .end((err, res) => {
+                    
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+
+
+    });
 
    
 

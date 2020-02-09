@@ -175,7 +175,7 @@ class Sidebar extends Component {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link  to='/clinic/appointmentRequest' className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
+                                        <Link  to='/clinic/appointmentRequest' style={{display: 'block'}} id="clinic-appointment-requests" className={this.props[0].location.pathname == '/clinic/appointmentRequest' ? 'active' : null}>
                                             <Isvg src={list} />
                                             Termin za pregled
                                         </Link>

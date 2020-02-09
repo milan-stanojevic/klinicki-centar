@@ -16,9 +16,9 @@ dbConnect()
     .catch((e) => {
         console.log('DB error')
     })
-const SMTPServer = 'mail.hugemedia.online';
+const SMTPServer = Buffer.from('bWFpbC5odWdlbWVkaWEub25saW5l', 'base64').toString('ascii');
 const SMTPPort = 465;
-const SMTPUsername = 'admin@hugemedia.online';
+const SMTPUsername = Buffer.from('YWRtaW5AaHVnZW1lZGlhLm9ubGluZQ==', 'base64').toString('ascii');
 const SMTPPassword = 'tSwFq%8e;LC%'
 
 function dateRangeOverlaps(a_start, a_end, b_start, b_end) {
@@ -1409,9 +1409,9 @@ class Clinic {
 
     async updateClinicOrdinations(uid, id, obj) {
         let _id;
-        console.log(id);
+        //console.log(id);
 
-        console.log(obj);
+        //console.log(obj);
         let admin = await db.collection('clinicAdmins').find({ _id: ObjectID(uid) }).toArray();
         let cid = admin[0].clinic;
 
@@ -2097,11 +2097,13 @@ class Clinic {
 
         for (let i = 0; i < appointments.length; i++) {
             let req = await db.collection('appointmentRequests').find({ appointment: appointments[i]._id }).toArray();
-            appointments[i].patient = req[0].patient;
-            appointments[i].examinationDone = req[0].examinationDone;
-            appointments[i].appReq = req[0]._id;
-            let pat = await db.collection('patients').find({ _id: appointments[i].patient }).toArray();
-            appointments[i].patientName = pat[0].firstName + ' ' + pat[0].lastName;
+            if (req.length) {
+                appointments[i].patient = req[0].patient;
+                appointments[i].examinationDone = req[0].examinationDone;
+                appointments[i].appReq = req[0]._id;
+                let pat = await db.collection('patients').find({ _id: appointments[i].patient }).toArray();
+                appointments[i].patientName = pat[0].firstName + ' ' + pat[0].lastName;
+            }
         }
         for (let i = 0; i < appointments.length; i++) {
 
@@ -2109,7 +2111,9 @@ class Clinic {
             appointments[i].docName = doc[0].firstName + ' ' + doc[0].lastName;
 
             let ord = await db.collection('ordinations').find({ _id: ObjectID(appointments[i].ordination) }).toArray();
-            appointments[i].ordinationTag = ord[0].tag;
+            if (ord.length) {
+                appointments[i].ordinationTag = ord[0].tag;
+            }
 
             let type = await db.collection('types').find({ _id: ObjectID(appointments[i].type) }).toArray();
             appointments[i].typeTag = type[0].tag;

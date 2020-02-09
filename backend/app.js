@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const port = process.env.PORT || 4000;
+const fs = require("fs");
 //const nodemailer = require('nodemailer');
 const cors = require('cors')
 const bodyParser = require("body-parser");
@@ -25,26 +26,29 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use('/uploads', express.static('uploads'))
 const server = http.createServer(app);
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  
-
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
+
+
+const frontendApp = express();
+frontendApp.use(cors());
+frontendApp.use('/', express.static('../frontend/build'))
+const frontendServer = http.createServer(frontendApp);
+
+frontendServer.listen(80, () => console.log(`Listening on port ${80}`));
 
 /*
     ADMIN API ROUTES
 */
 
-app.post('/admin/upload', isAdminAuthenticated, function (req, res) {
+app.post('/upload', function (req, res) {
     res.send(adminModule.upload(req.body.file));
 });
 
 app.post('/admin/login', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let result = await adminModule.login(req.body.username, req.body.password);
-    console.log(result.status)
+    //console.log(result.status)
     res.status(result.status).send(result.response);
 });
 
@@ -53,7 +57,7 @@ app.post('/admin/verify', isAdminAuthenticated, (req, res) => {
 });
 
 app.get('/admin/clinic', isAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await adminModule.clinicList());
 });
 
@@ -89,12 +93,12 @@ app.post('/admin/diagnoses/:id', isAdminAuthenticated, async (req, res) => {
 });
 
 app.get('/admin/medications', isAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await adminModule.medications());
 });
 
 app.get('/admin/diagnoses', isAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await adminModule.diagnoses());
 });
 
@@ -110,7 +114,7 @@ app.delete('/admin/diagnoses/:id', isAdminAuthenticated, async (req, res) => {
 
 
 app.get('/admin/clinic/:cid/admins', isAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await adminModule.clinicAdminList(req.params.cid));
 });
 
@@ -193,13 +197,13 @@ app.get('/admin/admins', isAdminAuthenticated, async (req, res) => {
 */
 
 app.post('/patient/login', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let result = await patientModule.login(req.body.username, req.body.password);
     res.status(result.status).send(result.response);
 });
 
 app.post('/patient/register', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let result = await patientModule.register(req.body);
     res.send(result.response).status(result.status);
 });
@@ -216,7 +220,7 @@ app.post('/patient/update', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.updatePatient(uid, req.body));
 });
 app.post('/patient/clinic/:sort', isPatientAuthenticated, async (req, res) => {
-    res.send(await patientModule.clinicList(req.body,req.params.sort));
+    res.send(await patientModule.clinicList(req.body, req.params.sort));
 });
 // app.get('/clinic/patients/:sort', isClinicAdminAuthenticated, async (req, res) => {
 //     res.send(await clinicModule.patients(req.params.sort));
@@ -226,7 +230,7 @@ app.post('/patient/clinic/doctors/:id', isPatientAuthenticated, async (req, res)
     res.send(await patientModule.doctorsList(req.body, req.params.id));
 });
 app.post('/patient/clinic/appointements/:id', isPatientAuthenticated, async (req, res) => {
-    console.log(req.params.id);
+    //console.log(req.params.id);
     res.send(await patientModule.appointementsList(req.params.id));
 });
 app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req, res) => {
@@ -235,12 +239,12 @@ app.post('/patient/appointmentRequests/:id', isPatientAuthenticated, async (req,
 });
 app.get('/patient/clinic/history/:sort', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
-    res.send(await patientModule.illnessHistory(uid,req.params.sort));
+    //console.log(uid);
+    res.send(await patientModule.illnessHistory(uid, req.params.sort));
 });
 app.get('/patient/clinic/history/rateAllowed', isPatientAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
+    //console.log(uid);
     res.send(await patientModule.rateAllowed(uid));
 });
 
@@ -262,16 +266,16 @@ app.get('/patient/medicalRecord', isPatientAuthenticated, async (req, res) => {
 */
 
 app.post('/clinic/admin/login', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let result = await clinicModule.login(req.body.username, req.body.password);
     res.status(result.status).send(result.response);
 });
 
 
 app.post('/clinic/user/login', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let result = await clinicModule.userLogin(req.body.username, req.body.password);
-    res.send(result.response).status(result.status);
+    res.status(result.status).send(result.response);
 });
 
 
@@ -424,8 +428,8 @@ app.get('/patient/clinic/grading', isPatientAuthenticated, async (req, res) => {
     res.send(await patientModule.clinicGrading(uid));
 });
 app.post('/patient/clinic/rating', isPatientAuthenticated, async (req, res) => {
-    console.log("===========");
-    console.log(req.body);
+    //console.log("===========");
+    //console.log(req.body);
     res.send(await patientModule.clinicRating(req.body));
 });
 app.get('/patient/clinic/gradingDoctor', isPatientAuthenticated, async (req, res) => {
@@ -433,7 +437,7 @@ app.get('/patient/clinic/gradingDoctor', isPatientAuthenticated, async (req, res
     res.send(await patientModule.doctorGrading(uid));
 });
 app.post('/patient/doctor/rating', isPatientAuthenticated, async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     res.send(await patientModule.doctorRating(req.body));
 });
 
@@ -477,13 +481,13 @@ app.get('/clinic/user', isClinicAdminAuthenticated, async (req, res) => {
 
 app.post('/clinic/user/update', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
+    //console.log(uid);
     res.send(await clinicModule.updateUserProfile(uid, req.body));
 });
 
 app.post('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
+    //console.log(uid);
     res.send(await clinicModule.updateClinicAdmin(uid, req.body));
 });
 app.get('/clinic/admin/update', isClinicAdminAuthenticated, async (req, res) => {
@@ -495,7 +499,7 @@ app.get('/doctor/patient/:id', isClinicAdminAuthenticated, async (req, res) => {
     res.send(await clinicModule.patient(req.params.id,uid));
 });
 
-app.get('/doctor/patient/:id/medicalRecord',isClinicAdminAuthenticated , async (req, res) => {
+app.get('/doctor/patient/:id/medicalRecord', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
     res.send(await clinicModule.medicalRecord(req.params.id, uid));
 });
@@ -505,7 +509,7 @@ app.get('/doctor/medicalRecord/:id', isClinicAdminAuthenticated, async (req, res
 });
 app.post('/doctor/updateMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
+    //console.log(uid);
     res.send(await clinicModule.updateMedicalRecord(uid, req.params.id, req.body));
 });
 app.post('/doctor/examination/fillMedicalRecord/:id', isClinicAdminAuthenticated, async (req, res) => {
@@ -514,17 +518,17 @@ app.post('/doctor/examination/fillMedicalRecord/:id', isClinicAdminAuthenticated
 
 
 app.get('/doctor/medications', isClinicAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await clinicModule.medications());
 });
 
 app.get('/doctor/diagnoses', isClinicAdminAuthenticated, async (req, res) => {
-    console.log('fetch')
+    //console.log('fetch')
     res.send(await clinicModule.diagnoses());
 });
 app.get('/doctor/appointments', isClinicAdminAuthenticated, async (req, res) => {
     let uid = res.locals.uid;
-    console.log(uid);
+    //console.log(uid);
     res.send(await clinicModule.scheduledAppointments(uid));
 });
 
@@ -539,12 +543,12 @@ app.post('/doctor/insertMedicalRecord/:id', isClinicAdminAuthenticated, async (r
 
 
 app.get('/doctor/finishedAppointments', isClinicAdminAuthenticated, async (req, res) => {
-    console.log('finishedApp')
+    //console.log('finishedApp')
     res.send(await clinicModule.finishedAppointments());
 })
 
 app.get('/doctor/recipeAuth/verify/:id', isClinicAdminAuthenticated, async (req, res) => {
-    console.log('finishedApp')
+    //console.log('finishedApp')
     res.send(await clinicModule.recipeVerify(req.params.id));
 })
 
@@ -592,12 +596,12 @@ setInterval(async () => {
 }, 30000);
 
 
-async function dbPrepareTest(){
+async function dbPrepareTest() {
 
     await adminModule.dbTrunc();
 
-    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Dom zdravlja', adress: 'Bijeljinska 25'});
-    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Smedico', adress: '27 Marta 35' });
+    let clinic1 = await adminModule.clinicUpdate('new', { name: 'Dom zdravlja', adress: 'Bijeljinska 25' });
+    let clinic2 = await adminModule.clinicUpdate('new', { name: 'Smedico', adress: '27 Marta 35' });
 
 
     let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
@@ -622,14 +626,19 @@ async function dbPrepareTest(){
         name: 'Ordinacija #1'
     });
 
-    await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
-        username: 'dokotor1-domzdravnja',
-        password: 'dokotor2020',
+    let doctor = await clinicModule.updateClinicUser(clinic1Admin.id.toString(), 'new', {
+        username: 'doktor1-domzdravlja',
+        password: 'doktor2020',
         type: 'doctor',
         firstName: 'Janko',
         lastName: 'Jankovic',
         email: 'doktor@test.com'
     })
+
+    await clinicModule.doctorChangePassword(doctor.id.toString(), {
+        password: 'doktor2020'
+    });
+
 
     let patient = await patientModule.register({
         email: 'test@test.com',
@@ -642,14 +651,14 @@ async function dbPrepareTest(){
     await adminModule.allowPatient(patient.response.id.toString());
 }
 
-async function dbPrepare(){
+async function dbPrepare() {
 
     await adminModule.dbTrunc();
 
-    let clinic1 = await adminModule.clinicUpdate('new', {name: 'Klinika1', adress: 'Bulevar Oslobodjenja 33'});
-    let clinic2 = await adminModule.clinicUpdate('new', {name: 'Klinika2', adress: 'Bulevar Cara Dusana 117' });
-    let clinic3 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Narodnog Fronta 7' });
-    let clinic4 = await adminModule.clinicUpdate('new', {name: 'Klinika3', adress: 'Safarikova 31' });
+    let clinic1 = await adminModule.clinicUpdate('new', { name: 'Klinika1', adress: 'Bulevar Oslobodjenja 33' });
+    let clinic2 = await adminModule.clinicUpdate('new', { name: 'Klinika2', adress: 'Bulevar Cara Dusana 117' });
+    let clinic3 = await adminModule.clinicUpdate('new', { name: 'Klinika3', adress: 'Narodnog Fronta 7' });
+    let clinic4 = await adminModule.clinicUpdate('new', { name: 'Klinika3', adress: 'Safarikova 31' });
 
 
     let clinic1Admin = await adminModule.clinicAdminUpdate(clinic1.id.toString(), 'new', {
@@ -847,9 +856,9 @@ async function dbPrepare(){
 var isInTest = typeof global.it === 'function';
 
 
-// if (isInTest){
-//     dbPrepareTest();
-// }
+ if (isInTest){
+     dbPrepareTest();
+ }
 // else
 //     dbPrepare();
 

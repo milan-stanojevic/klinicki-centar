@@ -30,7 +30,7 @@ class Image extends Component {
                 this.setState({
                     _loading: true
                 })
-                fetch('http://127.0.0.1:4000/admin/upload', {
+                fetch('http://127.0.0.1:4000/upload', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
